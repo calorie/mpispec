@@ -25,9 +25,8 @@ replay_common.lo: replay_common.c /usr/include/stdio.h \
  /usr/include/i386-linux-gnu/bits/select2.h \
  /usr/include/i386-linux-gnu/sys/sysmacros.h \
  /usr/include/i386-linux-gnu/bits/pthreadtypes.h /usr/include/alloca.h \
- /usr/include/i386-linux-gnu/bits/stdlib.h /usr/local/mpich/include/mpi.h \
- /usr/local/mpich/include/mpio.h /usr/local/mpich/include/mpi.h \
- replay_common.h
+ /usr/include/i386-linux-gnu/bits/stdlib.h /usr/local/include/mpi.h \
+ /usr/local/include/mpio.h /usr/local/include/mpi.h replay_common.h
 
 /usr/include/stdio.h:
 
@@ -99,10 +98,10 @@ replay_common.lo: replay_common.c /usr/include/stdio.h \
 
 /usr/include/i386-linux-gnu/bits/stdlib.h:
 
-/usr/local/mpich/include/mpi.h:
+/usr/local/include/mpi.h:
 
-/usr/local/mpich/include/mpio.h:
+/usr/local/include/mpio.h:
 
-/usr/local/mpich/include/mpi.h:
+/usr/local/include/mpi.h:
 
 replay_common.h:

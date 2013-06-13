@@ -16,7 +16,6 @@
 
 
 
-
 am__make_dryrun = \
   { \
     am__dry=no; \
@@ -34,10 +33,10 @@ am__make_dryrun = \
     esac; \
     test $$am__dry = yes; \
   }
-pkgdatadir = $(datadir)/full-package-name
-pkgincludedir = $(includedir)/full-package-name
-pkglibdir = $(libdir)/full-package-name
-pkglibexecdir = $(libexecdir)/full-package-name
+pkgdatadir = $(datadir)/mpispec
+pkgincludedir = $(includedir)/mpispec
+pkglibdir = $(libdir)/mpispec
+pkglibexecdir = $(libexecdir)/mpispec
 am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd
 install_sh_DATA = $(install_sh) -c -m 644
 install_sh_PROGRAM = $(install_sh) -c
@@ -57,8 +56,7 @@ am__append_2 = -DNDEBUG -O2
 #am__append_3 = -pg
 #am__append_4 = -fprofile-arcs -ftest-coverage
 subdir = src/cspec/src
-DIST_COMMON = $(pkginclude_HEADERS) $(srcdir)/Makefile.am \
-	$(srcdir)/Makefile.in
+DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
@@ -94,18 +92,14 @@ am__uninstall_files_from_dir = { \
     || { echo " ( cd '$$dir' && rm -f" $$files ")"; \
          $(am__cd) "$$dir" && rm -f $$files; }; \
   }
-am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(pkgincludedir)"
-LIBRARIES = $(lib_LIBRARIES)
-ARFLAGS = cru
-libcspec_a_AR = $(AR) $(ARFLAGS)
-libcspec_a_LIBADD =
-am_libcspec_a_OBJECTS = cspec_output_header.$(OBJEXT) \
-	cspec_output_verbose.$(OBJEXT) cspec_output_xml.$(OBJEXT) \
-	cspec_runner.$(OBJEXT) cspec_config.$(OBJEXT) \
-	cspec_output_unit.$(OBJEXT) cspec_private.$(OBJEXT) \
-	cspec_output.$(OBJEXT) array.$(OBJEXT) \
-	cspec_output_junit_xml.$(OBJEXT)
-libcspec_a_OBJECTS = $(am_libcspec_a_OBJECTS)
+am__installdirs = "$(DESTDIR)$(libdir)"
+LTLIBRARIES = $(lib_LTLIBRARIES)
+libcspec_la_LIBADD =
+am_libcspec_la_OBJECTS = array.lo cspec_output_header.lo \
+	cspec_output_verbose.lo cspec_output_xml.lo cspec_runner.lo \
+	cspec_config.lo cspec_output_unit.lo cspec_private.lo \
+	cspec_output.lo cspec_output_junit_xml.lo
+libcspec_la_OBJECTS = $(am_libcspec_la_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -119,28 +113,27 @@ CCLD = $(CC)
 LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = $(libcspec_a_SOURCES)
-DIST_SOURCES = $(libcspec_a_SOURCES)
+SOURCES = $(libcspec_la_SOURCES)
+DIST_SOURCES = $(libcspec_la_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
     *) (install-info --version) >/dev/null 2>&1;; \
   esac
-HEADERS = $(pkginclude_HEADERS)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-ACLOCAL = ${SHELL} /home/yuu/work/mpiut/missing --run aclocal-1.11
+ACLOCAL = ${SHELL} /home/yuu/work/hpcss/mpispec/missing --run aclocal-1.11
 AMTAR = $${TAR-tar}
 AR = ar
-AUTOCONF = ${SHELL} /home/yuu/work/mpiut/missing --run autoconf
-AUTOHEADER = ${SHELL} /home/yuu/work/mpiut/missing --run autoheader
-AUTOMAKE = ${SHELL} /home/yuu/work/mpiut/missing --run automake-1.11
+AUTOCONF = ${SHELL} /home/yuu/work/hpcss/mpispec/missing --run autoconf
+AUTOHEADER = ${SHELL} /home/yuu/work/hpcss/mpispec/missing --run autoheader
+AUTOMAKE = ${SHELL} /home/yuu/work/hpcss/mpispec/missing --run automake-1.11
 AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS = -Wall $(am__append_1) $(am__append_2) $(am__append_3) \
-	$(am__append_4)
+CFLAGS = -g -O2 -Wall $(am__append_1) $(am__append_2) \
+	$(am__append_3) $(am__append_4)
 CPP = gcc -E
 CPPFLAGS = 
 CXX = g++
@@ -173,7 +166,7 @@ LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LIPO = 
 LN_S = ln -s
 LTLIBOBJS = 
-MAKEINFO = ${SHELL} /home/yuu/work/mpiut/missing --run makeinfo
+MAKEINFO = ${SHELL} /home/yuu/work/hpcss/mpispec/missing --run makeinfo
 MANIFEST_TOOL = :
 MKDIR_P = /bin/mkdir -p
 NM = /usr/bin/nm -B
@@ -182,24 +175,24 @@ OBJDUMP = objdump
 OBJEXT = o
 OTOOL = 
 OTOOL64 = 
-PACKAGE = full-package-name
-PACKAGE_BUGREPORT = BUG-REPORT-ADDRESS
-PACKAGE_NAME = FULL-PACKAGE-NAME
-PACKAGE_STRING = FULL-PACKAGE-NAME VERSION
-PACKAGE_TARNAME = full-package-name
+PACKAGE = mpispec
+PACKAGE_BUGREPORT = s2g4t1n2@gmail.com
+PACKAGE_NAME = mpispec
+PACKAGE_STRING = mpispec 0.1
+PACKAGE_TARNAME = mpispec
 PACKAGE_URL = 
-PACKAGE_VERSION = VERSION
+PACKAGE_VERSION = 0.1
 PATH_SEPARATOR = :
 RANLIB = ranlib
 SED = /bin/sed
 SET_MAKE = 
 SHELL = /bin/bash
 STRIP = strip
-VERSION = VERSION
-abs_builddir = /home/yuu/work/mpiut/src/cspec/src
-abs_srcdir = /home/yuu/work/mpiut/src/cspec/src
-abs_top_builddir = /home/yuu/work/mpiut
-abs_top_srcdir = /home/yuu/work/mpiut
+VERSION = 0.1
+abs_builddir = /home/yuu/work/hpcss/mpispec/src/cspec/src
+abs_srcdir = /home/yuu/work/hpcss/mpispec/src/cspec/src
+abs_top_builddir = /home/yuu/work/hpcss/mpispec
+abs_top_srcdir = /home/yuu/work/hpcss/mpispec
 ac_ct_AR = ar
 ac_ct_CC = gcc
 ac_ct_CXX = g++
@@ -229,7 +222,7 @@ host_vendor = pc
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /home/yuu/work/mpiut/install-sh
+install_sh = ${SHELL} /home/yuu/work/hpcss/mpispec/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -250,22 +243,17 @@ top_build_prefix = ../../../
 top_builddir = ../../..
 top_srcdir = ../../..
 INCLUDES = -I../inc
-lib_LIBRARIES = libcspec.a
-libcspec_a_SOURCES = \
-	cspec_output_header.c \
-	cspec_output_verbose.c \
-	cspec_output_xml.c \
-	cspec_runner.c \
-	cspec_config.c \
-	cspec_output_unit.c \
-	cspec_private.c \
-	cspec_output.c \
-	array.c \
-	cspec_output_junit_xml.c
-
-pkginclude_HEADERS = array.h cspec.h cspec_config.h cspec_output.h cspec_output_header.h \
-cspec_output_junit_xml.h cspec_output_unit.h cspec_output_verbose.h \
-cspec_output_xml.h cspec_private.h cspec_private_output_junit_xml.h
+lib_LTLIBRARIES = libcspec.la
+libcspec_la_SOURCES = array.c \
+cspec_output_header.c \
+cspec_output_verbose.c \
+cspec_output_xml.c \
+cspec_runner.c \
+cspec_config.c \
+cspec_output_unit.c \
+cspec_private.c \
+cspec_output.c \
+cspec_output_junit_xml.c
 
 all: all-am
 
@@ -301,9 +289,9 @@ $(top_srcdir)/configure:  $(am__configure_deps)
 $(ACLOCAL_M4):  $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(am__aclocal_m4_deps):
-install-libLIBRARIES: $(lib_LIBRARIES)
+install-libLTLIBRARIES: $(lib_LTLIBRARIES)
 	@$(NORMAL_INSTALL)
-	@list='$(lib_LIBRARIES)'; test -n "$(libdir)" || list=; \
+	@list='$(lib_LTLIBRARIES)'; test -n "$(libdir)" || list=; \
 	list2=; for p in $$list; do \
 	  if test -f $$p; then \
 	    list2="$$list2 $$p"; \
@@ -312,30 +300,29 @@ install-libLIBRARIES: $(lib_LIBRARIES)
 	test -z "$$list2" || { \
 	  echo " $(MKDIR_P) '$(DESTDIR)$(libdir)'"; \
 	  $(MKDIR_P) "$(DESTDIR)$(libdir)" || exit 1; \
-	  echo " $(INSTALL_DATA) $$list2 '$(DESTDIR)$(libdir)'"; \
-	  $(INSTALL_DATA) $$list2 "$(DESTDIR)$(libdir)" || exit $$?; }
-	@$(POST_INSTALL)
-	@list='$(lib_LIBRARIES)'; test -n "$(libdir)" || list=; \
+	  echo " $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(INSTALL) $(INSTALL_STRIP_FLAG) $$list2 '$(DESTDIR)$(libdir)'"; \
+	  $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(INSTALL) $(INSTALL_STRIP_FLAG) $$list2 "$(DESTDIR)$(libdir)"; \
+	}
+
+uninstall-libLTLIBRARIES:
+	@$(NORMAL_UNINSTALL)
+	@list='$(lib_LTLIBRARIES)'; test -n "$(libdir)" || list=; \
 	for p in $$list; do \
-	  if test -f $$p; then \
-	    $(am__strip_dir) \
-	    echo " ( cd '$(DESTDIR)$(libdir)' && $(RANLIB) $$f )"; \
-	    ( cd "$(DESTDIR)$(libdir)" && $(RANLIB) $$f ) || exit $$?; \
-	  else :; fi; \
+	  $(am__strip_dir) \
+	  echo " $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=uninstall rm -f '$(DESTDIR)$(libdir)/$$f'"; \
+	  $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=uninstall rm -f "$(DESTDIR)$(libdir)/$$f"; \
 	done
 
-uninstall-libLIBRARIES:
-	@$(NORMAL_UNINSTALL)
-	@list='$(lib_LIBRARIES)'; test -n "$(libdir)" || list=; \
-	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
-	dir='$(DESTDIR)$(libdir)'; $(am__uninstall_files_from_dir)
-
-clean-libLIBRARIES:
-	-test -z "$(lib_LIBRARIES)" || rm -f $(lib_LIBRARIES)
-libcspec.a: $(libcspec_a_OBJECTS) $(libcspec_a_DEPENDENCIES) $(EXTRA_libcspec_a_DEPENDENCIES) 
-	-rm -f libcspec.a
-	$(libcspec_a_AR) libcspec.a $(libcspec_a_OBJECTS) $(libcspec_a_LIBADD)
-	$(RANLIB) libcspec.a
+clean-libLTLIBRARIES:
+	-test -z "$(lib_LTLIBRARIES)" || rm -f $(lib_LTLIBRARIES)
+	@list='$(lib_LTLIBRARIES)'; for p in $$list; do \
+	  dir="`echo $$p | sed -e 's|/[^/]*$$||'`"; \
+	  test "$$dir" != "$$p" || dir=.; \
+	  echo "rm -f \"$${dir}/so_locations\""; \
+	  rm -f "$${dir}/so_locations"; \
+	done
+libcspec.la: $(libcspec_la_OBJECTS) $(libcspec_la_DEPENDENCIES) $(EXTRA_libcspec_la_DEPENDENCIES) 
+	$(LINK) -rpath $(libdir) $(libcspec_la_OBJECTS) $(libcspec_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -343,16 +330,16 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-include ./$(DEPDIR)/array.Po
-include ./$(DEPDIR)/cspec_config.Po
-include ./$(DEPDIR)/cspec_output.Po
-include ./$(DEPDIR)/cspec_output_header.Po
-include ./$(DEPDIR)/cspec_output_junit_xml.Po
-include ./$(DEPDIR)/cspec_output_unit.Po
-include ./$(DEPDIR)/cspec_output_verbose.Po
-include ./$(DEPDIR)/cspec_output_xml.Po
-include ./$(DEPDIR)/cspec_private.Po
-include ./$(DEPDIR)/cspec_runner.Po
+include ./$(DEPDIR)/array.Plo
+include ./$(DEPDIR)/cspec_config.Plo
+include ./$(DEPDIR)/cspec_output.Plo
+include ./$(DEPDIR)/cspec_output_header.Plo
+include ./$(DEPDIR)/cspec_output_junit_xml.Plo
+include ./$(DEPDIR)/cspec_output_unit.Plo
+include ./$(DEPDIR)/cspec_output_verbose.Plo
+include ./$(DEPDIR)/cspec_output_xml.Plo
+include ./$(DEPDIR)/cspec_private.Plo
+include ./$(DEPDIR)/cspec_runner.Plo
 
 .c.o:
 	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -380,27 +367,6 @@ mostlyclean-libtool:
 
 clean-libtool:
 	-rm -rf .libs _libs
-install-pkgincludeHEADERS: $(pkginclude_HEADERS)
-	@$(NORMAL_INSTALL)
-	@list='$(pkginclude_HEADERS)'; test -n "$(pkgincludedir)" || list=; \
-	if test -n "$$list"; then \
-	  echo " $(MKDIR_P) '$(DESTDIR)$(pkgincludedir)'"; \
-	  $(MKDIR_P) "$(DESTDIR)$(pkgincludedir)" || exit 1; \
-	fi; \
-	for p in $$list; do \
-	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
-	  echo "$$d$$p"; \
-	done | $(am__base_list) | \
-	while read files; do \
-	  echo " $(INSTALL_HEADER) $$files '$(DESTDIR)$(pkgincludedir)'"; \
-	  $(INSTALL_HEADER) $$files "$(DESTDIR)$(pkgincludedir)" || exit $$?; \
-	done
-
-uninstall-pkgincludeHEADERS:
-	@$(NORMAL_UNINSTALL)
-	@list='$(pkginclude_HEADERS)'; test -n "$(pkgincludedir)" || list=; \
-	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
-	dir='$(DESTDIR)$(pkgincludedir)'; $(am__uninstall_files_from_dir)
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \
@@ -486,9 +452,9 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-am
-all-am: Makefile $(LIBRARIES) $(HEADERS)
+all-am: Makefile $(LTLIBRARIES)
 installdirs:
-	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(pkgincludedir)"; do \
+	for dir in "$(DESTDIR)$(libdir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: install-am
@@ -523,7 +489,7 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-am
 
-clean-am: clean-generic clean-libLIBRARIES clean-libtool \
+clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
 	mostlyclean-am
 
 distclean: distclean-am
@@ -544,13 +510,13 @@ info: info-am
 
 info-am:
 
-install-data-am: install-pkgincludeHEADERS
+install-data-am:
 
 install-dvi: install-dvi-am
 
 install-dvi-am:
 
-install-exec-am: install-libLIBRARIES
+install-exec-am: install-libLTLIBRARIES
 
 install-html: install-html-am
 
@@ -590,24 +556,23 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-libLIBRARIES uninstall-pkgincludeHEADERS
+uninstall-am: uninstall-libLTLIBRARIES
 
 .MAKE: install-am install-strip
 
 .PHONY: CTAGS GTAGS all all-am check check-am clean clean-generic \
-	clean-libLIBRARIES clean-libtool ctags distclean \
+	clean-libLTLIBRARIES clean-libtool ctags distclean \
 	distclean-compile distclean-generic distclean-libtool \
 	distclean-tags distdir dvi dvi-am html html-am info info-am \
 	install install-am install-data install-data-am install-dvi \
 	install-dvi-am install-exec install-exec-am install-html \
 	install-html-am install-info install-info-am \
-	install-libLIBRARIES install-man install-pdf install-pdf-am \
-	install-pkgincludeHEADERS install-ps install-ps-am \
-	install-strip installcheck installcheck-am installdirs \
-	maintainer-clean maintainer-clean-generic mostlyclean \
-	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
-	pdf pdf-am ps ps-am tags uninstall uninstall-am \
-	uninstall-libLIBRARIES uninstall-pkgincludeHEADERS
+	install-libLTLIBRARIES install-man install-pdf install-pdf-am \
+	install-ps install-ps-am install-strip installcheck \
+	installcheck-am installdirs maintainer-clean \
+	maintainer-clean-generic mostlyclean mostlyclean-compile \
+	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
+	tags uninstall uninstall-am uninstall-libLTLIBRARIES
 
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.

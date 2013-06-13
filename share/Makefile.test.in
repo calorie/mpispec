@@ -7,6 +7,7 @@ MPIUTFLAGS = -I${INSTDIR}/include
 MPIUTLIBS = -L${INSTDIR}/lib -lmpiunit -lm
 PROCLOGLIBS = -L${INSTDIR}/lib -ldatalog -lproclog -lm
 PROCUTLIBS=-L${INSTDIR}/lib -ldatareplay -lprocut -lm
+MPISPECLIBS = -L${INSTDIR}/lib -lmpiunit -lcspec -lm
 RUNTEST = run-test
 
 mpiut:
@@ -22,4 +23,9 @@ proclog:
 procut:
 	@${CC} ${MPIUTFLAGS} ${PROCUTLIBS} ${SRC} ${TESTSRC} -o ${RUNTEST}
 	./${RUNTEST}
+	@rm -f ${RUNTEST} *.o *.so *~
+
+mpispec:
+	@${CC} ${MPIUTFLAGS} ${MPISPECLIBS} ${SRC} ${TESTSRC} -o ${RUNTEST}
+	@mpirun ${ARGV} ./${RUNTEST}
 	@rm -f ${RUNTEST} *.o *.so *~

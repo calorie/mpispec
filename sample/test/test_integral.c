@@ -1,7 +1,7 @@
 
 /* Time-stamp: <2007-11-14 22:31:27 shinya> */
 
-#include "mpiunit/mpiunit.h"
+#include "mpispec/mpiunit.h"
 #include "../src/integral.h"
 
 static double

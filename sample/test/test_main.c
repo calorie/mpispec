@@ -3,7 +3,7 @@
 
 #include <stdlib.h>
 #include <mpi.h>
-#include "mpiunit/mpiunit.h"
+#include "mpispec/mpiunit.h"
 
 /* Prototypes */
 MPIUT_PROTOTYPE(test_cpi);

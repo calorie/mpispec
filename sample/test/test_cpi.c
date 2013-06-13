@@ -2,7 +2,7 @@
 /* Time-stamp: <2007-11-24 22:06:19 shinya> */
 
 #include <mpi.h>
-#include "mpiunit/mpiunit.h"
+#include "mpispec/mpiunit.h"
 #include "../src/cpi.h"
 
 /* Define tests */

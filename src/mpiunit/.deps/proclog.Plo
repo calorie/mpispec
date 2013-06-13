@@ -1,6 +1,5 @@
-proclog.lo: proclog.c /usr/local/mpich/include/mpi.h \
- /usr/local/mpich/include/mpio.h /usr/local/mpich/include/mpi.h \
- /usr/include/stdio.h /usr/include/features.h \
+proclog.lo: proclog.c /usr/local/include/mpi.h /usr/local/include/mpio.h \
+ /usr/local/include/mpi.h /usr/include/stdio.h /usr/include/features.h \
  /usr/include/i386-linux-gnu/bits/predefs.h \
  /usr/include/i386-linux-gnu/sys/cdefs.h \
  /usr/include/i386-linux-gnu/bits/wordsize.h \
@@ -46,11 +45,11 @@ proclog.lo: proclog.c /usr/local/mpich/include/mpi.h \
  /usr/include/i386-linux-gnu/bits/setjmp2.h testrun.h mpiut_assertion.h \
  util.h
 
-/usr/local/mpich/include/mpi.h:
+/usr/local/include/mpi.h:
 
-/usr/local/mpich/include/mpio.h:
+/usr/local/include/mpio.h:
 
-/usr/local/mpich/include/mpi.h:
+/usr/local/include/mpi.h:
 
 /usr/include/stdio.h:
 

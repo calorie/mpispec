@@ -25,9 +25,9 @@ mpiunit.lo: mpiunit.c /usr/include/stdio.h /usr/include/features.h \
  /usr/include/i386-linux-gnu/bits/select2.h \
  /usr/include/i386-linux-gnu/sys/sysmacros.h \
  /usr/include/i386-linux-gnu/bits/pthreadtypes.h /usr/include/alloca.h \
- /usr/include/i386-linux-gnu/bits/stdlib.h /usr/local/mpich/include/mpi.h \
- /usr/local/mpich/include/mpio.h /usr/local/mpich/include/mpi.h \
- /usr/include/unistd.h /usr/include/i386-linux-gnu/bits/posix_opt.h \
+ /usr/include/i386-linux-gnu/bits/stdlib.h /usr/local/include/mpi.h \
+ /usr/local/include/mpio.h /usr/local/include/mpi.h /usr/include/unistd.h \
+ /usr/include/i386-linux-gnu/bits/posix_opt.h \
  /usr/include/i386-linux-gnu/bits/environments.h \
  /usr/include/i386-linux-gnu/bits/confname.h /usr/include/getopt.h \
  /usr/include/i386-linux-gnu/bits/unistd.h \
@@ -124,11 +124,11 @@ mpiunit.lo: mpiunit.c /usr/include/stdio.h /usr/include/features.h \
 
 /usr/include/i386-linux-gnu/bits/stdlib.h:
 
-/usr/local/mpich/include/mpi.h:
+/usr/local/include/mpi.h:
 
-/usr/local/mpich/include/mpio.h:
+/usr/local/include/mpio.h:
 
-/usr/local/mpich/include/mpi.h:
+/usr/local/include/mpi.h:
 
 /usr/include/unistd.h:
 

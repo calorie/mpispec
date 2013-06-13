@@ -35,10 +35,10 @@ am__make_dryrun = \
     esac; \
     test $$am__dry = yes; \
   }
-pkgdatadir = $(datadir)/full-package-name
-pkgincludedir = $(includedir)/full-package-name
-pkglibdir = $(libdir)/full-package-name
-pkglibexecdir = $(libexecdir)/full-package-name
+pkgdatadir = $(datadir)/mpispec
+pkgincludedir = $(includedir)/mpispec
+pkglibdir = $(libdir)/mpispec
+pkglibexecdir = $(libexecdir)/mpispec
 am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd
 install_sh_DATA = $(install_sh) -c -m 644
 install_sh_PROGRAM = $(install_sh) -c
@@ -54,14 +54,15 @@ POST_UNINSTALL = :
 build_triplet = i686-pc-linux-gnu
 host_triplet = i686-pc-linux-gnu
 subdir = script
-DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
+DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in \
+	$(srcdir)/mpispec.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/config.h
-CONFIG_CLEAN_FILES =
+CONFIG_CLEAN_FILES = mpispec
 CONFIG_CLEAN_VPATH_FILES =
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
 am__vpath_adj = case $$p in \
@@ -100,12 +101,12 @@ am__can_run_installinfo = \
     *) (install-info --version) >/dev/null 2>&1;; \
   esac
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-ACLOCAL = ${SHELL} /home/yuu/work/mpiut/missing --run aclocal-1.11
+ACLOCAL = ${SHELL} /home/yuu/work/hpcss/mpispec/missing --run aclocal-1.11
 AMTAR = $${TAR-tar}
 AR = ar
-AUTOCONF = ${SHELL} /home/yuu/work/mpiut/missing --run autoconf
-AUTOHEADER = ${SHELL} /home/yuu/work/mpiut/missing --run autoheader
-AUTOMAKE = ${SHELL} /home/yuu/work/mpiut/missing --run automake-1.11
+AUTOCONF = ${SHELL} /home/yuu/work/hpcss/mpispec/missing --run autoconf
+AUTOHEADER = ${SHELL} /home/yuu/work/hpcss/mpispec/missing --run autoheader
+AUTOMAKE = ${SHELL} /home/yuu/work/hpcss/mpispec/missing --run automake-1.11
 AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
@@ -142,7 +143,7 @@ LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LIPO = 
 LN_S = ln -s
 LTLIBOBJS = 
-MAKEINFO = ${SHELL} /home/yuu/work/mpiut/missing --run makeinfo
+MAKEINFO = ${SHELL} /home/yuu/work/hpcss/mpispec/missing --run makeinfo
 MANIFEST_TOOL = :
 MKDIR_P = /bin/mkdir -p
 NM = /usr/bin/nm -B
@@ -151,24 +152,24 @@ OBJDUMP = objdump
 OBJEXT = o
 OTOOL = 
 OTOOL64 = 
-PACKAGE = full-package-name
-PACKAGE_BUGREPORT = BUG-REPORT-ADDRESS
-PACKAGE_NAME = FULL-PACKAGE-NAME
-PACKAGE_STRING = FULL-PACKAGE-NAME VERSION
-PACKAGE_TARNAME = full-package-name
+PACKAGE = mpispec
+PACKAGE_BUGREPORT = s2g4t1n2@gmail.com
+PACKAGE_NAME = mpispec
+PACKAGE_STRING = mpispec 0.1
+PACKAGE_TARNAME = mpispec
 PACKAGE_URL = 
-PACKAGE_VERSION = VERSION
+PACKAGE_VERSION = 0.1
 PATH_SEPARATOR = :
 RANLIB = ranlib
 SED = /bin/sed
 SET_MAKE = 
 SHELL = /bin/bash
 STRIP = strip
-VERSION = VERSION
-abs_builddir = /home/yuu/work/mpiut/script
-abs_srcdir = /home/yuu/work/mpiut/script
-abs_top_builddir = /home/yuu/work/mpiut
-abs_top_srcdir = /home/yuu/work/mpiut
+VERSION = 0.1
+abs_builddir = /home/yuu/work/hpcss/mpispec/script
+abs_srcdir = /home/yuu/work/hpcss/mpispec/script
+abs_top_builddir = /home/yuu/work/hpcss/mpispec
+abs_top_srcdir = /home/yuu/work/hpcss/mpispec
 ac_ct_AR = ar
 ac_ct_CC = gcc
 ac_ct_CXX = g++
@@ -198,7 +199,7 @@ host_vendor = pc
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /home/yuu/work/mpiut/install-sh
+install_sh = ${SHELL} /home/yuu/work/hpcss/mpispec/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -218,7 +219,7 @@ target_alias =
 top_build_prefix = ../
 top_builddir = ..
 top_srcdir = ..
-bin_SCRIPTS = mpiut proclog procut
+bin_SCRIPTS = mpiut proclog procut mpispec
 all: all-am
 
 .SUFFIXES:
@@ -252,6 +253,8 @@ $(top_srcdir)/configure:  $(am__configure_deps)
 $(ACLOCAL_M4):  $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(am__aclocal_m4_deps):
+mpispec: $(top_builddir)/config.status $(srcdir)/mpispec.in
+	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 install-binSCRIPTS: $(bin_SCRIPTS)
 	@$(NORMAL_INSTALL)
 	@list='$(bin_SCRIPTS)'; test -n "$(bindir)" || list=; \

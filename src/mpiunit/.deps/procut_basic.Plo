@@ -29,10 +29,9 @@ procut_basic.lo: procut_basic.c /usr/include/stdio.h \
  /usr/include/xlocale.h /usr/include/assert.h /usr/include/string.h \
  /usr/include/i386-linux-gnu/bits/string.h \
  /usr/include/i386-linux-gnu/bits/string2.h \
- /usr/include/i386-linux-gnu/bits/string3.h \
- /usr/local/mpich/include/mpi.h /usr/local/mpich/include/mpio.h \
- /usr/local/mpich/include/mpi.h mpiut_base.h /usr/include/math.h \
- /usr/include/i386-linux-gnu/bits/huge_val.h \
+ /usr/include/i386-linux-gnu/bits/string3.h /usr/local/include/mpi.h \
+ /usr/local/include/mpio.h /usr/local/include/mpi.h mpiut_base.h \
+ /usr/include/math.h /usr/include/i386-linux-gnu/bits/huge_val.h \
  /usr/include/i386-linux-gnu/bits/huge_valf.h \
  /usr/include/i386-linux-gnu/bits/huge_vall.h \
  /usr/include/i386-linux-gnu/bits/inf.h \
@@ -131,11 +130,11 @@ procut_basic.lo: procut_basic.c /usr/include/stdio.h \
 
 /usr/include/i386-linux-gnu/bits/string3.h:
 
-/usr/local/mpich/include/mpi.h:
+/usr/local/include/mpi.h:
 
-/usr/local/mpich/include/mpio.h:
+/usr/local/include/mpio.h:
 
-/usr/local/mpich/include/mpi.h:
+/usr/local/include/mpi.h:
 
 mpiut_base.h:
 

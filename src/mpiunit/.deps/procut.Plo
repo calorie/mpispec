@@ -12,10 +12,9 @@ procut.lo: procut.c /usr/include/stdio.h /usr/include/features.h \
  /usr/include/i386-linux-gnu/bits/stdio_lim.h \
  /usr/include/i386-linux-gnu/bits/sys_errlist.h \
  /usr/include/i386-linux-gnu/bits/stdio.h \
- /usr/include/i386-linux-gnu/bits/stdio2.h /usr/local/mpich/include/mpi.h \
- /usr/local/mpich/include/mpio.h /usr/local/mpich/include/mpi.h \
- /usr/include/string.h /usr/include/xlocale.h \
- /usr/include/i386-linux-gnu/bits/string.h \
+ /usr/include/i386-linux-gnu/bits/stdio2.h /usr/local/include/mpi.h \
+ /usr/local/include/mpio.h /usr/local/include/mpi.h /usr/include/string.h \
+ /usr/include/xlocale.h /usr/include/i386-linux-gnu/bits/string.h \
  /usr/include/i386-linux-gnu/bits/string2.h /usr/include/endian.h \
  /usr/include/i386-linux-gnu/bits/endian.h \
  /usr/include/i386-linux-gnu/bits/byteswap.h /usr/include/stdlib.h \
@@ -81,11 +80,11 @@ procut.lo: procut.c /usr/include/stdio.h /usr/include/features.h \
 
 /usr/include/i386-linux-gnu/bits/stdio2.h:
 
-/usr/local/mpich/include/mpi.h:
+/usr/local/include/mpi.h:
 
-/usr/local/mpich/include/mpio.h:
+/usr/local/include/mpio.h:
 
-/usr/local/mpich/include/mpi.h:
+/usr/local/include/mpi.h:
 
 /usr/include/string.h:
 

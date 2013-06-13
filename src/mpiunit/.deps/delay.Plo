@@ -27,8 +27,8 @@ delay.lo: delay.c /usr/include/stdio.h /usr/include/features.h \
  /usr/include/i386-linux-gnu/bits/pthreadtypes.h /usr/include/alloca.h \
  /usr/include/i386-linux-gnu/bits/stdlib.h /usr/include/dlfcn.h \
  /usr/include/i386-linux-gnu/bits/dlfcn.h \
- /usr/include/i386-linux-gnu/bits/timex.h /usr/local/mpich/include/mpi.h \
- /usr/local/mpich/include/mpio.h /usr/local/mpich/include/mpi.h
+ /usr/include/i386-linux-gnu/bits/timex.h /usr/local/include/mpi.h \
+ /usr/local/include/mpio.h /usr/local/include/mpi.h
 
 /usr/include/stdio.h:
 
@@ -108,8 +108,8 @@ delay.lo: delay.c /usr/include/stdio.h /usr/include/features.h \
 
 /usr/include/i386-linux-gnu/bits/timex.h:
 
-/usr/local/mpich/include/mpi.h:
+/usr/local/include/mpi.h:
 
-/usr/local/mpich/include/mpio.h:
+/usr/local/include/mpio.h:
 
-/usr/local/mpich/include/mpi.h:
+/usr/local/include/mpi.h:

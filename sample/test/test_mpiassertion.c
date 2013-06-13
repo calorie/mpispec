@@ -1,7 +1,7 @@
 
 /* Time-stamp: <2007-11-14 22:31:35 shinya> */
 
-#include "mpiunit/mpiunit.h"
+#include "mpispec/mpiunit.h"
 
 /* Define tests */
 MPIUT_DEF(test_mpiassertion)
