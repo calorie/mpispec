@@ -1,0 +1,232 @@
+# -*- rd -*-
+
+Time-stamp: <2007-11-14 22:30:31 shinya>
+
+= MPIUnit::Tutorial.ja
+
+任意の1変数関数の積分を求めるMPIプログラムintegralをとりあげます。
+
+テスト実行までの流れは次のようになります。
+
+  1. ディレクトリをつくる
+  2. ソースコードを書く
+  3. テストコードを書く
+  4. テスト実行
+
+== ディレクトリをつくる
+
+ディレクトリ構成は次のようにしてください。
+
+  integral---+---src
+             |
+             +---test
+
+integral/はプロジェクトのトップディレクトリです。
+
+src/にソースコードを置きます。
+
+test/にテストコードを置きます。
+
+== ソースコードを書く
+
+まず，ヘッダファイルsrc/integral.hを書きます。
+
+積分を計算する関数はintegralとしましょう。
+
+引数は，min（積分範囲の始点），max（積分範囲の終点），n（分割数）
+
+f（1変数関数）です。
+
+長方形の面積で積分を近似するので，その分割数がnです。
+
+戻り値は，定積分の値（rank 0），定数0.0（rank 0以外）とします。
+
+#ifndef INTEGRAL_H
+#define INTEGRAL_H
+
+/*
+ */
+double
+integral(double min, double max, int n, double f(double));
+
+#endif
+
+次に実装コードsrc/integral.cを書きます。
+
+これはインターフェイスを守りつつ自由に書いてください。
+
+ここまでで，ファイル構成は次のようになりました。
+
+  integral/---+---src/---+---integral.h
+              |          |          
+              |          +---integral.c
+              |
+              +---test/
+
+== テストコードを書く
+
+テストコードを書きます。
+
+MPIUnitを利用するために，mpiunit/mpiunit.hをインクルードします。
+
+テストはMPIUT_DEF(testname)で定義します。
+
+テスト内部ではランクごとに場合分けをします。
+
+ランク0ではMPIUT_ASSERT_DOUBLE_EQUAL(actual, expect, 誤差許容範囲)を使って，
+
+アサーションを記述します。pi_funcを0.0〜1.0まで積分すればπになるはずです。
+
+ランク0以外はintegralを実行するだけです。
+
+最後にMPIUT_INIT〜MPIUT_FINALIZEの間で，MPIUT_REGISTERを使って
+
+テストを登録します。
+
+#include "mpiunit/mpiunit.h"
+#include "../src/integral.h"
+
+#define PI 3.14159265
+
+static double
+pi_func(double x)
+{
+  return 4.0 / (1.0 + x * x);
+}
+
+MPIUT_DEF(test_integral)
+{
+  if(MPIUT_RANK == 0) {
+    MPIUT_ASSERT_DOUBLE_EQUAL(integral(0.0, 1.0, 100, pi_func), PI, 0.001);
+  }
+  else {
+    integral(0, 1.0, 100, pi_func);
+  }
+}
+
+MPIUT_INIT;
+MPIUT_REGISTER("test integral", test_integral);
+MPIUT_FINALIZE;
+
+ここまでで，ファイル構成は次のようになりました。
+
+  integral/---+---src/---+---integral.h
+              |          |          
+              |          +---integral.c
+              |
+              +---test/--+---test_integral.c
+
+== ビルド，実行
+
+integral/ディレクトリに移動し，以下のコマンドを実行してください。
+
+argsはmpirunにわたす引数です。
+
+  [integral]% mpiut [args ...]
+
+たとえば
+
+  [integral]% mpiut -np 3
+
+すると，次のようなテスト結果が得られます。
+
+  rank  0:
+    Test: integral ... passed
+
+  --Run Summary: Type      Total  Passed  Failed
+                 tests         1       1       0
+                 asserts       1       1       0
+
+  rank  1:
+    Test: integral ... passed
+
+  --Run Summary: Type      Total  Passed  Failed
+                 tests         1       1       0
+                 asserts       0       0       0
+
+  rank  2:
+    Test: integral ... passed
+
+  --Run Summary: Type      Total  Passed  Failed
+                 tests         1       1       0
+                 asserts       0       0       0
+
+  [3 Process Results]
+  =============================================[1/1][100]
+
+== ちょっと進んだテスト
+
+ここからはMakefileを知ってる人を対象にしています。
+
+テストの実行はmpiutコマンドでできるのですが，
+
+src/やtest/が階層構造になっている場合はうまくいきません。
+
+また，一部のコードだけを実行したいときもあります。
+
+そんなときは自分でMakefileを書いてテストを実行します。
+
+== Makefileを書く
+
+integral/ディレクトリにMakefileをつくります。
+
+Makefileは以下のように書いておきます。
+
+  include ${INSTDIR}/share/cue/Makefile.test
+
+  CC = mpicc
+  ARGV = -np 3
+  SRC = src/integral.c
+  TESTSRC = test/test_integral.c
+  
+${INSTDIR}はMPIUnitをインストールしたディレクトリに変更してください。
+
+CCはコンパイルコマンドです。
+
+ARGVはmpirunに渡す引数です。ここではプロセス数3で実行します。
+
+SRCはソースコードを列挙したものです。
+
+TESTSRCはテストコードを列挙したものです。
+
+ここまでで，ファイル構成は次のようになりました。
+
+  integral/---+---Makefile
+              |
+              +---src/---+---integral.h
+              |          |          
+              |          +---integral.c
+              |
+              +---test/--+---test_integral.c
+
+== Makeによるテストの実行
+
+トップディレクトリで以下のコマンドを実行します。
+
+  [integral]% make mpiut
+
+すると，次のようなテスト結果が得られます。
+
+  rank  0:
+    Test: integral ... passed
+
+  --Run Summary: Type      Total  Passed  Failed
+                 tests         1       1       0
+                 asserts       1       1       0
+
+  rank  1:
+    Test: integral ... passed
+
+  --Run Summary: Type      Total  Passed  Failed
+                 tests         1       1       0
+                 asserts       0       0       0
+
+  rank  2:
+    Test: integral ... passed
+
+  --Run Summary: Type      Total  Passed  Failed
+                 tests         1       1       0
+                 asserts       0       0       0
+
+  [3 Process Results]
+  =============================================[1/1][100]

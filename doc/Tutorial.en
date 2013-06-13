@@ -1,0 +1,40 @@
+# -*- rd -*-
+
+Time-stamp: <2007-11-14 22:30:27 shinya>
+
+= MPIUnit::Tutorial.en
+
+== Make directories
+
+  top---+---src
+        |
+        +---test
+
+  % mkdir add
+  % mkdir add/src add/test
+
+== Write test programs
+
+See the "sample/test/" directory and References.
+
+Test programs are placed under the test directory.
+
+== Write source programs
+
+See the "sample/src/" directory.
+
+Source programs are placed under the src directory.
+
+== Build and Run
+
+Go to "top/" directory, and execute following command.
+
+args are mpirun argument.
+
+  [top]% mpiut [args ...]
+
+example, 
+
+  [top]% mpiut -np 4
+
+You will see the result of tests.
