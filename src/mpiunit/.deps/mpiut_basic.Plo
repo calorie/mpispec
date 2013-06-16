@@ -44,7 +44,7 @@ mpiut_basic.lo: mpiut_basic.c /usr/include/stdio.h \
  /usr/include/asm-generic/errno.h /usr/include/asm-generic/errno-base.h \
  testdb.h /usr/include/setjmp.h /usr/include/i386-linux-gnu/bits/setjmp.h \
  /usr/include/i386-linux-gnu/bits/setjmp2.h testrun.h util.h \
- mpiut_basic.h
+ mpiut_basic.h ../cspec/inc/cspec_output.h
 
 /usr/include/stdio.h:
 
@@ -183,3 +183,5 @@ testrun.h:
 util.h:
 
 mpiut_basic.h:
+
+../cspec/inc/cspec_output.h:

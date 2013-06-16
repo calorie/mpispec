@@ -64,10 +64,11 @@
 #include "util.h"
 #include "testrun.h"
 #include "mpiut_basic.h"
+#include "../cspec/inc/cspec_output.h"
+FILE *__mpiut_result_file__;
 
 static CU_pSuite f_pRunningSuite = NULL;
 static CU_BasicRunMode f_run_mode = CU_BRM_NORMAL;
-static FILE *__mpiut_result_file__;
 
 static CU_ErrorCode basic_initialize(void);
 static CU_ErrorCode basic_run_all_tests(CU_pTestRegistry pRegistry);
@@ -130,8 +131,9 @@ CU_basic_run_test(CU_pSuite pSuite, CU_pTest pTest)
     error = CUE_NOSUITE;
   else if (NULL != pTest)
     error = CUE_NOTEST;
-  else if (CUE_SUCCESS == (error = basic_initialize()))
+  else if (CUE_SUCCESS == (error = basic_initialize())) {
     error = basic_run_single_test(pSuite, pTest);
+  }
 
   return error;
 }
@@ -144,7 +146,7 @@ CU_basic_set_mode(CU_BasicRunMode mode)
 
   MPI_Comm_rank(MPI_COMM_WORLD, &myrank);
   sprintf(result_filename, "rank%d.result", myrank);
-  if(NULL == (__mpiut_result_file__ = fopen(result_filename, "w"))) {
+  if(NULL == (__mpiut_result_file__ = fopen(result_filename, "a"))) {
     fprintf(stderr, "Can't open result files");
     exit(-1);
   };
@@ -264,8 +266,7 @@ basic_test_complete_message_handler(const CU_pTest pTest,
 
   if (NULL == pFailure) {
     if (CU_BRM_VERBOSE == f_run_mode) {
-      /* fprintf(__mpiut_result_file__, "\033[1;32mpassed\033[0m"); */
-      fprintf(__mpiut_result_file__, "passed");
+      fprintf(__mpiut_result_file__, "\033[1;32mpassed\033[0m");
     }
   }
   else {

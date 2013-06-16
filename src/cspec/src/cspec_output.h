@@ -7,6 +7,9 @@
 #ifndef CSPEC_OUTPUT_H
 #define CSPEC_OUTPUT_H
 
+#include <stdio.h>
+static FILE *__mpiut_result_file__;
+
 typedef void ( * CSpecOutputStartDescribeFun ) ( const char *descr);
 typedef void ( * CSpecOutputEndDescribeFun ) ( );
 

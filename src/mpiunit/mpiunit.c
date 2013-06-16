@@ -37,6 +37,7 @@ mpiut_setup()
   CU_initialize_registry();
   suite = NULL;
   suite = CU_add_suite(suitename, NULL, NULL);
+  /* CU_basic_set_mode(CU_BRM_VERBOSE); */
 }
 
 void

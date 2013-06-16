@@ -40,7 +40,7 @@
  *
  *  18-Jul-2004   New interface, doxygen comments, made local functions &
  *                constants static, fixed reporting of memory tracking (valid
- *                vs invalid cycles), restructured memory tracking to detect 
+ *                vs invalid cycles), restructured memory tracking to detect
  *                reallocations & multiple deletions. (JDS)
  *
  *  24-Apr-2005   Changed type of allocated sizes to size_t to avoid
@@ -98,7 +98,7 @@ typedef struct mem_node {
 typedef MEMORY_NODE* PMEMORY_NODE;
 
 static PMEMORY_NODE f_pMemoryTrackerHead = NULL;
-static unsigned int f_nMemoryNodes = 0;         
+static unsigned int f_nMemoryNodes = 0;
 
 static PMEMORY_NODE
 find_memory_node(void* pLocation)
@@ -201,8 +201,8 @@ allocate_memory(size_t nSize, void* pLocation, unsigned int uiAllocationLine,
   return pMemoryNode;
 }
 
-static void 
-deallocate_memory(void* pLocation, unsigned int uiDeletionLine, 
+static void
+deallocate_memory(void* pLocation, unsigned int uiDeletionLine,
                   const char* szDeletionFileName)
 {
   PMEMORY_NODE  pMemoryNode = NULL;
@@ -255,7 +255,7 @@ CU_calloc(size_t nmemb, size_t size, unsigned int uiLine,
   return pVoid;
 }
 
-void* 
+void*
 CU_malloc(size_t size, unsigned int uiLine, const char* szFileName)
 {
   void* pVoid = NULL;
@@ -381,7 +381,7 @@ CU_dump_memory_usage(const char* szFilename)
   fclose(pFile);
 }
 
-#endif 
+#endif
 
 #ifdef CUNIT_BUILD_TESTS
 #include "test_cunit.h"

@@ -58,7 +58,7 @@
  *                requirement for registry to be initialized in order to run
  *                CU_run_suite() and CU_run_test(). (JDS)
  *
- *  30-Apr-2005   Added callback for suite cleanup function failure, 
+ *  30-Apr-2005   Added callback for suite cleanup function failure,
  *                updated unit tests. (JDS)
  */
 
@@ -81,26 +81,26 @@
 #include "testrun.h"
 
 static CU_BOOL   f_bTestIsRunning = CU_FALSE;
-static CU_pSuite f_pCurSuite = NULL;         
-static CU_pTest  f_pCurTest  = NULL;         
+static CU_pSuite f_pCurSuite = NULL;
+static CU_pTest  f_pCurTest  = NULL;
 static CU_RunSummary f_run_summary = {0, 0, 0, 0, 0, 0, 0};
 static CU_pFailureRecord f_failure_list = NULL;
 static CU_pFailureRecord f_last_failure = NULL;
 
-static void         
-clear_previous_results(CU_pRunSummary pRunSummary, 
+static void
+clear_previous_results(CU_pRunSummary pRunSummary,
                        CU_pFailureRecord* ppFailure);
 
-static void         
+static void
 cleanup_failure_list(CU_pFailureRecord* ppFailure);
 
-static CU_ErrorCode 
+static CU_ErrorCode
 run_single_suite(CU_pSuite pSuite, CU_pRunSummary pRunSummary);
 
-static CU_ErrorCode 
+static CU_ErrorCode
 run_single_test(CU_pTest pTest, CU_pRunSummary pRunSummary);
 
-static void         
+static void
 add_failure(CU_pFailureRecord* ppFailure,
             CU_pRunSummary pRunSummary,
             unsigned int uiLineNumber,
@@ -115,12 +115,12 @@ static CU_AllTestsCompleteMessageHandler f_pAllTestsCompleteMessageHandler = NUL
 static CU_SuiteInitFailureMessageHandler    f_pSuiteInitFailureMessageHandler = NULL;
 static CU_SuiteCleanupFailureMessageHandler f_pSuiteCleanupFailureMessageHandler = NULL;
 
-CU_BOOL 
-CU_assertImplementation(CU_BOOL bValue, 
+CU_BOOL
+CU_assertImplementation(CU_BOOL bValue,
                         unsigned int uiLine,
-                        char strCondition[], 
+                        char strCondition[],
                         char strFile[],
-                        char strFunction[], 
+                        char strFunction[],
                         CU_BOOL bFatal)
 {
   CU_UNREFERENCED_PARAMETER(strFunction);
@@ -142,127 +142,127 @@ CU_assertImplementation(CU_BOOL bValue,
   return bValue;
 }
 
-void 
+void
 CU_set_test_start_handler(CU_TestStartMessageHandler pTestStartHandler)
 {
   f_pTestStartMessageHandler = pTestStartHandler;
 }
 
-void 
+void
 CU_set_test_complete_handler(CU_TestCompleteMessageHandler pTestCompleteHandler)
 {
   f_pTestCompleteMessageHandler = pTestCompleteHandler;
 }
 
-void 
+void
 CU_set_all_test_complete_handler(CU_AllTestsCompleteMessageHandler pAllTestsCompleteHandler)
 {
   f_pAllTestsCompleteMessageHandler = pAllTestsCompleteHandler;
 }
 
-void 
+void
 CU_set_suite_init_failure_handler(CU_SuiteInitFailureMessageHandler pSuiteInitFailureHandler)
 {
   f_pSuiteInitFailureMessageHandler = pSuiteInitFailureHandler;
 }
 
-void 
+void
 CU_set_suite_cleanup_failure_handler(CU_SuiteCleanupFailureMessageHandler pSuiteCleanupFailureHandler)
 {
   f_pSuiteCleanupFailureMessageHandler = pSuiteCleanupFailureHandler;
 }
 
-CU_TestStartMessageHandler 
+CU_TestStartMessageHandler
 CU_get_test_start_handler(void)
 {
   return f_pTestStartMessageHandler;
 }
 
-CU_TestCompleteMessageHandler 
+CU_TestCompleteMessageHandler
 CU_get_test_complete_handler(void)
 {
   return f_pTestCompleteMessageHandler;
 }
 
-CU_AllTestsCompleteMessageHandler 
+CU_AllTestsCompleteMessageHandler
 CU_get_all_test_complete_handler(void)
 {
   return f_pAllTestsCompleteMessageHandler;
 }
 
-CU_SuiteInitFailureMessageHandler 
+CU_SuiteInitFailureMessageHandler
 CU_get_suite_init_failure_handler(void)
 {
   return f_pSuiteInitFailureMessageHandler;
 }
 
-CU_SuiteCleanupFailureMessageHandler 
+CU_SuiteCleanupFailureMessageHandler
 CU_get_suite_cleanup_failure_handler(void)
 {
   return f_pSuiteCleanupFailureMessageHandler;
 }
 
-unsigned int 
+unsigned int
 CU_get_number_of_suites_run(void)
 {
   return f_run_summary.nSuitesRun;
 }
 
-unsigned int 
+unsigned int
 CU_get_number_of_suites_failed(void)
 {
   return f_run_summary.nSuitesFailed;
 }
 
-unsigned int 
+unsigned int
 CU_get_number_of_tests_run(void)
 {
   return f_run_summary.nTestsRun;
 }
 
-unsigned int 
+unsigned int
 CU_get_number_of_tests_failed(void)
 {
   return f_run_summary.nTestsFailed;
 }
 
-unsigned int 
+unsigned int
 CU_get_number_of_asserts(void)
 {
   return f_run_summary.nAsserts;
 }
 
-unsigned int 
+unsigned int
 CU_get_number_of_successes(void)
 {
   return (f_run_summary.nAsserts - f_run_summary.nAssertsFailed);
 }
 
-unsigned int 
+unsigned int
 CU_get_number_of_failures(void)
 {
   return f_run_summary.nAssertsFailed;
 }
 
-unsigned int 
+unsigned int
 CU_get_number_of_failure_records(void)
 {
   return f_run_summary.nFailureRecords;
 }
 
-CU_pFailureRecord 
+CU_pFailureRecord
 CU_get_failure_list(void)
 {
   return f_failure_list;
 }
 
-CU_pRunSummary 
+CU_pRunSummary
 CU_get_run_summary(void)
 {
   return &f_run_summary;
 }
 
-CU_ErrorCode 
+CU_ErrorCode
 CU_run_all_tests(void)
 {
   CU_pTestRegistry pRegistry = CU_get_registry();
@@ -298,7 +298,7 @@ CU_run_all_tests(void)
   return result;
 }
 
-CU_ErrorCode 
+CU_ErrorCode
 CU_run_suite(CU_pSuite pSuite)
 {
   CU_ErrorCode result;
@@ -326,7 +326,7 @@ CU_run_suite(CU_pSuite pSuite)
   return result;
 }
 
-CU_ErrorCode 
+CU_ErrorCode
 CU_run_test(CU_pSuite pSuite, CU_pTest pTest)
 {
   CU_ErrorCode result;
@@ -388,31 +388,31 @@ CU_run_test(CU_pSuite pSuite, CU_pTest pTest)
   return result;
 }
 
-void 
+void
 CU_clear_previous_results(void)
 {
   clear_previous_results(&f_run_summary, &f_failure_list);
 }
 
-CU_pSuite 
+CU_pSuite
 CU_get_current_suite(void)
 {
   return f_pCurSuite;
 }
 
-CU_pTest 
+CU_pTest
 CU_get_current_test(void)
 {
   return f_pCurTest;
 }
 
-CU_BOOL 
+CU_BOOL
 CU_is_test_running(void)
 {
   return f_bTestIsRunning;
 }
 
-void 
+void
 add_failure(CU_pFailureRecord* ppFailure,
             CU_pRunSummary pRunSummary,
             unsigned int uiLineNumber,
@@ -479,8 +479,8 @@ add_failure(CU_pFailureRecord* ppFailure,
   f_last_failure = pFailureNew;
 }
 
-static void 
-clear_previous_results(CU_pRunSummary pRunSummary, 
+static void
+clear_previous_results(CU_pRunSummary pRunSummary,
                        CU_pFailureRecord* ppFailure)
 {
   assert(NULL != pRunSummary);
@@ -501,7 +501,7 @@ clear_previous_results(CU_pRunSummary pRunSummary,
   f_last_failure = NULL;
 }
 
-static void 
+static void
 cleanup_failure_list(CU_pFailureRecord* ppFailure)
 {
   CU_pFailureRecord pCurFailure = NULL;
@@ -527,7 +527,7 @@ cleanup_failure_list(CU_pFailureRecord* ppFailure)
   *ppFailure = NULL;
 }
 
-static CU_ErrorCode 
+static CU_ErrorCode
 run_single_suite(CU_pSuite pSuite, CU_pRunSummary pRunSummary)
 {
   CU_pTest pTest = NULL;
@@ -575,7 +575,7 @@ run_single_suite(CU_pSuite pSuite, CU_pRunSummary pRunSummary)
   return result;
 }
 
-CU_ErrorCode 
+CU_ErrorCode
 run_single_test(CU_pTest pTest, CU_pRunSummary pRunSummary)
 {
   volatile unsigned int nStartFailures;
@@ -598,7 +598,7 @@ run_single_test(CU_pTest pTest, CU_pRunSummary pRunSummary)
   pTest->pJumpBuf = &buf;
   if (0 == setjmp(buf)) {
     if (NULL != pTest->pTestFunc) {
-      (*pTest->pTestFunc)();       
+      (*pTest->pTestFunc)();
     }
   }
 
@@ -650,7 +650,7 @@ typedef struct TE {
 static int f_nTestEvents = 0;
 static pTestEvent f_pFirstEvent = NULL;
 
-static void 
+static void
 add_test_event(TestEventType type, CU_pSuite psuite,
                CU_pTest ptest, CU_pFailureRecord pfailure)
 {
@@ -676,7 +676,7 @@ add_test_event(TestEventType type, CU_pSuite psuite,
   ++f_nTestEvents;
 }
 
-static void 
+static void
 clear_test_events(void)
 {
   pTestEvent pCurrentEvent = f_pFirstEvent;
@@ -692,7 +692,7 @@ clear_test_events(void)
   f_nTestEvents = 0;
 }
 
-static void 
+static void
 test_start_handler(const CU_pTest pTest, const CU_pSuite pSuite)
 {
   TEST(CU_is_test_running());
@@ -702,7 +702,7 @@ test_start_handler(const CU_pTest pTest, const CU_pSuite pSuite)
   add_test_event(TEST_START, pSuite, pTest, NULL);
 }
 
-static void 
+static void
 test_complete_handler(const CU_pTest pTest, const CU_pSuite pSuite,
                       const CU_pFailureRecord pFailure)
 {
@@ -713,7 +713,7 @@ test_complete_handler(const CU_pTest pTest, const CU_pSuite pSuite,
   add_test_event(TEST_COMPLETE, pSuite, pTest, pFailure);
 }
 
-static void 
+static void
 test_all_complete_handler(const CU_pFailureRecord pFailure)
 {
   TEST(!CU_is_test_running());
@@ -721,7 +721,7 @@ test_all_complete_handler(const CU_pFailureRecord pFailure)
   add_test_event(ALL_TESTS_COMPLETE, NULL, NULL, pFailure);
 }
 
-static void 
+static void
 suite_init_failure_handler(const CU_pSuite pSuite)
 {
   TEST(CU_is_test_running());
@@ -730,7 +730,7 @@ suite_init_failure_handler(const CU_pSuite pSuite)
   add_test_event(SUITE_INIT_FAILED, pSuite, NULL, NULL);
 }
 
-static void 
+static void
 suite_cleanup_failure_handler(const CU_pSuite pSuite)
 {
   TEST(CU_is_test_running());
@@ -739,19 +739,19 @@ suite_cleanup_failure_handler(const CU_pSuite pSuite)
   add_test_event(SUITE_CLEANUP_FAILED, pSuite, NULL, NULL);
 }
 
-void 
+void
 test_succeed(void) { CU_TEST(CU_TRUE); }
 
-void 
+void
 test_fail(void) { CU_TEST(CU_FALSE); }
 
-int 
+int
 suite_succeed(void) { return 0; }
 
-int 
+int
 suite_fail(void) { return 1; }
 
-static void 
+static void
 test_message_handlers(void)
 {
   CU_pSuite pSuite1 = NULL;
@@ -955,14 +955,14 @@ test_message_handlers(void)
 
 static CU_BOOL f_exit_called = CU_FALSE;
 
-void 
+void
 test_exit(int status)
 {
   CU_UNREFERENCED_PARAMETER(status);  /* not used */
   f_exit_called = CU_TRUE;
 }
 
-static void 
+static void
 test_CU_run_all_tests(void)
 {
   CU_pSuite pSuite1 = NULL;
@@ -1112,7 +1112,7 @@ test_CU_run_all_tests(void)
   clear_test_events();
 }
 
-static void 
+static void
 test_CU_run_suite(void)
 {
   CU_pSuite pSuite1 = NULL;
@@ -1430,7 +1430,7 @@ test_CU_run_suite(void)
   clear_test_events();
 }
 
-static void 
+static void
 test_CU_run_test(void)
 {
   CU_pSuite pSuite1 = NULL;
@@ -2114,67 +2114,67 @@ test_CU_run_test(void)
   clear_test_events();
 }
 
-static void 
+static void
 test_CU_get_number_of_suites_run(void)
 {
 }
 
-static void 
+static void
 test_CU_get_number_of_suites_failed(void)
 {
 }
 
-static void 
+static void
 test_CU_get_number_of_tests_run(void)
 {
 }
 
-static void 
+static void
 test_CU_get_number_of_tests_failed(void)
 {
 }
 
-static void 
+static void
 test_CU_get_number_of_asserts(void)
 {
 }
 
-static void 
+static void
 test_CU_get_number_of_successes(void)
 {
 }
 
-static void 
+static void
 test_CU_get_number_of_failures(void)
 {
 }
 
-static void 
+static void
 test_CU_get_failure_list(void)
 {
 }
 
-static void 
+static void
 test_CU_get_run_summary(void)
 {
 }
 
-static void 
+static void
 test_CU_get_current_suite(void)
 {
 }
 
-static void 
+static void
 test_CU_get_current_test(void)
 {
 }
 
-static void 
+static void
 test_CU_is_test_running(void)
 {
 }
 
-static void 
+static void
 test_CU_assertImplementation(void)
 {
   CU_Test dummy_test;
@@ -2288,32 +2288,32 @@ test_CU_assertImplementation(void)
   f_pCurSuite = NULL;
 }
 
-static void 
+static void
 test_CU_clear_previous_results(void)
 {
 }
 
-static void 
+static void
 test_clear_previous_results(void)
 {
 }
 
-static void 
+static void
 test_cleanup_failure_list(void)
 {
 }
 
-static void 
+static void
 test_run_single_suite(void)
 {
 }
 
-static void 
+static void
 test_run_single_test(void)
 {
 }
 
-static void 
+static void
 test_add_failure(void)
 {
   CU_Test test1;
@@ -2365,7 +2365,7 @@ test_add_failure(void)
       TEST(!strcmp("file2.c", pFailure2->strFileName));
       TEST(&test1 == pFailure2->pTest);
       TEST(NULL == pFailure2->pSuite);
-      TEST(NULL == pFailure2->pNext);                          
+      TEST(NULL == pFailure2->pNext);
       TEST(pFailure1 == pFailure2->pPrev);
       TEST(pFailure2 == f_last_failure);
       TEST(0 != test_cunit_get_n_memevents(pFailure2));
@@ -2384,7 +2384,7 @@ test_add_failure(void)
   TEST(test_cunit_get_n_allocations(pFailure4) == test_cunit_get_n_deallocations(pFailure4));
 }
 
-void 
+void
 test_cunit_TestRun(void)
 {
   test_cunit_start_tests("TestRun.c");

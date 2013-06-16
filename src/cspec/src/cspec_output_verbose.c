@@ -7,16 +7,19 @@
 
 #include <stdarg.h>
 #include <stdio.h>
+#include <mpi.h>
 #ifdef _WIN32
 #  include <windows.h>
 #endif
-#include "cspec_output_verbose.h"
+#include "../inc/cspec_output_verbose.h"
 
+/* static FILE *__mpiut_result_file__; */
 static CSpecOutputStruct verbose;
 int tab_num = 0;
 
 /* private functions */
 static void coloredPrintf(CSpec_Color color, const char* format, ...);
+static void coloredFprintf(CSpec_Color color, const char* format, ...);
 #ifdef _WIN32
 static WORD getWindowsColorAttribute(CSpec_Color color);
 #else  /* !_WIN32 */
@@ -28,17 +31,34 @@ void printTab(int n)
 {
     int i;
     for (i = 0; i < n; i++)
-        printf("    ");
+        printf("  ");
+}
+void fprintTab(int n)
+{
+    int i;
+    for (i = 0; i < n; i++)
+        fprintf(__mpiut_result_file__, "    ");
 }
 
 void startDescribeFunVerbose( const char *descr)
 {
     printf("Describe:%s\n", descr);
 }
+void f_startDescribeFunVerbose( const char *descr)
+{
+    fprintf(__mpiut_result_file__, "\n");
+    fprintTab(++tab_num);
+    fprintf(__mpiut_result_file__, "Describe:%s\n", descr);
+}
 
 void endDescribeFunVerbose( )
 {
+    tab_num--;
     printf("\n");
+}
+void f_endDescribeFunVerbose( )
+{
+    fprintf(__mpiut_result_file__, "\n");
 }
 
 void startItFunVerbose( const char *descr)
@@ -46,10 +66,20 @@ void startItFunVerbose( const char *descr)
     printTab(++tab_num);
     printf("- it %s\n", descr);
 }
+void f_startItFunVerbose( const char *descr)
+{
+    fprintTab(++tab_num);
+    fprintf(__mpiut_result_file__, "- it %s\n", descr);
+}
 
 void endItFunVerbose( )
 {
     printf("\n");
+}
+void f_endItFunVerbose( )
+{
+    tab_num--;
+    fprintf(__mpiut_result_file__, "\n");
 }
 
 void endFunVerbose( )
@@ -57,11 +87,21 @@ void endFunVerbose( )
     tab_num--;
     printf("\n");
 }
+void f_endFunVerbose( )
+{
+    tab_num--;
+    fprintf(__mpiut_result_file__, "\n");
+}
 
 void startContextFunVerbose( const char *descr)
 {
     printTab(++tab_num);
     printf("- context %s\n", descr);
+}
+void f_startContextFunVerbose( const char *descr)
+{
+    fprintTab(++tab_num);
+    fprintf(__mpiut_result_file__, "- context %s\n", descr);
 }
 
 void evalFunVerbose(const char*filename, int line_number, const char*assertion, int assertionResult)
@@ -78,13 +118,31 @@ void evalFunVerbose(const char*filename, int line_number, const char*assertion, 
                 "Failed: %s in file %s at line %d\n", assertion, filename, line_number);
     }
 }
+void f_evalFunVerbose(const char*filename, int line_number, const char*assertion, int assertionResult)
+{
+    fprintTab(tab_num + 1);
+    if(assertionResult)
+    {
+        coloredFprintf(CSPEC_COLOR_GREEN,
+                "OK: %s\n", assertion, filename, line_number);
+    }
+    else
+    {
+        coloredFprintf(CSPEC_COLOR_RED,
+                "Failed: %s in file %s at line %d\n", assertion, filename, line_number);
+    }
+}
 
 void pendingFunVerbose(const char* reason)
 {
     coloredPrintf(CSPEC_COLOR_YELLOW, "       Pending: %s\n", reason);
 }
+void f_pendingFunVerbose(const char* reason)
+{
+    coloredFprintf(CSPEC_COLOR_YELLOW, "       Pending: %s\n", reason);
+}
 
-CSpecOutputStruct* CSpec_NewOutputVerbose()
+CSpecOutputStruct* f_CSpec_NewOutputVerbose()
 {
     CSpec_InitOutput(&verbose);
 
@@ -96,6 +154,22 @@ CSpecOutputStruct* CSpec_NewOutputVerbose()
     verbose.endFun           = endFunVerbose;
     verbose.evalFun          = evalFunVerbose;
     verbose.pendingFun       = pendingFunVerbose;
+
+    return &verbose;
+}
+
+CSpecOutputStruct* CSpec_NewOutputVerbose()
+{
+    CSpec_InitOutput(&verbose);
+
+    verbose.startDescribeFun = f_startDescribeFunVerbose;
+    verbose.endDescribeFun   = f_endDescribeFunVerbose;
+    verbose.startItFun       = f_startItFunVerbose;
+    verbose.endItFun         = f_endItFunVerbose;
+    verbose.startContextFun  = f_startContextFunVerbose;
+    verbose.endFun           = f_endFunVerbose;
+    verbose.evalFun          = f_evalFunVerbose;
+    verbose.pendingFun       = f_pendingFunVerbose;
 
     return &verbose;
 }
@@ -195,6 +269,26 @@ coloredPrintf(CSpec_Color color, const char* format, ...)
     printf("\033[m");
 
 #endif  /* _WIN32 */
+
+    va_end(args);
+    return;
+}
+
+static void
+coloredFprintf(CSpec_Color color, const char* format, ...)
+{
+    va_list args;
+
+    va_start(args, format);
+
+    /* Set color */
+    fprintf(__mpiut_result_file__, "\033[0;%dm", getAnsiColorCode(color));
+
+    /* Print Text */
+    vfprintf(__mpiut_result_file__, format, args);
+
+    /* Reset color */
+    fprintf(__mpiut_result_file__, "\033[m");
 
     va_end(args);
     return;

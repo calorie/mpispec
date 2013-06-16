@@ -12,8 +12,9 @@ cspec_output_verbose.lo: cspec_output_verbose.c \
  /usr/include/i386-linux-gnu/bits/stdio_lim.h \
  /usr/include/i386-linux-gnu/bits/sys_errlist.h \
  /usr/include/i386-linux-gnu/bits/stdio.h \
- /usr/include/i386-linux-gnu/bits/stdio2.h cspec_output_verbose.h \
- cspec_output.h
+ /usr/include/i386-linux-gnu/bits/stdio2.h /usr/local/include/mpi.h \
+ /usr/local/include/mpio.h /usr/local/include/mpi.h \
+ ../inc/cspec_output_verbose.h ../inc/cspec_output.h
 
 /usr/lib/gcc/i686-linux-gnu/4.7/include/stdarg.h:
 
@@ -51,6 +52,12 @@ cspec_output_verbose.lo: cspec_output_verbose.c \
 
 /usr/include/i386-linux-gnu/bits/stdio2.h:
 
-cspec_output_verbose.h:
+/usr/local/include/mpi.h:
 
-cspec_output.h:
+/usr/local/include/mpio.h:
+
+/usr/local/include/mpi.h:
+
+../inc/cspec_output_verbose.h:
+
+../inc/cspec_output.h:

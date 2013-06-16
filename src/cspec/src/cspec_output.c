@@ -1,5 +1,5 @@
 /*
- *  cspec_output.c   :  
+ *  cspec_output.c   :
  *
  *
  * See copyright notice in cspec.h
@@ -7,10 +7,11 @@
  */
 
 #include "cspec.h"
+#include <stdio.h>
 #include <memory.h>
 
 void CSpec_InitOutput( CSpecOutputStruct* output )
 {
-	memset(output, 0, sizeof(CSpecOutputStruct) );
+  memset(output, 0, sizeof(CSpecOutputStruct) );
 }
 

@@ -1,28 +1,35 @@
-cspec_output.lo: cspec_output.c cspec.h cspec_config.h cspec_private.h \
- cspec_output.h /usr/include/memory.h /usr/include/features.h \
- /usr/include/i386-linux-gnu/bits/predefs.h \
+cspec_output.lo: cspec_output.c cspec.h ../inc/cspec_config.h \
+ cspec_private.h cspec_output.h /usr/include/stdio.h \
+ /usr/include/features.h /usr/include/i386-linux-gnu/bits/predefs.h \
  /usr/include/i386-linux-gnu/sys/cdefs.h \
  /usr/include/i386-linux-gnu/bits/wordsize.h \
  /usr/include/i386-linux-gnu/gnu/stubs.h \
- /usr/include/i386-linux-gnu/gnu/stubs-32.h /usr/include/string.h \
- /usr/lib/gcc/i686-linux-gnu/4.7/include/stddef.h /usr/include/xlocale.h \
+ /usr/include/i386-linux-gnu/gnu/stubs-32.h \
+ /usr/lib/gcc/i686-linux-gnu/4.7/include/stddef.h \
+ /usr/include/i386-linux-gnu/bits/types.h \
+ /usr/include/i386-linux-gnu/bits/typesizes.h /usr/include/libio.h \
+ /usr/include/_G_config.h /usr/include/wchar.h \
+ /usr/lib/gcc/i686-linux-gnu/4.7/include/stdarg.h \
+ /usr/include/i386-linux-gnu/bits/stdio_lim.h \
+ /usr/include/i386-linux-gnu/bits/sys_errlist.h \
+ /usr/include/i386-linux-gnu/bits/stdio.h \
+ /usr/include/i386-linux-gnu/bits/stdio2.h /usr/include/memory.h \
+ /usr/include/string.h /usr/include/xlocale.h \
  /usr/include/i386-linux-gnu/bits/string.h \
  /usr/include/i386-linux-gnu/bits/string2.h /usr/include/endian.h \
  /usr/include/i386-linux-gnu/bits/endian.h \
- /usr/include/i386-linux-gnu/bits/byteswap.h \
- /usr/include/i386-linux-gnu/bits/types.h \
- /usr/include/i386-linux-gnu/bits/typesizes.h /usr/include/stdlib.h \
+ /usr/include/i386-linux-gnu/bits/byteswap.h /usr/include/stdlib.h \
  /usr/include/i386-linux-gnu/bits/string3.h
 
 cspec.h:
 
-cspec_config.h:
+../inc/cspec_config.h:
 
 cspec_private.h:
 
 cspec_output.h:
 
-/usr/include/memory.h:
+/usr/include/stdio.h:
 
 /usr/include/features.h:
 
@@ -36,9 +43,31 @@ cspec_output.h:
 
 /usr/include/i386-linux-gnu/gnu/stubs-32.h:
 
-/usr/include/string.h:
-
 /usr/lib/gcc/i686-linux-gnu/4.7/include/stddef.h:
+
+/usr/include/i386-linux-gnu/bits/types.h:
+
+/usr/include/i386-linux-gnu/bits/typesizes.h:
+
+/usr/include/libio.h:
+
+/usr/include/_G_config.h:
+
+/usr/include/wchar.h:
+
+/usr/lib/gcc/i686-linux-gnu/4.7/include/stdarg.h:
+
+/usr/include/i386-linux-gnu/bits/stdio_lim.h:
+
+/usr/include/i386-linux-gnu/bits/sys_errlist.h:
+
+/usr/include/i386-linux-gnu/bits/stdio.h:
+
+/usr/include/i386-linux-gnu/bits/stdio2.h:
+
+/usr/include/memory.h:
+
+/usr/include/string.h:
 
 /usr/include/xlocale.h:
 
@@ -51,10 +80,6 @@ cspec_output.h:
 /usr/include/i386-linux-gnu/bits/endian.h:
 
 /usr/include/i386-linux-gnu/bits/byteswap.h:
-
-/usr/include/i386-linux-gnu/bits/types.h:
-
-/usr/include/i386-linux-gnu/bits/typesizes.h:
 
 /usr/include/stdlib.h:
 

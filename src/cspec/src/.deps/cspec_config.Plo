@@ -19,7 +19,7 @@ cspec_config.lo: cspec_config.c /usr/include/string.h \
  /usr/include/i386-linux-gnu/bits/nan.h \
  /usr/include/i386-linux-gnu/bits/mathdef.h \
  /usr/include/i386-linux-gnu/bits/mathcalls.h \
- /usr/include/i386-linux-gnu/bits/mathinline.h cspec_config.h
+ /usr/include/i386-linux-gnu/bits/mathinline.h ../inc/cspec_config.h
 
 /usr/include/string.h:
 
@@ -75,4 +75,4 @@ cspec_config.lo: cspec_config.c /usr/include/string.h \
 
 /usr/include/i386-linux-gnu/bits/mathinline.h:
 
-cspec_config.h:
+../inc/cspec_config.h:
