@@ -8,6 +8,6 @@ EXEC="exec_test"
 MPIUTFLAGS="-I${INSTDIR}/include -finstrument-functions -rdynamic"
 MPIUTLIBS="-L${INSTDIR}/lib -lmpiunit -lcspec -lm"
 
-$CC $MPIUTFLAGS $MPIUTLIBS src/*.c test/*.c -o $EXEC
+$CC $MPIUTFLAGS $MPIUTLIBS src/*.c spec/*.c -o $EXEC
 mpirun $* ./$EXEC
 rm -f *.o $EXEC

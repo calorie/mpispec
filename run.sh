@@ -1,3 +1,3 @@
 #!/bin/sh
 
-test/mpiunit/run-test.sh
+test/mpispec/run-test.sh

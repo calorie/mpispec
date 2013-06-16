@@ -26,6 +26,6 @@ procut:
 	@rm -f ${RUNTEST} *.o *.so *~
 
 mpispec:
-	@${CC} ${MPIUTFLAGS} ${MPISPECLIBS} ${SRC} ${TESTSRC} -o ${RUNTEST}
+	@${CC} ${MPIUTFLAGS} ${MPISPECLIBS} ${SRC} ${SPECRC} -o ${RUNTEST}
 	@mpirun ${ARGV} ./${RUNTEST}
 	@rm -f ${RUNTEST} *.o *.so *~

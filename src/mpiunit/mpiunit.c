@@ -90,14 +90,12 @@ mpiut_show_result()
 
   if(myrank == 0) {
     for(i = 0; i < n_procs; i++) {
-      /* printf("\n\n"); */
       sprintf(result_filename, "rank%d.result", i);
       if(NULL == (fp = fopen(result_filename, "r"))) {
         fprintf(stderr, "Can't open result files");
         exit(-1);
       }
-      while(!feof(fp)) {
-        ch = fgetc(fp);
+      while ((ch = fgetc(fp)) != EOF) {
         fputc(ch, stdout);
       }
       fclose(fp);
@@ -119,7 +117,7 @@ mpiut_show_result()
     else {
       fprintf(stdout, "\033[1;31m%s\033[0m", BAR);
     }
-    fprintf(stdout, "[%3.0lf\%]\n", 100 * s_rate);
+    fprintf(stdout, "[%3.0lf%%]\n", 100 * s_rate);
   }
 }
 

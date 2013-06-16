@@ -148,7 +148,7 @@ CU_basic_set_mode(CU_BasicRunMode mode)
     fprintf(stderr, "Can't open result files");
     exit(-1);
   };
-  
+
   f_run_mode = mode;
 }
 
@@ -189,8 +189,9 @@ basic_initialize(void)
 
   CU_set_error(CUE_SUCCESS);
 
-  if (CU_BRM_SILENT != f_run_mode)
-    puts("");
+  if (CU_BRM_SILENT != f_run_mode){
+    /* puts(""); */
+  }
 
   CU_set_test_start_handler(basic_test_start_message_handler);
   CU_set_test_complete_handler(basic_test_complete_message_handler);
@@ -251,8 +252,8 @@ basic_test_start_message_handler(const CU_pTest pTest,
 }
 
 static void
-basic_test_complete_message_handler(const CU_pTest pTest, 
-                                    const CU_pSuite pSuite, 
+basic_test_complete_message_handler(const CU_pTest pTest,
+                                    const CU_pSuite pSuite,
                                     const CU_pFailureRecord pFailureList)
 {
   CU_pFailureRecord pFailure = pFailureList;
@@ -273,7 +274,7 @@ basic_test_complete_message_handler(const CU_pTest pTest,
         fprintf(__mpiut_result_file__, "\033[1;31mFAILED\033[0m");
         break;
       case CU_BRM_NORMAL:
-        fprintf(__mpiut_result_file__, "\nSuite %s, Test %s had failures:", 
+        fprintf(__mpiut_result_file__, "\nSuite %s, Test %s had failures:",
                         (NULL != pSuite->pName) ? pSuite->pName : "",
                         (NULL != pTest->pName) ? pTest->pName : "");
         break;
