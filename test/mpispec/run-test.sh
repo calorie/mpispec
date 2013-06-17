@@ -2,6 +2,6 @@
 
 make
 sudo make install
-cd ~/work/hpcss/mpispec_sample/
+cd sample/
 mpispec -np 3
 cd ..

@@ -18,19 +18,26 @@
 /*               */
 
 
+/* Public function definition */
+
+typedef void ( * CSpecDescriptionFun ) ( );
+int CSpec_Run( CSpecDescriptionFun fun, CSpecOutputStruct* output);
+
 /* Structural macros */
 
 #define define_description(foo) void foo ## _describe();
 #define description(foo)        foo ## _describe
 
-#define describe(foo, caption)  void foo ## _describe () { CSpec_StartDescribe(caption); {
+#define describe(foo, caption)  {void foo ## _describe () { CSpec_StartDescribe(caption); {
 #define end_describe            } CSpec_EndDescribe(); }
 
 #define it(caption)             { CSpec_StartIt(caption); {
 #define end_it                  } CSpec_EndIt() ; }
 #define end                     } CSpec_End() ; }
+#define end(foo)                     } CSpec_End() ; }CSpec_SetOutput(CSpec_NewOutputVerbose());foo ## _describe();
 
 #define context(caption)        { CSpec_StartContext(caption); {
+#define end_context             } CSpec_EndContext() ; }
 
 
 
@@ -67,11 +74,6 @@
 #define expect_to_pending(reason)               CSPEC_PENDING(reason)
 
 
-
-/* Public function definition */
-
-typedef void ( * CSpecDescriptionFun ) ( );
-int CSpec_Run( CSpecDescriptionFun fun, CSpecOutputStruct* output);
 
 #endif
 

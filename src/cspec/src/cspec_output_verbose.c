@@ -37,18 +37,18 @@ void fprintTab(int n)
 {
     int i;
     for (i = 0; i < n; i++)
-        fprintf(__mpiut_result_file__, "    ");
+        fprintf(__mpiut_result_file__, "  ");
 }
 
 void startDescribeFunVerbose( const char *descr)
 {
-    printf("Describe:%s\n", descr);
+    printf("%s\n", descr);
 }
 void f_startDescribeFunVerbose( const char *descr)
 {
     fprintf(__mpiut_result_file__, "\n");
     fprintTab(++tab_num);
-    fprintf(__mpiut_result_file__, "Describe:%s\n", descr);
+    fprintf(__mpiut_result_file__, "%s\n", descr);
 }
 
 void endDescribeFunVerbose( )
@@ -58,18 +58,19 @@ void endDescribeFunVerbose( )
 }
 void f_endDescribeFunVerbose( )
 {
-    fprintf(__mpiut_result_file__, "\n");
+    tab_num--;
+    /* fprintf(__mpiut_result_file__, "\n"); */
 }
 
 void startItFunVerbose( const char *descr)
 {
     printTab(++tab_num);
-    printf("- it %s\n", descr);
+    printf("- %s\n", descr);
 }
 void f_startItFunVerbose( const char *descr)
 {
     fprintTab(++tab_num);
-    fprintf(__mpiut_result_file__, "- it %s\n", descr);
+    fprintf(__mpiut_result_file__, "- %s\n", descr);
 }
 
 void endItFunVerbose( )
@@ -79,7 +80,7 @@ void endItFunVerbose( )
 void f_endItFunVerbose( )
 {
     tab_num--;
-    fprintf(__mpiut_result_file__, "\n");
+    /* fprintf(__mpiut_result_file__, "\n"); */
 }
 
 void endFunVerbose( )
@@ -96,12 +97,23 @@ void f_endFunVerbose( )
 void startContextFunVerbose( const char *descr)
 {
     printTab(++tab_num);
-    printf("- context %s\n", descr);
+    printf("- %s\n", descr);
 }
 void f_startContextFunVerbose( const char *descr)
 {
     fprintTab(++tab_num);
-    fprintf(__mpiut_result_file__, "- context %s\n", descr);
+    fprintf(__mpiut_result_file__, "- %s\n", descr);
+}
+
+void endContextFunVerbose( const char *descr)
+{
+    tab_num--;
+    printf("\n");
+}
+void f_endContextFunVerbose( const char *descr)
+{
+    tab_num--;
+    /* fprintf(__mpiut_result_file__, "\n"); */
 }
 
 void evalFunVerbose(const char*filename, int line_number, const char*assertion, int assertionResult)
@@ -151,6 +163,7 @@ CSpecOutputStruct* f_CSpec_NewOutputVerbose()
     verbose.startItFun       = startItFunVerbose;
     verbose.endItFun         = endItFunVerbose;
     verbose.startContextFun  = startContextFunVerbose;
+    verbose.endContextFun    = endContextFunVerbose;
     verbose.endFun           = endFunVerbose;
     verbose.evalFun          = evalFunVerbose;
     verbose.pendingFun       = pendingFunVerbose;
@@ -167,6 +180,7 @@ CSpecOutputStruct* CSpec_NewOutputVerbose()
     verbose.startItFun       = f_startItFunVerbose;
     verbose.endItFun         = f_endItFunVerbose;
     verbose.startContextFun  = f_startContextFunVerbose;
+    verbose.endContextFun    = f_endContextFunVerbose;
     verbose.endFun           = f_endFunVerbose;
     verbose.evalFun          = f_evalFunVerbose;
     verbose.pendingFun       = f_pendingFunVerbose;

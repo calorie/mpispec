@@ -1,7 +1,7 @@
 
 /* Time-stamp: <2007-11-14 22:31:01 shinya> */
 
-/* 
+/*
  * Original:
  *
  * Argonne National Laboratory Group
@@ -28,7 +28,7 @@
 #include <stdio.h>
 #include <math.h>
 
-static double 
+static double
 f(double x)
 {
   return (4.0 / (1.0 + x * x));
@@ -72,9 +72,14 @@ cpi()
         return pi;
       }
       else {
-        return 0.0;
+        return 3.14;
       }
     }
   }
 }
 
+double
+cpi2()
+{
+    return 3.14;
+}

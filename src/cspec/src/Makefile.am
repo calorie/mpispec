@@ -27,3 +27,9 @@ cspec_output_unit.c \
 cspec_private.c \
 cspec_output.c \
 cspec_output_junit_xml.c
+
+pkginclude_HEADERS = ../inc/mpispec.h ../inc/array.h ../inc/cspec.h ../inc/cspec_config.h ../inc/cspec_output.h \
+../inc/cspec_output_header.h ../inc/cspec_output_junit_xml.h ../inc/cspec_output_unit.h \
+../inc/cspec_output_verbose.h ../inc/cspec_output_xml.h ../inc/cspec_private.h \
+../inc/cspec_private_output_junit_xml.h
+

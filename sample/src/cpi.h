@@ -6,5 +6,7 @@
 
 double
 cpi();
+double
+cpi2();
 
 #endif

@@ -15,6 +15,7 @@ void CSpec_EndIt();
 void CSpec_End();
 
 int CSpec_StartContext(const char *descr);
+void CSpec_EndContext();
 
 
 void CSpec_Eval(const char*filename, int line_number, const char*assertion, int assertionResult);

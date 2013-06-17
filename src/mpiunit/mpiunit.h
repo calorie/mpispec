@@ -37,14 +37,32 @@ mpiut_rank();
     MPI_Init(&argc, &argv);     \
     mpiut_setup()
 
+#define mpispec_init            \
+  int                           \
+  main(int argc, char **argv) { \
+    MPI_Init(&argc, &argv);     \
+    mpiut_setup();
+
 #define MPIUT_PROTOTYPE(test) \
   void test()
+
+#define mpispec_prototype(test) \
+  void test();
 
 #define MPIUT_DEF(test) \
   void test()
 
+#define mpispec_def(test) \
+  void test() {{
+
+#define end_def \
+  }}
+
 #define MPIUT_REGISTER(name, test) \
   mpiut_register(name, test)
+
+#define mpispec_register(name, test) \
+  mpiut_register(name, test);
 
 #define MPIUT_FINALIZE         \
   mpiut_run();                 \
@@ -53,7 +71,17 @@ mpiut_rank();
   MPI_Finalize();              \
   return EXIT_SUCCESS; }
 
+#define mpispec_finalize       \
+  mpiut_run();                 \
+  MPI_Barrier(MPI_COMM_WORLD); \
+  mpiut_show_result();         \
+  MPI_Finalize();              \
+  return EXIT_SUCCESS; };
+
 #define MPIUT_RANK \
+  mpiut_rank()
+
+#define mpispec_rank \
   mpiut_rank()
 
 #endif
