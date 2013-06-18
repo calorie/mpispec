@@ -15,3 +15,7 @@ void CSpec_InitOutput( CSpecOutputStruct* output )
   memset(output, 0, sizeof(CSpecOutputStruct) );
 }
 
+void CSpec_InitOutputArray( CSpecOutputStructArray* output_array )
+{
+  memset(output_array, 0, sizeof(CSpecOutputStructArray) );
+}

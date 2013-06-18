@@ -8,7 +8,9 @@
 #define CSPEC_OUTPUT_H
 
 #include <stdio.h>
+#define MAX_TEST_NUM 100
 extern FILE *__mpiut_result_file__;
+
 typedef void ( * CSpecOutputStartDescribeFun ) ( const char *descr);
 typedef void ( * CSpecOutputEndDescribeFun ) ( );
 
@@ -42,7 +44,20 @@ typedef struct
 
 } CSpecOutputStruct;
 
+typedef struct
+{
+
+    CSpecOutputStruct output;
+
+    int Passed;
+    int Total;
+
+} CSpecOutputStructArray;
+
+static CSpecOutputStructArray output_array[MAX_TEST_NUM];
+
 void CSpec_InitOutput(CSpecOutputStruct* output);
+void CSpec_InitOutputArray(CSpecOutputStructArray* output_array);
 
 void CSpec_SetOutput(CSpecOutputStruct* output);
 

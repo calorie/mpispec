@@ -244,7 +244,7 @@ basic_test_start_message_handler(const CU_pTest pTest,
   if (CU_BRM_VERBOSE == f_run_mode) {
     if ((NULL == f_pRunningSuite) || (f_pRunningSuite != pSuite)) {
       fprintf(__mpiut_result_file__, "\n%s:", (NULL != pSuite->pName) ? pSuite->pName : "");
-      fprintf(__mpiut_result_file__, "\n  Test: %s ... ", (NULL != pTest->pName) ? pTest->pName : "");
+      /* fprintf(__mpiut_result_file__, "\n  Test: %s ... ", (NULL != pTest->pName) ? pTest->pName : ""); */
       f_pRunningSuite = pSuite;
     }
     else {
@@ -266,13 +266,13 @@ basic_test_complete_message_handler(const CU_pTest pTest,
 
   if (NULL == pFailure) {
     if (CU_BRM_VERBOSE == f_run_mode) {
-      fprintf(__mpiut_result_file__, "\033[1;32mpassed\033[0m");
+      /* fprintf(__mpiut_result_file__, "\033[1;32mpassed\033[0m"); */
     }
   }
   else {
     switch (f_run_mode) {
       case CU_BRM_VERBOSE:
-        fprintf(__mpiut_result_file__, "\033[1;31mFAILED\033[0m");
+        /* fprintf(__mpiut_result_file__, "\033[1;31mFAILED\033[0m"); */
         break;
       case CU_BRM_NORMAL:
         fprintf(__mpiut_result_file__, "\nSuite %s, Test %s had failures:",
@@ -304,16 +304,17 @@ basic_all_tests_complete_message_handler(const CU_pFailureRecord pFailure)
   assert(NULL != pRunSummary);
   assert(NULL != pRegistry);
 
-  if (CU_BRM_SILENT != f_run_mode)
-    fprintf(__mpiut_result_file__,"\n\n--Run Summary: Type      Total  Passed  Failed"
-                     "\n               tests  %8u%8u%8u"
-                     "\n               asserts%8u%8u%8u\n",
-                    pRegistry->uiNumberOfTests,
-                    pRunSummary->nTestsRun - pRunSummary->nTestsFailed,
-                    pRunSummary->nTestsFailed,
-                    pRunSummary->nAsserts,
-                    pRunSummary->nAsserts - pRunSummary->nAssertsFailed,
-                    pRunSummary->nAssertsFailed);
+  if (CU_BRM_SILENT != f_run_mode){
+    /* fprintf(__mpiut_result_file__,"\n\n--Run Summary: Type      Total  Passed  Failed" */
+    /*                  "\n               tests  %8u%8u%8u" */
+    /*                  "\n               asserts%8u%8u%8u\n", */
+    /*                 pRegistry->uiNumberOfTests, */
+    /*                 pRunSummary->nTestsRun - pRunSummary->nTestsFailed, */
+    /*                 pRunSummary->nTestsFailed, */
+    /*                 pRunSummary->nAsserts, */
+    /*                 pRunSummary->nAsserts - pRunSummary->nAssertsFailed, */
+    /*                 pRunSummary->nAssertsFailed); */
+  }
 }
 
 static void

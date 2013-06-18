@@ -69,7 +69,6 @@ AC_CONFIG_FILES([Makefile
                  src/Makefile
                  src/datareplay/Makefile
                  src/mpiunit/Makefile
-                 src/cspec/Makefile
-                 src/cspec/src/Makefile])
+                 src/cspec/Makefile])
  #AC_CONFIG_SUBDIRS([src/cspec])
 AC_OUTPUT

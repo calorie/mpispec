@@ -111,14 +111,14 @@ mpiut_show_result()
         (double)(total_asserts);
     }
 
-    fprintf(stdout, "\n[%d Process Results]\n", n_procs);
+    /* fprintf(stdout, "\n[%d Process Results]\n", n_procs); */
     if(total_failasserts == 0) {
-      fprintf(stdout, "\033[1;32m%s\033[0m", BAR);
+      /* fprintf(stdout, "\033[1;32m%s\033[0m", BAR); */
     }
     else {
-      fprintf(stdout, "\033[1;31m%s\033[0m", BAR);
+      /* fprintf(stdout, "\033[1;31m%s\033[0m", BAR); */
     }
-    fprintf(stdout, "[%3.0lf%%]\n", 100 * s_rate);
+    /* fprintf(stdout, "[%3.0lf%%]\n", 100 * s_rate); */
   }
 }
 

@@ -393,7 +393,7 @@ on `(hostname || uname -n) 2>/dev/null | sed 1q`
 "
 
 # Files that config.status was made for.
-config_files=" Makefile sample/Makefile script/Makefile script/mpispec share/Makefile src/Makefile src/datareplay/Makefile src/mpiunit/Makefile src/cspec/Makefile src/cspec/src/Makefile"
+config_files=" Makefile sample/Makefile script/Makefile script/mpispec share/Makefile src/Makefile src/datareplay/Makefile src/mpiunit/Makefile src/cspec/Makefile"
 config_headers=" config.h"
 config_commands=" depfiles libtool"
 
@@ -812,7 +812,6 @@ do
     "src/datareplay/Makefile") CONFIG_FILES="$CONFIG_FILES src/datareplay/Makefile" ;;
     "src/mpiunit/Makefile") CONFIG_FILES="$CONFIG_FILES src/mpiunit/Makefile" ;;
     "src/cspec/Makefile") CONFIG_FILES="$CONFIG_FILES src/cspec/Makefile" ;;
-    "src/cspec/src/Makefile") CONFIG_FILES="$CONFIG_FILES src/cspec/src/Makefile" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac
