@@ -64,7 +64,7 @@
 #include "util.h"
 #include "testrun.h"
 #include "mpiut_basic.h"
-#include "../cspec/inc/cspec_output.h"
+#include "../cspec/cspec_output.h"
 FILE *__mpiut_result_file__;
 
 static CU_pSuite f_pRunningSuite = NULL;
