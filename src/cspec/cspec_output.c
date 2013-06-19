@@ -15,7 +15,7 @@ void CSpec_InitOutput( CSpecOutputStruct* output )
   memset(output, 0, sizeof(CSpecOutputStruct) );
 }
 
-void CSpec_InitOutputArray( CSpecOutputStructArray* output_array )
+MS_pRunSummary get_mpi_run_summary(void)
 {
-  memset(output_array, 0, sizeof(CSpecOutputStructArray) );
+  return &mpi_run_summary;
 }

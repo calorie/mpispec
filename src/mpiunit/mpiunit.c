@@ -39,6 +39,20 @@ mpiut_setup()
   suite = CU_add_suite(suitename, NULL, NULL);
   /* CU_basic_set_mode(CU_BRM_VERBOSE); */
 }
+void
+mpispec_setup()
+{
+  int myrank;
+  /* char suitename[32]; */
+
+  MPI_Comm_rank(MPI_COMM_WORLD, &myrank);
+
+  /* sprintf(suitename, "rank%3d", myrank); */
+  /* CU_initialize_registry(); */
+  /* suite = NULL; */
+  /* suite = CU_add_suite(suitename, NULL, NULL); */
+  CU_basic_set_mode(CU_BRM_VERBOSE);
+}
 
 void
 mpiut_register(const char* name, CU_TestFunc test)
@@ -119,6 +133,35 @@ mpiut_show_result()
       /* fprintf(stdout, "\033[1;31m%s\033[0m", BAR); */
     }
     /* fprintf(stdout, "[%3.0lf%%]\n", 100 * s_rate); */
+  }
+}
+
+void
+mpispec_show_result()
+{
+  int myrank, n_procs;
+  double s_rate;
+  char result_filename[32];
+  FILE *fp;
+  char ch;
+  int i;
+
+  MPI_Comm_rank(MPI_COMM_WORLD, &myrank);
+  MPI_Comm_size(MPI_COMM_WORLD, &n_procs);
+
+  if(myrank == 0) {
+    for(i = 0; i < n_procs; i++) {
+      sprintf(result_filename, "rank%d.result", i);
+      if(NULL == (fp = fopen(result_filename, "r"))) {
+        fprintf(stderr, "Can't open result files");
+        exit(-1);
+      }
+      while ((ch = fgetc(fp)) != EOF) {
+        fputc(ch, stdout);
+      }
+      fclose(fp);
+      remove(result_filename);
+    }
   }
 }
 

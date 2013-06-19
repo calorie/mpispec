@@ -14,9 +14,8 @@
 #include "cspec_output_verbose.h"
 
 static CSpecOutputStruct verbose;
-/* static CSpecOutputStructArray verbose_array[MAX_TEST_NUM]; */
-static int verbose_array_index = 0;
 int tab_num = 0;
+MS_pRunSummary verbose_summary;
 
 /* private functions */
 static void coloredPrintf(CSpec_Color color, const char* format, ...);
@@ -47,9 +46,10 @@ void startDescribeFunVerbose( const char *descr)
 }
 void f_startDescribeFunVerbose( const char *descr)
 {
-  fprintf(__mpiut_result_file__, "\n");
   fprintTab(++tab_num);
-  fprintf(__mpiut_result_file__, "%s\n", descr);
+  fprintf(__mpiut_result_file__, "\n%s\n", descr);
+
+  verbose_summary = get_mpi_run_summary();
 }
 
 void endDescribeFunVerbose( )
@@ -60,16 +60,15 @@ void endDescribeFunVerbose( )
 void f_endDescribeFunVerbose( )
 {
   tab_num--;
-  CSpecOutputStructArray cur_verbose = output_array[verbose_array_index];
 
-  if(cur_verbose.Passed == cur_verbose.Total)
-  {
-    fprintf(__mpiut_result_file__, "\033[1;32mAll tests Passed (%d)\033[0m\n", cur_verbose.Total);
-  }
-  else
-  {
-    fprintf(__mpiut_result_file__, "\033[1;31mFailed\033[0m %d tests out of %d\n", cur_verbose.Total - cur_verbose.Passed, cur_verbose.Total);
-  }
+  /* if(verbose_summary->Passed == verbose_summary->Total) */
+  /* { */
+  /*   fprintf(__mpiut_result_file__, "\033[1;32mAll tests Passed (%d)\033[0m\n", verbose_summary->Total); */
+  /* } */
+  /* else */
+  /* { */
+  /*   fprintf(__mpiut_result_file__, "\033[1;31mFailed\033[0m %d tests out of %d\n", verbose_summary->Total - verbose_summary->Passed, verbose_summary->Total); */
+  /* } */
 }
 
 void startItFunVerbose( const char *descr)
@@ -142,11 +141,11 @@ void evalFunVerbose(const char*filename, int line_number, const char*assertion, 
 }
 void f_evalFunVerbose(const char*filename, int line_number, const char*assertion, int assertionResult)
 {
-  output_array[verbose_array_index].Total++;
+  verbose_summary->Total++;
   fprintTab(tab_num + 1);
   if(assertionResult)
   {
-    output_array[verbose_array_index].Passed++;
+    verbose_summary->Passed++;
     coloredFprintf(CSPEC_COLOR_GREEN,
         "OK: %s\n", assertion, filename, line_number);
   }
@@ -187,7 +186,6 @@ CSpecOutputStruct* f_CSpec_NewOutputVerbose()
 CSpecOutputStruct* CSpec_NewOutputVerbose()
 {
   CSpec_InitOutput(&verbose);
-  CSpec_InitOutputArray(&output_array[verbose_array_index]);
 
   verbose.startDescribeFun = f_startDescribeFunVerbose;
   verbose.endDescribeFun   = f_endDescribeFunVerbose;
@@ -198,9 +196,6 @@ CSpecOutputStruct* CSpec_NewOutputVerbose()
   verbose.endFun           = f_endFunVerbose;
   verbose.evalFun          = f_evalFunVerbose;
   verbose.pendingFun       = f_pendingFunVerbose;
-
-  output_array[verbose_array_index].output = verbose;
-  verbose_array_index++;
 
   return &verbose;
 }

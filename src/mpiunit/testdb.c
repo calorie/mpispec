@@ -71,35 +71,35 @@
 
 static CU_pTestRegistry f_pTestRegistry = NULL;
 
-static void      
+static void
 cleanup_test_registry(CU_pTestRegistry pRegistry);
 
-static CU_pSuite 
-create_suite(const char* strName, CU_InitializeFunc pInit, 
+static CU_pSuite
+create_suite(const char* strName, CU_InitializeFunc pInit,
              CU_CleanupFunc pClean);
 
-static void      
+static void
 cleanup_suite(CU_pSuite pSuite);
 
-static void      
+static void
 insert_suite(CU_pTestRegistry pRegistry, CU_pSuite pSuite);
 
-static CU_pTest  
+static CU_pTest
 create_test(const char* strName, CU_TestFunc pTestFunc);
 
-static void      
+static void
 cleanup_test(CU_pTest pTest);
 
-static void      
+static void
 insert_test(CU_pSuite pSuite, CU_pTest pTest);
 
-static CU_BOOL   
+static CU_BOOL
 suite_exists(CU_pTestRegistry pRegistry, const char* szSuiteName);
 
-static CU_BOOL   
+static CU_BOOL
 test_exists(CU_pSuite pSuite, const char* szTestName);
 
-CU_ErrorCode 
+CU_ErrorCode
 CU_initialize_registry(void)
 {
   CU_ErrorCode result;
@@ -120,30 +120,30 @@ CU_initialize_registry(void)
   return result;
 }
 
-CU_BOOL 
+CU_BOOL
 CU_registry_initialized(void)
 {
   return (NULL == f_pTestRegistry) ? CU_FALSE : CU_TRUE;
 }
 
-void 
+void
 CU_cleanup_registry(void)
 {
   assert(CU_FALSE == CU_is_test_running());
 
   CU_set_error(CUE_SUCCESS);
-  CU_destroy_existing_registry(&f_pTestRegistry); 
+  CU_destroy_existing_registry(&f_pTestRegistry);
   CU_clear_previous_results();
   CU_CREATE_MEMORY_REPORT(NULL);
 }
 
-CU_pTestRegistry 
+CU_pTestRegistry
 CU_get_registry(void)
 {
   return f_pTestRegistry;
 }
 
-CU_pTestRegistry 
+CU_pTestRegistry
 CU_set_registry(CU_pTestRegistry pRegistry)
 {
   CU_pTestRegistry pOldRegistry = f_pTestRegistry;
@@ -155,8 +155,8 @@ CU_set_registry(CU_pTestRegistry pRegistry)
   return pOldRegistry;
 }
 
-CU_pSuite 
-CU_add_suite(const char* strName, CU_InitializeFunc pInit, 
+CU_pSuite
+CU_add_suite(const char* strName, CU_InitializeFunc pInit,
              CU_CleanupFunc pClean)
 {
   CU_pSuite pRetValue = NULL;
@@ -187,7 +187,7 @@ CU_add_suite(const char* strName, CU_InitializeFunc pInit,
   return pRetValue;
 }
 
-CU_pTest 
+CU_pTest
 CU_add_test(CU_pSuite pSuite, const char* strName, CU_TestFunc pTestFunc)
 {
   CU_pTest pRetValue = NULL;
@@ -225,7 +225,7 @@ CU_add_test(CU_pSuite pSuite, const char* strName, CU_TestFunc pTestFunc)
   return pRetValue;
 }
 
-CU_ErrorCode 
+CU_ErrorCode
 CU_register_nsuites(int suite_count, ...)
 {
   CU_SuiteInfo *pSuiteItem = NULL;
@@ -254,16 +254,16 @@ CU_register_nsuites(int suite_count, ...)
       }
     }
   }
-	return CU_get_error();
+  return CU_get_error();
 }
 
-CU_ErrorCode 
+CU_ErrorCode
 CU_register_suites(CU_SuiteInfo suite_info[])
 {
   return CU_register_nsuites(1, suite_info);
 }
 
-static void 
+static void
 cleanup_test_registry(CU_pTestRegistry pRegistry)
 {
   CU_pSuite pCurSuite = NULL;
@@ -284,8 +284,8 @@ cleanup_test_registry(CU_pTestRegistry pRegistry)
   pRegistry->uiNumberOfTests = 0;
 }
 
-static CU_pSuite 
-create_suite(const char* strName, CU_InitializeFunc pInit, 
+static CU_pSuite
+create_suite(const char* strName, CU_InitializeFunc pInit,
              CU_CleanupFunc pClean)
 {
   CU_pSuite pRetValue = (CU_pSuite)CU_MALLOC(sizeof(CU_Suite));
@@ -312,7 +312,7 @@ create_suite(const char* strName, CU_InitializeFunc pInit,
   return pRetValue;
 }
 
-static void 
+static void
 cleanup_suite(CU_pSuite pSuite)
 {
   CU_pTest pCurTest = NULL;
@@ -338,7 +338,7 @@ cleanup_suite(CU_pSuite pSuite)
   pSuite->uiNumberOfTests = 0;
 }
 
-static void 
+static void
 insert_suite(CU_pTestRegistry pRegistry, CU_pSuite pSuite)
 {
   CU_pSuite pCurSuite = NULL;
@@ -368,7 +368,7 @@ insert_suite(CU_pTestRegistry pRegistry, CU_pSuite pSuite)
   }
 }
 
-static CU_pTest 
+static CU_pTest
 create_test(const char* strName, CU_TestFunc pTestFunc)
 {
   CU_pTest pRetValue = (CU_pTest)CU_MALLOC(sizeof(CU_Test));
@@ -393,7 +393,7 @@ create_test(const char* strName, CU_TestFunc pTestFunc)
   return pRetValue;
 }
 
-static void 
+static void
 cleanup_test(CU_pTest pTest)
 {
   assert(NULL != pTest);
@@ -405,7 +405,7 @@ cleanup_test(CU_pTest pTest)
   pTest->pName = NULL;
 }
 
-static void 
+static void
 insert_test(CU_pSuite pSuite, CU_pTest pTest)
 {
   CU_pTest pCurTest = NULL;
@@ -436,7 +436,7 @@ insert_test(CU_pSuite pSuite, CU_pTest pTest)
   }
 }
 
-static CU_BOOL 
+static CU_BOOL
 suite_exists(CU_pTestRegistry pRegistry, const char* szSuiteName)
 {
   CU_pSuite pSuite = NULL;
@@ -455,7 +455,7 @@ suite_exists(CU_pTestRegistry pRegistry, const char* szSuiteName)
   return CU_FALSE;
 }
 
-static CU_BOOL 
+static CU_BOOL
 test_exists(CU_pSuite pSuite, const char* szTestName)
 {
   CU_pTest pTest = NULL;
@@ -474,7 +474,7 @@ test_exists(CU_pSuite pSuite, const char* szTestName)
   return CU_FALSE;
 }
 
-CU_pTestRegistry 
+CU_pTestRegistry
 CU_create_new_registry(void)
 {
   CU_pTestRegistry pRegistry = (CU_pTestRegistry)CU_MALLOC(sizeof(CU_TestRegistry));
@@ -487,7 +487,7 @@ CU_create_new_registry(void)
   return pRegistry;
 }
 
-void 
+void
 CU_destroy_existing_registry(CU_pTestRegistry* ppRegistry)
 {
   assert(NULL != ppRegistry);
@@ -499,7 +499,7 @@ CU_destroy_existing_registry(CU_pTestRegistry* ppRegistry)
   *ppRegistry = NULL;
 }
 
-CU_pSuite 
+CU_pSuite
 CU_get_suite_by_name(const char* szSuiteName, CU_pTestRegistry pRegistry)
 {
   CU_pSuite pSuite = NULL;
@@ -520,7 +520,7 @@ CU_get_suite_by_name(const char* szSuiteName, CU_pTestRegistry pRegistry)
   return pSuite;
 }
 
-CU_pTest 
+CU_pTest
 CU_get_test_by_name(const char* szTestName, CU_pSuite pSuite)
 {
   CU_pTest pTest = NULL;
@@ -544,18 +544,18 @@ CU_get_test_by_name(const char* szTestName, CU_pSuite pSuite)
 #ifdef CUNIT_BUILD_TESTS
 #include "test_cunit.h"
 
-static int 
+static int
 sfunc1(void)
 {
   return 0;
 }
 
-static void 
+static void
 test1(void)
 {
 }
 
-static void 
+static void
 test_CU_initialize_registry(void)
 {
   CU_pTestRegistry pReg = NULL;
@@ -593,7 +593,7 @@ test_CU_initialize_registry(void)
   test_cunit_activate_malloc();
 }
 
-static void 
+static void
 test_CU_cleanup_registry(void)
 {
   CU_cleanup_registry();
@@ -603,7 +603,7 @@ test_CU_cleanup_registry(void)
   CU_cleanup_registry();
 }
 
-static void 
+static void
 test_CU_add_suite(void)
 {
   CU_pSuite pSuite = NULL;
@@ -740,7 +740,7 @@ test_CU_add_suite(void)
   TEST(test_cunit_get_n_allocations(pSuite4) == test_cunit_get_n_deallocations(pSuite4));
 }
 
-static void 
+static void
 test_CU_add_test(void)
 {
   CU_pSuite pSuite1 = NULL;
@@ -913,7 +913,7 @@ test_CU_add_test(void)
   TEST(test_cunit_get_n_allocations(pTest4) == test_cunit_get_n_deallocations(pTest4));
 }
 
-static void 
+static void
 test_CU_get_registry(void)
 {
   CU_cleanup_registry();
@@ -926,7 +926,7 @@ test_CU_get_registry(void)
   CU_cleanup_registry();
 }
 
-static void 
+static void
 test_CU_set_registry(void)
 {
   CU_pTestRegistry pReg1 = NULL;
@@ -986,7 +986,7 @@ test_CU_set_registry(void)
   TEST(test_cunit_get_n_allocations(pReg1) == test_cunit_get_n_deallocations(pReg1));
 }
 
-static void 
+static void
 test_CU_create_new_registry(void)
 {
   CU_pTestRegistry pReg = NULL;
@@ -1012,22 +1012,22 @@ test_CU_create_new_registry(void)
   TEST(NULL == pReg);
 }
 
-static void 
+static void
 test_CU_destroy_existing_registry(void)
 {
 }
 
-static void 
+static void
 test_CU_get_suite_by_name(void)
 {
 }
 
-static void 
+static void
 test_CU_get_test_by_name(void)
 {
 }
 
-static void 
+static void
 test_cleanup_test_registry(void)
 {
   CU_pSuite pSuite1 = NULL;
@@ -1100,7 +1100,7 @@ test_cleanup_test_registry(void)
   TEST(test_cunit_get_n_allocations(pTest4) == test_cunit_get_n_deallocations(pTest4));
 }
 
-static void 
+static void
 test_create_suite(void)
 {
   CU_pSuite pSuite1 = NULL;
@@ -1174,12 +1174,12 @@ test_create_suite(void)
   TEST(test_cunit_get_n_allocations(pSuite4) == test_cunit_get_n_deallocations(pSuite4));
 }
 
-static void 
+static void
 test_cleanup_suite(void)
 {
 }
 
-static void 
+static void
 test_insert_suite(void)
 {
   CU_pSuite pSuite1 = NULL;
@@ -1285,7 +1285,7 @@ test_insert_suite(void)
   TEST(test_cunit_get_n_allocations(pSuite4) == test_cunit_get_n_deallocations(pSuite4));
 }
 
-static void 
+static void
 test_create_test(void)
 {
   CU_pTest pTest1 = NULL;
@@ -1327,7 +1327,7 @@ test_create_test(void)
   TEST(test_cunit_get_n_allocations(pTest2) == test_cunit_get_n_deallocations(pTest2));
 }
 
-static void 
+static void
 test_insert_test(void)
 {
   CU_pSuite pSuite1 = NULL;
@@ -1381,7 +1381,7 @@ test_insert_test(void)
   TEST(pTest2->pNext == pTest3);
   TEST(pTest2->pPrev == pTest1);
   TEST(pTest3->pNext == NULL);
-  TEST(pTest3->pPrev == pTest2);        
+  TEST(pTest3->pPrev == pTest2);
   TEST(pTest4->pNext == NULL);
   TEST(pTest4->pPrev == NULL);
 
@@ -1436,7 +1436,7 @@ test_insert_test(void)
   TEST(test_cunit_get_n_allocations(pTest4) == test_cunit_get_n_deallocations(pTest4));
 }
 
-static void 
+static void
 test_cleanup_test(void)
 {
   char* pName;
@@ -1458,17 +1458,17 @@ test_cleanup_test(void)
   TEST(test_cunit_get_n_allocations(pName) == test_cunit_get_n_deallocations(pName));
 }
 
-static void 
+static void
 test_suite_exists(void)
 {
 }
 
-static void 
+static void
 test_test_exists(void)
 {
 }
 
-static 
+static
 void group_A_case_1(void)
 {
   CU_ASSERT_TRUE(1);
@@ -1480,13 +1480,13 @@ group_A_case_2(void)
   CU_ASSERT_TRUE(2);
 }
 
-static void 
+static void
 group_B_case_1(void)
 {
   CU_ASSERT_FALSE(1);
 }
 
-static void 
+static void
 group_B_case_2(void)
 {
   CU_ASSERT_FALSE(2);
@@ -1520,7 +1520,7 @@ static CU_SuiteInfo suites2[] = {
   CU_SUITE_INFO_NULL,
 };
 
-static void 
+static void
 test_register_suite(void)
 {
   CU_pTestRegistry pReg = NULL;
@@ -1572,7 +1572,7 @@ test_register_suite(void)
   TEST(8 == pReg->uiNumberOfTests);
 }
 
-void 
+void
 test_cunit_TestDB(void)
 {
   test_cunit_start_tests("TestDB.c");

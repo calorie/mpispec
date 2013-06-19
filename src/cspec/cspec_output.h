@@ -47,17 +47,15 @@ typedef struct
 typedef struct
 {
 
-    CSpecOutputStruct output;
+    unsigned int Passed;
+    unsigned int Total;
 
-    int Passed;
-    int Total;
-
-} CSpecOutputStructArray;
-
-static CSpecOutputStructArray output_array[MAX_TEST_NUM];
+} MPISpecRunSummary;
+typedef MPISpecRunSummary* MS_pRunSummary;
+static MPISpecRunSummary mpi_run_summary;
+MS_pRunSummary get_mpi_run_summary(void);
 
 void CSpec_InitOutput(CSpecOutputStruct* output);
-void CSpec_InitOutputArray(CSpecOutputStructArray* output_array);
 
 void CSpec_SetOutput(CSpecOutputStruct* output);
 

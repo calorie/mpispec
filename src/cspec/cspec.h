@@ -28,8 +28,8 @@ int CSpec_Run( CSpecDescriptionFun fun, CSpecOutputStruct* output);
 #define define_description(foo) void foo ## _describe();
 #define description(foo)        foo ## _describe
 
-#define describe(foo, caption)  void foo ## _describe () { CSpec_StartDescribe(caption); {
-#define end_describe(foo)            } CSpec_EndDescribe(); } CSpec_Run( description(foo), CSpec_NewOutputVerbose());
+#define describe(foo, caption)  { CSpec_SetOutput(CSpec_NewOutputVerbose());CSpec_StartDescribe(caption); {
+#define end_describe            } CSpec_EndDescribe(); }
 
 #define it(caption)             { CSpec_StartIt(caption); {
 #define end_it                  } CSpec_EndIt() ; }

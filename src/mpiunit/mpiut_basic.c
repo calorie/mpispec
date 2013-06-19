@@ -66,6 +66,7 @@
 #include "mpiut_basic.h"
 #include "../cspec/cspec_output.h"
 FILE *__mpiut_result_file__;
+/* MPISpecRunSummary mpi_run_summary; */
 
 static CU_pSuite f_pRunningSuite = NULL;
 static CU_BasicRunMode f_run_mode = CU_BRM_NORMAL;
@@ -299,13 +300,15 @@ basic_all_tests_complete_message_handler(const CU_pFailureRecord pFailure)
   CU_pRunSummary pRunSummary = CU_get_run_summary();
   CU_pTestRegistry pRegistry = CU_get_registry();
 
+  MS_pRunSummary summary = get_mpi_run_summary();
+
   CU_UNREFERENCED_PARAMETER(pFailure);
 
   assert(NULL != pRunSummary);
   assert(NULL != pRegistry);
 
   if (CU_BRM_SILENT != f_run_mode){
-    /* fprintf(__mpiut_result_file__,"\n\n--Run Summary: Type      Total  Passed  Failed" */
+    /* fprintf(__mpiut_result_file__,"\n--Run Summary: Type      Total  Passed  Failed" */
     /*                  "\n               tests  %8u%8u%8u" */
     /*                  "\n               asserts%8u%8u%8u\n", */
     /*                 pRegistry->uiNumberOfTests, */
@@ -314,6 +317,11 @@ basic_all_tests_complete_message_handler(const CU_pFailureRecord pFailure)
     /*                 pRunSummary->nAsserts, */
     /*                 pRunSummary->nAsserts - pRunSummary->nAssertsFailed, */
     /*                 pRunSummary->nAssertsFailed); */
+    fprintf(__mpiut_result_file__,"\n--Run Summary: Type      Total  Passed  Failed"
+                     "\n               tests  %8u%8u%8u\n",
+                    summary->Total,
+                    summary->Passed,
+                    summary->Total - summary->Passed);
   }
 }
 

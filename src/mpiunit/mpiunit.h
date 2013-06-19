@@ -18,6 +18,8 @@
 
 void
 mpiut_setup();
+void
+mpispec_setup();
 
 void
 mpiut_register(const char* name, CU_TestFunc test);
@@ -27,6 +29,8 @@ mpiut_run();
 
 void
 mpiut_show_result();
+void
+mpispec_show_result();
 
 int
 mpiut_rank();
