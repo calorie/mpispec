@@ -54,8 +54,8 @@ extern "C" {
 
 typedef enum {
   CU_BRM_NORMAL = 0,
-  CU_BRM_SILENT,    
-  CU_BRM_VERBOSE    
+  CU_BRM_SILENT,
+  CU_BRM_VERBOSE
 } CU_BasicRunMode;
 
 CU_EXPORT CU_ErrorCode
@@ -79,8 +79,11 @@ CU_basic_show_failures(CU_pFailureRecord pFailure);
 CU_EXPORT void
 CU_basic_exit();
 
+CU_EXPORT void
+mpispec_run_summary(void);
+
 #ifdef __cplusplus
 }
 #endif
 
-#endif 
+#endif

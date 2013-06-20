@@ -12,6 +12,7 @@
 #include "cspec_config.h"
 #include "cspec_private.h"
 #include "cspec_output.h"
+#include "cspec_output_verbose.h"
 
 /*               */
 /* Public macros */
@@ -22,6 +23,7 @@
 
 typedef void ( * CSpecDescriptionFun ) ( );
 int CSpec_Run( CSpecDescriptionFun fun, CSpecOutputStruct* output);
+#define MPISpec_Run(foo) CSpec_Run(foo, CSpec_NewOutputVerbose())
 
 /* Structural macros */
 

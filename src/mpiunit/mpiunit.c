@@ -42,15 +42,6 @@ mpiut_setup()
 void
 mpispec_setup()
 {
-  int myrank;
-  /* char suitename[32]; */
-
-  MPI_Comm_rank(MPI_COMM_WORLD, &myrank);
-
-  /* sprintf(suitename, "rank%3d", myrank); */
-  /* CU_initialize_registry(); */
-  /* suite = NULL; */
-  /* suite = CU_add_suite(suitename, NULL, NULL); */
   CU_basic_set_mode(CU_BRM_VERBOSE);
 }
 

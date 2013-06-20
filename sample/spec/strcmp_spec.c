@@ -1,0 +1,36 @@
+#include <stdio.h>
+#include "mpispec/mpispec.h"
+#include "mpispec/cspec_output_verbose.h"
+
+mpispec_def(strcmp_spec)
+
+  describe(strcmp, "標準ライブラリのstrcmpの")
+
+    context("入力が一致するとき")
+      it( "0を返す" )
+        expect_to_equal( strcmp("hello", "hell"), 0)
+      end
+    end
+
+    context("入力が一致しないとき")
+      it( "NULL以外を返す" )
+        expect_not_to_be_null( strcmp("hello", "world") )
+      end
+      context("第1引数が第2より小さい時")
+        it( "負の数を返す" )
+          expect_to_be_true( strcmp("hello", "aworld") < 0 )
+          expect_to_be_true( strcmp("0123", "1321431") < 0 )
+        end
+      end
+
+      context("第1引数が第2より大きい時")
+        it( "正の数を返す" )
+          expect_to_be_true( strcmp("yellow", "world") > 0 )
+          expect_to_be_true( strcmp("9", "789") > 0 )
+        end
+      end
+    end
+
+  end
+
+end_def

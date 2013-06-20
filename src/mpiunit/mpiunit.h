@@ -45,7 +45,7 @@ mpiut_rank();
   int                           \
   main(int argc, char **argv) { \
     MPI_Init(&argc, &argv);     \
-    mpiut_setup();
+    mpispec_setup();
 
 #define MPIUT_PROTOTYPE(test) \
   void test()
@@ -76,11 +76,12 @@ mpiut_rank();
   return EXIT_SUCCESS; }
 
 #define mpispec_finalize       \
-  mpiut_run();                 \
+  mpispec_run_summary();       \
+  CU_basic_exit();             \
   MPI_Barrier(MPI_COMM_WORLD); \
   mpiut_show_result();         \
   MPI_Finalize();              \
-  return EXIT_SUCCESS; };
+  return EXIT_SUCCESS; }
 
 #define MPIUT_RANK \
   mpiut_rank()

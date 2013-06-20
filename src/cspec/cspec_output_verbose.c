@@ -46,8 +46,9 @@ void startDescribeFunVerbose( const char *descr)
 }
 void f_startDescribeFunVerbose( const char *descr)
 {
+  fprintf(__mpiut_result_file__, "\n");
   fprintTab(++tab_num);
-  fprintf(__mpiut_result_file__, "\n%s\n", descr);
+  fprintf(__mpiut_result_file__, "%s\n", descr);
 
   verbose_summary = get_mpi_run_summary();
 }
@@ -100,7 +101,6 @@ void endFunVerbose( )
 void f_endFunVerbose( )
 {
   tab_num--;
-  fprintf(__mpiut_result_file__, "\n");
 }
 
 void startContextFunVerbose( const char *descr)
@@ -122,7 +122,6 @@ void endContextFunVerbose( const char *descr)
 void f_endContextFunVerbose( const char *descr)
 {
   tab_num--;
-  /* fprintf(__mpiut_result_file__, "\n"); */
 }
 
 void evalFunVerbose(const char*filename, int line_number, const char*assertion, int assertionResult)

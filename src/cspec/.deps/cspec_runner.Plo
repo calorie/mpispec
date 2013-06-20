@@ -13,7 +13,7 @@ cspec_runner.lo: cspec_runner.c cspec.h cspec_config.h cspec_private.h \
  /usr/include/i386-linux-gnu/bits/stdio_lim.h \
  /usr/include/i386-linux-gnu/bits/sys_errlist.h \
  /usr/include/i386-linux-gnu/bits/stdio.h \
- /usr/include/i386-linux-gnu/bits/stdio2.h
+ /usr/include/i386-linux-gnu/bits/stdio2.h cspec_output_verbose.h
 
 cspec.h:
 
@@ -58,3 +58,5 @@ cspec_output.h:
 /usr/include/i386-linux-gnu/bits/stdio.h:
 
 /usr/include/i386-linux-gnu/bits/stdio2.h:
+
+cspec_output_verbose.h:

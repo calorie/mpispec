@@ -13,8 +13,8 @@ cspec_output.lo: cspec_output.c cspec.h cspec_config.h cspec_private.h \
  /usr/include/i386-linux-gnu/bits/stdio_lim.h \
  /usr/include/i386-linux-gnu/bits/sys_errlist.h \
  /usr/include/i386-linux-gnu/bits/stdio.h \
- /usr/include/i386-linux-gnu/bits/stdio2.h /usr/include/memory.h \
- /usr/include/string.h /usr/include/xlocale.h \
+ /usr/include/i386-linux-gnu/bits/stdio2.h cspec_output_verbose.h \
+ /usr/include/memory.h /usr/include/string.h /usr/include/xlocale.h \
  /usr/include/i386-linux-gnu/bits/string.h \
  /usr/include/i386-linux-gnu/bits/string2.h /usr/include/endian.h \
  /usr/include/i386-linux-gnu/bits/endian.h \
@@ -64,6 +64,8 @@ cspec_output.h:
 /usr/include/i386-linux-gnu/bits/stdio.h:
 
 /usr/include/i386-linux-gnu/bits/stdio2.h:
+
+cspec_output_verbose.h:
 
 /usr/include/memory.h:
 

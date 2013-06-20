@@ -151,6 +151,7 @@ CU_basic_set_mode(CU_BasicRunMode mode)
     fprintf(stderr, "Can't open result files");
     exit(-1);
   };
+  fprintf(__mpiut_result_file__, "\nrank  %d:", myrank);
 
   f_run_mode = mode;
 }
@@ -345,4 +346,16 @@ basic_suite_cleanup_failure_message_handler(const CU_pSuite pSuite)
     fprintf(__mpiut_result_file__,
             "\nWARNING - Suite cleanup failed for %s.",
             (NULL != pSuite->pName) ? pSuite->pName : "");
+}
+
+void
+mpispec_run_summary(void)
+{
+  MS_pRunSummary summary = get_mpi_run_summary();
+
+  fprintf(__mpiut_result_file__,"\n--Run Summary: Type      Total  Passed  Failed"
+      "\n               tests  %8u%8u%8u\n",
+      summary->Total,
+      summary->Passed,
+      summary->Total - summary->Passed);
 }

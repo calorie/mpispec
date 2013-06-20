@@ -5,8 +5,11 @@
 
 mpispec_prototype(fabs_spec)
 mpispec_prototype(fab_spec)
+mpispec_prototype(strcmp_spec)
 
 mpispec_init
+
+MPISpec_Run(strcmp_spec);
 
 if(MPIUT_RANK == 0) {
   MPISpec_Run(fabs_spec);
