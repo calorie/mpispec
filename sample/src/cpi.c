@@ -72,14 +72,8 @@ cpi()
         return pi;
       }
       else {
-        return 3.14;
+        return 0.0;
       }
     }
   }
-}
-
-double
-cpi2()
-{
-    return 3.14;
 }

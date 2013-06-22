@@ -8,7 +8,7 @@ mpispec_def(strcmp_spec)
 
     context("入力が一致するとき")
       it( "0を返す" )
-        expect_to_equal( strcmp("hello", "hell"), 0)
+        expect_to_equal( strcmp("hello", "hello"), 0)
       end
     end
 
@@ -18,7 +18,7 @@ mpispec_def(strcmp_spec)
       end
       context("第1引数が第2より小さい時")
         it( "負の数を返す" )
-          expect_to_be_true( strcmp("hello", "aworld") < 0 )
+          expect_to_be_true( strcmp("hello", "world") < 0 )
           expect_to_be_true( strcmp("0123", "1321431") < 0 )
         end
       end

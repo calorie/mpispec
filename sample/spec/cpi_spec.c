@@ -1,18 +1,18 @@
-
-/* Time-stamp: <2007-11-24 22:06:19 shinya> */
-
-#include <mpi.h>
-#include "mpispec/mpiunit.h"
+#include "mpispec/mpispec.h"
+#include "mpispec/cspec_output_verbose.h"
 #include "../src/cpi.h"
 
 /* Define tests */
-MPIUT_DEF(test_cpi)
-{
-  if(MPIUT_RANK == 0) {
-    /* CSpec_Run( description( fabs ), CSpec_NewOutputVerbose() ); */
-    MPIUT_ASSERT_DOUBLE_EQUAL(cpi(), 3.1415926535, 0.001);
-  }
-  else {
-    cpi();
-  }
-}
+mpispec_def(cpi_spec)
+
+  describe(cpi, "cpi関数は")
+
+    context("rank0なら")
+      it("piを返す")
+        expect_to_equal_double(cpi(), 3.1415926535, 0.001);
+      end
+    end
+
+  end
+
+end_def

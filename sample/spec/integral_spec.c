@@ -1,7 +1,5 @@
-
-/* Time-stamp: <2007-11-14 22:31:27 shinya> */
-
-#include "mpispec/mpiunit.h"
+#include "mpispec/mpispec.h"
+#include "mpispec/cspec_output_verbose.h"
 #include "../src/integral.h"
 
 static double
@@ -17,16 +15,17 @@ pi_func(double x)
 }
 
 /* Define tests */
-MPIUT_DEF(test_integral)
-{
-  if(MPIUT_RANK == 0) {
-    MPIUT_ASSERT_DOUBLE_EQUAL(integral(0, 10, 100, f),
-                              50.0000000, 0.001);
-    MPIUT_ASSERT_DOUBLE_EQUAL(integral(0.0, 1.0, 100, pi_func),
-                              3.14159265, 0.001);
-  }
-  else {
-    integral(0, 10, 100, f);
-    integral(0, 1.0, 100, pi_func);
-  }
-}
+mpispec_def(integral_spec)
+
+  describe(integral, "integral関数は")
+
+    it("積分値を返す")
+      expect_to_equal_double(integral(0, 10, 100, f),
+                             50.0000000, 0.001);
+      expect_to_equal_double(integral(0.0, 1.0, 100, pi_func),
+                             3.14159265, 0.001);
+    end
+
+  end
+
+end_def
