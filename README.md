@@ -15,6 +15,13 @@ $ make
 $ sudo make install
 ```
 
+## run tests
+
+```
+$ cd sample
+$ mpispec -np 3
+```
+
 ## uninstall
 
 ```
