@@ -62,7 +62,6 @@ AC_FUNC_VPRINTF
 AC_CHECK_FUNCS([memset strerror strdup])
 
 AC_CONFIG_FILES([Makefile
-                 sample/Makefile
                  script/Makefile
                  script/mpispec
                  share/Makefile
