@@ -13,7 +13,6 @@ $ ./bootstrap
 $ ./configure
 $ make
 $ sudo make install
-
 ```
 
 ## uninstall
@@ -21,6 +20,5 @@ $ sudo make install
 ```
 $ cd /path/to/mpispec
 $ sudo make uninstall
-
 ```
 
