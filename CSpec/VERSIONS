@@ -1,0 +1,23 @@
+VERSIONS
+========
+
+0.2.1 - soon to come - : Integrate output improvement from toshi-kawanishi
+	- Colored version of verbose output
+	- XML output
+
+0.2.0 : Description ready
+	- Fixed VC++ compilation
+	- All current macros and function names are frozen
+
+0.1.9 : Skip list sample & Pending
+	- Finished the first version of the skip list sample (except VC compilation)
+	- Changed 'Not implemented' to Pending
+	- Only OS X compilation and link have been checked
+
+0.1.2 : Not implemented
+	- added 'Not implemented' capability. It is necessary for works in progress (implementation or tests)
+
+0.1.0 : Initial release
+	- basic features for descriptions
+	- 3 output (verbose, unit, header)
+	- 1 sample application
