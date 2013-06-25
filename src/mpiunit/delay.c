@@ -33,6 +33,9 @@ __attribute__ ((no_instrument_function))
 static void
 delay()
 {
+  if(!( random() % 2 ))
+    return;
+
   struct timespec req;
 
   req.tv_sec = 0;
@@ -44,9 +47,7 @@ __attribute__ ((no_instrument_function))
 void
 __cyg_profile_func_enter(void *func_addr, void *callsite)
 {
-  if(random() % 2) {
-    delay();
-  }
+  /* delay(); */
 }
 
 __attribute__ ((no_instrument_function))

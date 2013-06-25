@@ -74,6 +74,8 @@ int CSpec_Run( CSpecDescriptionFun fun, CSpecOutputStruct* output);
 
 #define expect_to_pending(reason)               CSPEC_PENDING(reason)
 
+// mpi macros
+#define expect_to_send_recv(fun, from, to, tag, timeout)         CSPEC_EVAL ( mpispec_send_recv(fun, from, to, tag, timeout) == 1 )
 
 
 #endif

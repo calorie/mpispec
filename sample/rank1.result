@@ -1,0 +1,4 @@
+
+rank  1:
+  send_recvは
+    - rank0でrank1からrecvする
