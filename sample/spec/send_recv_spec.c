@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include "mpispec/mpispec.h"
 #include "mpispec/cspec_output_verbose.h"
 #include "../src/send_recv.h"
@@ -12,7 +11,6 @@ mpispec_def(send_recv_spec)
       int to      = 1;
       int tag     = 0;
       int timeout = 1;
-      /* expect_to_send_recv(fun, from, tag, data, timeout) */
       expect_to_send_recv(send_recv, from, to, tag, timeout)
     end
 
