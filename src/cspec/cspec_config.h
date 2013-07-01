@@ -17,7 +17,7 @@ int cspec_strcmp ( const char * str1, const char * str2 );
 
 typedef void ( * MPISpecFun ) ( );
 typedef int mpispec_bool;
-mpispec_bool mpispec_recv(MPISpecFun fun, int from, int to, int tag, int timeout );
+mpispec_bool mpispec_recv(MPISpecFun fun, int from, int to, int tag, double timeout );
 
 #endif
 

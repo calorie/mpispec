@@ -17,9 +17,11 @@
 
 #include "cspec_config.h"
 
-#define MS_TRUE 1
-#define MS_FALSE 0
-#define MS_DEFAULT_TIMEOUT 2
+#define MPISPEC_TRUE 1
+#define MPISPEC_FALSE 0
+#define MPISPEC_DEFAULT_TIMEOUT 2000000
+#define ONE_SEC 1000000
+#define ZERO_POINT_ONE_SEC 100000
 
 int cspec_strcmp ( const char * str1, const char * str2 )
 {
@@ -31,27 +33,34 @@ cspec_double cspec_fabs( cspec_double arg )
   return fabs(arg);
 }
 
-mpispec_bool mpispec_send_recv(MPISpecFun fun, int from, int to, int tag, int timeout )
+mpispec_bool mpispec_send_recv(MPISpecFun fun, int from, int to, int tag, double timeout )
 {
   int i = 0;
-  int test = MS_FALSE;
+  int test = MPISPEC_FALSE;
   int myrank;
+  int diff = ZERO_POINT_ONE_SEC;
   MPI_Status status;
 
   MPI_Comm_rank(MPI_COMM_WORLD, &myrank);
 
   if (myrank == to) {
-    if (timeout < 0)
-      timeout = MS_DEFAULT_TIMEOUT;
+    timeout *= ONE_SEC;
+    if (timeout < 1)
+      timeout = MPISPEC_DEFAULT_TIMEOUT;
 
-    while (i <= timeout) {
+    while (timeout > 0) {
       MPI_Iprobe(from, tag, MPI_COMM_WORLD, &test, &status);
 
-      if (test == MS_TRUE)
+      if (test == MPISPEC_TRUE)
         break;
+      if (timeout < diff) {
+        usleep(timeout);
+        break;
+      }
 
-      sleep(1);
-      i++;
+      usleep(diff);
+
+      timeout -= diff;
     }
   }
 

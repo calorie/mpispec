@@ -6,11 +6,11 @@ mpispec_def(send_recv_spec)
 
   describe(send_recv, "send_recvは")
 
-    it( "rank0でrank1からrecvする" )
+    it( "rank0とrank1で通信する" )
       int from    = 0;
       int to      = 1;
       int tag     = 0;
-      int timeout = 1;
+      double timeout = 0.3;
       expect_to_send_recv(send_recv, from, to, tag, timeout)
     end
 
