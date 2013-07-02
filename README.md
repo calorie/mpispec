@@ -22,17 +22,17 @@ export C_INCLUDE_PATH=$C_INCLUDE_PATH:/your/mpich/include/path
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/your/shared-object-file/path
 ```
 
-if you had undefined error and use ubuntu, you probably need to install binutils-gold.
-
-```
-$ apt-get install binutils-gold
-```
-
 ## run tests
 
 ```
 $ cd sample
 $ mpispec -np 3
+```
+
+if you had undefined reference and use ubuntu, you probably need to install binutils-gold.
+
+```
+$ apt-get install binutils-gold
 ```
 
 ## uninstall
