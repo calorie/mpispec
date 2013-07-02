@@ -1,31 +1,11 @@
 
-# Time-stamp: <2007-11-14 22:32:31 shinya>
-
 INSTDIR = @prefix@
 CC=mpicc
-MPIUTFLAGS = -I${INSTDIR}/include
-MPIUTLIBS = -L${INSTDIR}/lib -lmpiunit -lm
-PROCLOGLIBS = -L${INSTDIR}/lib -ldatalog -lproclog -lm
-PROCUTLIBS=-L${INSTDIR}/lib -ldatareplay -lprocut -lm
-MPISPECLIBS = -L${INSTDIR}/lib -lmpiunit -lcspec -lm
+MPISPECFLAGS = -I${INSTDIR}/include
+MPISPECLIBS = -L${INSTDIR}/lib -lmpispec -lm
 RUNTEST = run-test
 
-mpiut:
-	@${CC} ${MPIUTFLAGS} ${MPIUTLIBS} ${SRC} ${TESTSRC} -o ${RUNTEST}
-	@mpirun ${ARGV} ./${RUNTEST}
-	@rm -f ${RUNTEST} *.o *.so *~
-
-proclog:
-	@${CC} ${MPIUTFLAGS} ${PROCLOGLIBS} ${SRC} ${TESTSRC} -o ${RUNTEST}
-	@mpirun ${ARGV} ./${RUNTEST}
-	@rm -f ${RUNTEST} *.o *.so *~
-
-procut:
-	@${CC} ${MPIUTFLAGS} ${PROCUTLIBS} ${SRC} ${TESTSRC} -o ${RUNTEST}
-	./${RUNTEST}
-	@rm -f ${RUNTEST} *.o *.so *~
-
 mpispec:
-	@${CC} ${MPIUTFLAGS} ${MPISPECLIBS} ${SRC} ${SPECRC} -o ${RUNTEST}
+	@${CC} ${MPISPECFLAGS} ${MPISPECLIBS} ${SRC} ${SPECRC} -o ${RUNTEST}
 	@mpirun ${ARGV} ./${RUNTEST}
 	@rm -f ${RUNTEST} *.o *.so *~
