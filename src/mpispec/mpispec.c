@@ -10,14 +10,25 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
+#include <sys/time.h>
 #include <mpi.h>
 #include "mpispec_basic.h"
 
 #define BAR "============================================="
 
+double gettimeofday_sec(void);
+double test_start_time;
+
 void
 mpispec_setup()
 {
+  int myrank;
+  MPI_Comm_rank(MPI_COMM_WORLD, &myrank);
+
+  if(myrank == 0)
+    test_start_time = gettimeofday_sec();
+
   CU_basic_set_mode(CU_BRM_VERBOSE);
 }
 
@@ -47,6 +58,7 @@ mpispec_show_result()
       fclose(fp);
       remove(result_filename);
     }
+    printf("\nRun Time: %f sec\n", gettimeofday_sec() - test_start_time);
   }
 }
 
@@ -58,4 +70,12 @@ mpiut_rank()
   MPI_Comm_rank(MPI_COMM_WORLD, &myrank);
 
   return myrank;
+}
+
+double
+gettimeofday_sec()
+{
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+    return tv.tv_sec + tv.tv_usec * 1e-6;
 }
