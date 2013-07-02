@@ -9,12 +9,14 @@
 #include "mpispec_output.h"
 #include <memory.h>
 
-void CSpec_InitOutput( CSpecOutputStruct* output )
+void
+CSpec_InitOutput( CSpecOutputStruct* output )
 {
   memset(output, 0, sizeof(CSpecOutputStruct) );
 }
 
-MS_pRunSummary get_mpi_run_summary(void)
+MS_pRunSummary
+get_mpi_run_summary(void)
 {
   return &mpi_run_summary;
 }

@@ -18,22 +18,25 @@ int tab_num = 0;
 MS_pRunSummary verbose_summary;
 
 /* private functions */
-void printTab(int n);
-void fprintTab(int n);
-static void coloredPrintf(CSpec_Color color, const char* format, ...);
-static void coloredFprintf(CSpec_Color color, const char* format, ...);
+void
+printTab(int n);
+void
+fprintTab(int n);
+static void
+coloredPrintf(CSpec_Color color, const char* format, ...);
+static void
+coloredFprintf(CSpec_Color color, const char* format, ...);
 #ifdef _WIN32
-static WORD getWindowsColorAttribute(CSpec_Color color);
+static
+WORD getWindowsColorAttribute(CSpec_Color color);
 #else  /* !_WIN32 */
-static int getAnsiColorCode(CSpec_Color color);
+static int
+getAnsiColorCode(CSpec_Color color);
 #endif  /* _WIN32 */
 
 
-void startDescribeFunVerbose( const char *descr)
-{
-  printf("%s\n", descr);
-}
-void f_startDescribeFunVerbose( const char *descr)
+void
+startDescribeFunVerbose(const char *descr)
 {
   fprintf(__mpiut_result_file__, "\n");
   fprintTab(++tab_num);
@@ -42,82 +45,46 @@ void f_startDescribeFunVerbose( const char *descr)
   verbose_summary = get_mpi_run_summary();
 }
 
-void endDescribeFunVerbose( )
-{
-  tab_num--;
-  printf("\n");
-}
-void f_endDescribeFunVerbose( )
+void
+endDescribeFunVerbose()
 {
   tab_num--;
 }
 
-void startItFunVerbose( const char *descr)
-{
-  printTab(++tab_num);
-  printf("- %s\n", descr);
-}
-void f_startItFunVerbose( const char *descr)
+void
+startItFunVerbose(const char *descr)
 {
   fprintTab(++tab_num);
   fprintf(__mpiut_result_file__, "- %s\n", descr);
 }
 
-void endItFunVerbose( )
-{
-  printf("\n");
-}
-void f_endItFunVerbose( )
+void
+endItFunVerbose()
 {
   tab_num--;
 }
 
-void endFunVerbose( )
-{
-  tab_num--;
-  printf("\n");
-}
-void f_endFunVerbose( )
+void
+endFunVerbose()
 {
   tab_num--;
 }
 
-void startContextFunVerbose( const char *descr)
-{
-  printTab(++tab_num);
-  printf("- %s\n", descr);
-}
-void f_startContextFunVerbose( const char *descr)
+void
+startContextFunVerbose(const char *descr)
 {
   fprintTab(++tab_num);
   fprintf(__mpiut_result_file__, "- %s\n", descr);
 }
 
-void endContextFunVerbose( const char *descr)
-{
-  tab_num--;
-  printf("\n");
-}
-void f_endContextFunVerbose( const char *descr)
+void
+endContextFunVerbose(const char *descr)
 {
   tab_num--;
 }
 
-void evalFunVerbose(const char*filename, int line_number, const char*assertion, int assertionResult)
-{
-  printTab(tab_num + 1);
-  if(assertionResult)
-  {
-    coloredPrintf(CSPEC_COLOR_GREEN,
-        "OK: %s\n", assertion, filename, line_number);
-  }
-  else
-  {
-    coloredPrintf(CSPEC_COLOR_RED,
-        "Failed: %s in file %s at line %d\n", assertion, filename, line_number);
-  }
-}
-void f_evalFunVerbose(const char*filename, int line_number, const char*assertion, int assertionResult)
+void
+evalFunVerbose(const char*filename, int line_number, const char*assertion, int assertionResult)
 {
   verbose_summary->Total++;
   fprintTab(tab_num + 1);
@@ -134,34 +101,32 @@ void f_evalFunVerbose(const char*filename, int line_number, const char*assertion
   }
 }
 
-void pendingFunVerbose(const char* reason)
-{
-  coloredPrintf(CSPEC_COLOR_YELLOW, "       Pending: %s\n", reason);
-}
-void f_pendingFunVerbose(const char* reason)
+void
+pendingFunVerbose(const char* reason)
 {
   coloredFprintf(CSPEC_COLOR_YELLOW, "       Pending: %s\n", reason);
 }
 
-CSpecOutputStruct* CSpec_NewOutputVerbose()
+CSpecOutputStruct*
+CSpec_NewOutputVerbose()
 {
   CSpec_InitOutput(&verbose);
 
-  verbose.startDescribeFun = f_startDescribeFunVerbose;
-  verbose.endDescribeFun   = f_endDescribeFunVerbose;
-  verbose.startItFun       = f_startItFunVerbose;
-  verbose.endItFun         = f_endItFunVerbose;
-  verbose.startContextFun  = f_startContextFunVerbose;
-  verbose.endContextFun    = f_endContextFunVerbose;
-  verbose.endFun           = f_endFunVerbose;
-  verbose.evalFun          = f_evalFunVerbose;
-  verbose.pendingFun       = f_pendingFunVerbose;
+  verbose.startDescribeFun = startDescribeFunVerbose;
+  verbose.endDescribeFun   = endDescribeFunVerbose;
+  verbose.startItFun       = startItFunVerbose;
+  verbose.endItFun         = endItFunVerbose;
+  verbose.startContextFun  = startContextFunVerbose;
+  verbose.endContextFun    = endContextFunVerbose;
+  verbose.endFun           = endFunVerbose;
+  verbose.evalFun          = evalFunVerbose;
+  verbose.pendingFun       = pendingFunVerbose;
 
   return &verbose;
 }
 
 #ifdef _WIN32
-  static WORD
+static WORD
 getWindowsColorAttribute(CSpec_Color color)
 {
   WORD color_attribute;
@@ -186,7 +151,7 @@ getWindowsColorAttribute(CSpec_Color color)
   return color_attribute;
 }
 #else  /* !_WIN32 */
-  static int
+static int
 getAnsiColorCode(CSpec_Color color)
 {
   int color_code;
@@ -212,7 +177,7 @@ getAnsiColorCode(CSpec_Color color)
 }
 #endif  /* _WIN32 */
 
-  static void
+static void
 coloredPrintf(CSpec_Color color, const char* format, ...)
 {
 #ifdef _WIN32
@@ -260,13 +225,15 @@ coloredPrintf(CSpec_Color color, const char* format, ...)
   return;
 }
 
-void printTab(int n)
+void
+printTab(int n)
 {
   int i;
   for (i = 0; i < n; i++)
     printf("  ");
 }
-void fprintTab(int n)
+void
+fprintTab(int n)
 {
   int i;
   for (i = 0; i < n; i++)

@@ -23,17 +23,20 @@
 #define MPISPEC_ONE_SEC 1000000
 #define MPISPEC_ZERO_POINT_ONE_SEC 100000
 
-int cspec_strcmp ( const char * str1, const char * str2 )
+int
+cspec_strcmp ( const char * str1, const char * str2 )
 {
   return strcmp(str1, str2);
 }
 
-cspec_double cspec_fabs( cspec_double arg )
+cspec_double
+cspec_fabs( cspec_double arg )
 {
   return fabs(arg);
 }
 
-mpispec_bool mpispec_send_recv(MPISpecFun fun, int from, int to, int tag, double timeout )
+mpispec_bool
+mpispec_send_recv(MPISpecFun fun, int from, int to, int tag, double timeout )
 {
   int i = 0;
   int test = MPISPEC_FALSE;

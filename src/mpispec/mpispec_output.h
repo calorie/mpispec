@@ -53,12 +53,17 @@ typedef struct
 
 } MPISpecRunSummary;
 typedef MPISpecRunSummary* MS_pRunSummary;
+
 static MPISpecRunSummary mpi_run_summary;
-MS_pRunSummary get_mpi_run_summary(void);
 
-void CSpec_InitOutput(CSpecOutputStruct* output);
+MS_pRunSummary
+get_mpi_run_summary(void);
 
-void CSpec_SetOutput(CSpecOutputStruct* output);
+void
+CSpec_InitOutput(CSpecOutputStruct* output);
+
+void
+CSpec_SetOutput(CSpecOutputStruct* output);
 
 #endif
 

@@ -11,7 +11,8 @@
 
 static CSpecOutputStruct* CSpec_output = 0;
 
-int CSpec_StartDescribe(const char *descr)
+int
+CSpec_StartDescribe(const char *descr)
 {
     if( CSpec_output->startDescribeFun != NULL)
     {
@@ -20,7 +21,8 @@ int CSpec_StartDescribe(const char *descr)
     return 0;
 }
 
-void CSpec_EndDescribe()
+void
+CSpec_EndDescribe()
 {
     if( CSpec_output->endDescribeFun != NULL)
     {
@@ -28,7 +30,8 @@ void CSpec_EndDescribe()
     }
 }
 
-int CSpec_StartIt(const char *descr)
+int
+CSpec_StartIt(const char *descr)
 {
     if(CSpec_output->startItFun != NULL)
     {
@@ -37,7 +40,8 @@ int CSpec_StartIt(const char *descr)
     return 0;
 }
 
-void CSpec_EndIt()
+void
+CSpec_EndIt()
 {
     if(CSpec_output->endItFun != NULL)
     {
@@ -45,7 +49,8 @@ void CSpec_EndIt()
     }
 }
 
-void CSpec_End()
+void
+CSpec_End()
 {
     if(CSpec_output->endFun != NULL)
     {
@@ -53,7 +58,8 @@ void CSpec_End()
     }
 }
 
-int CSpec_StartContext(const char *descr)
+int
+CSpec_StartContext(const char *descr)
 {
     if(CSpec_output->startContextFun != NULL)
     {
@@ -62,7 +68,8 @@ int CSpec_StartContext(const char *descr)
     return 0;
 }
 
-void CSpec_EndContext()
+void
+CSpec_EndContext()
 {
     if(CSpec_output->endContextFun != NULL)
     {
@@ -70,7 +77,8 @@ void CSpec_EndContext()
     }
 }
 
-void CSpec_Eval(const char*filename, int line_number, const char*assertion, int assertionResult)
+void
+CSpec_Eval(const char*filename, int line_number, const char*assertion, int assertionResult)
 {
     if(CSpec_output->evalFun != NULL)
     {
@@ -83,7 +91,8 @@ void CSpec_Eval(const char*filename, int line_number, const char*assertion, int 
     }
 }
 
-void CSpec_Pending(const char* reason)
+void
+CSpec_Pending(const char* reason)
 {
     if(CSpec_output->pendingFun != NULL)
     {
@@ -91,7 +100,8 @@ void CSpec_Pending(const char* reason)
     }
 }
 
-void CSpec_SetOutput(CSpecOutputStruct* output)
+void
+CSpec_SetOutput(CSpecOutputStruct* output)
 {
     CSpec_output = output;
 }
