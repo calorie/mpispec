@@ -16,14 +16,14 @@ mpispec_init
 /* run all ranks */
 MPISpec_Run(strcmp_spec);
 
-if(MPIUT_RANK == 0) {
+if(mpispec_rank == 0) {
   MPISpec_Run(cpi_spec);
   MPISpec_Run(send_recv_spec);
 }
 else {
   cpi();
 }
-if(MPIUT_RANK == 1) {
+if(mpispec_rank == 1) {
   MPISpec_Run(send_recv_spec);
   MPISpec_Run(fabs_spec);
 }

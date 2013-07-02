@@ -1,5 +1,4 @@
 #include "mpispec/mpispec.h"
-#include "mpispec/cspec_output_verbose.h"
 #include "../src/cpi.h"
 
 /* Define tests */

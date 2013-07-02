@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include "mpispec/mpispec.h"
-#include "mpispec/cspec_output_verbose.h"
 
 mpispec_def(strcmp_spec)
 

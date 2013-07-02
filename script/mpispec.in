@@ -1,13 +1,11 @@
 #!/bin/sh
 
-# Time-stamp: <2007-11-14 22:32:05 shinya>
-
 INSTDIR=@prefix@
 CC="mpicc"
 EXEC="exec_test"
-MPIUTFLAGS="-I${INSTDIR}/include -finstrument-functions -rdynamic"
-MPIUTLIBS="-L${INSTDIR}/lib -lmpiunit -lcspec -lm"
+MPISPECFLAGS="-I${INSTDIR}/include -finstrument-functions -rdynamic"
+MPISPECLIBS="-L${INSTDIR}/lib -lmpispec -lm"
 
-$CC $MPIUTFLAGS $MPIUTLIBS src/*.c spec/*.c -o $EXEC
+$CC $MPISPECFLAGS $MPISPECLIBS src/*.c spec/*.c -o $EXEC
 mpirun $* ./$EXEC
 rm -f *.o $EXEC

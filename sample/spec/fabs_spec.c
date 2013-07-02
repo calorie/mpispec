@@ -1,6 +1,5 @@
 #include <math.h>
 #include "mpispec/mpispec.h"
-#include "mpispec/cspec_output_verbose.h"
 
 /* Define tests */
 mpispec_def(fabs_spec)
