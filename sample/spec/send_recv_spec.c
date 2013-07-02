@@ -9,7 +9,7 @@ mpispec_def(send_recv_spec)
       int from    = 0;
       int to      = 1;
       int tag     = 0;
-      double timeout = 0.3;
+      double timeout = 0.11;
       expect_to_send_recv(send_recv, from, to, tag, timeout)
     end
 

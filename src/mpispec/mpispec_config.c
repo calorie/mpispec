@@ -20,8 +20,8 @@
 #define MPISPEC_TRUE 1
 #define MPISPEC_FALSE 0
 #define MPISPEC_DEFAULT_TIMEOUT 2000000
-#define ONE_SEC 1000000
-#define ZERO_POINT_ONE_SEC 100000
+#define MPISPEC_ONE_SEC 1000000
+#define MPISPEC_ZERO_POINT_ONE_SEC 100000
 
 int cspec_strcmp ( const char * str1, const char * str2 )
 {
@@ -38,13 +38,13 @@ mpispec_bool mpispec_send_recv(MPISpecFun fun, int from, int to, int tag, double
   int i = 0;
   int test = MPISPEC_FALSE;
   int myrank;
-  int diff = ZERO_POINT_ONE_SEC;
+  int diff = MPISPEC_ZERO_POINT_ONE_SEC;
   MPI_Status status;
 
   MPI_Comm_rank(MPI_COMM_WORLD, &myrank);
 
   if (myrank == to) {
-    timeout *= ONE_SEC;
+    timeout *= MPISPEC_ONE_SEC;
     if (timeout < 1)
       timeout = MPISPEC_DEFAULT_TIMEOUT;
 
