@@ -17,8 +17,8 @@
 
 #include "mpispec_config.h"
 
-#define MPISPEC_TRUE 1
-#define MPISPEC_FALSE 0
+#define MPISPEC_TRUE 0
+#define MPISPEC_FALSE -1
 #define MPISPEC_DEFAULT_TIMEOUT 2000000
 #define MPISPEC_ONE_SEC 1000000
 #define MPISPEC_ZERO_POINT_ONE_SEC 100000

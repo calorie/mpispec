@@ -46,3 +46,7 @@ stamp-h?
 /INSTALL
 /README
 /README.ja
+
+src/cspec/
+src/mpiunit/
+/build/**

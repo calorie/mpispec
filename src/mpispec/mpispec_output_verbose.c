@@ -7,7 +7,6 @@
 
 #include <stdarg.h>
 #include <stdio.h>
-#include <mpi.h>
 #ifdef _WIN32
 #  include <windows.h>
 #endif
