@@ -13,6 +13,7 @@
 #include <time.h>
 #include <sys/time.h>
 #include <mpi.h>
+
 #include "mpispec_basic.h"
 
 #define BAR "============================================="
@@ -30,6 +31,8 @@ mpispec_setup()
     test_start_time = gettimeofday_sec();
 
   CU_basic_set_mode(CU_BRM_VERBOSE);
+
+  mpispec_make_result_file(&myrank);
 }
 
 void

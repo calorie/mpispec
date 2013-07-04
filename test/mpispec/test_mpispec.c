@@ -23,5 +23,5 @@ void test_gettimeofday_sec(void)
   t1 = gettimeofday_sec();
   usleep(1000000);
   t2 = gettimeofday_sec();
-  TEST_ASSERT_EQUAL(t2 - t1, 1.0);
+  TEST_ASSERT_EQUAL(t2 - t1, 1);
 }

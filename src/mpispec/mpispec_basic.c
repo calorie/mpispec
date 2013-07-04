@@ -66,17 +66,6 @@ static CU_BasicRunMode f_run_mode = CU_BRM_NORMAL;
 void
 CU_basic_set_mode(CU_BasicRunMode mode)
 {
-  int myrank;
-  char result_filename[32];
-
-  MPI_Comm_rank(MPI_COMM_WORLD, &myrank);
-  sprintf(result_filename, "rank%d.result", myrank);
-  if(NULL == (__mpiut_result_file__ = fopen(result_filename, "a"))) {
-    fprintf(stderr, "Can't open result files");
-    exit(-1);
-  };
-  fprintf(__mpiut_result_file__, "\nrank  %d:", myrank);
-
   f_run_mode = mode;
 }
 
@@ -90,6 +79,20 @@ void
 CU_basic_exit()
 {
   fclose(__mpiut_result_file__);
+}
+
+void
+mpispec_make_result_file(int *myrank)
+{
+  char result_filename[32];
+
+  MPI_Comm_rank(MPI_COMM_WORLD, myrank);
+  sprintf(result_filename, "rank%d.result", *myrank);
+  if(NULL == (__mpiut_result_file__ = fopen(result_filename, "a"))) {
+    fprintf(stderr, "Can't open result files");
+    exit(-1);
+  };
+  fprintf(__mpiut_result_file__, "\nrank  %d:", *myrank);
 }
 
 void

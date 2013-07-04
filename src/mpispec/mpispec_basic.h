@@ -50,9 +50,9 @@ extern "C" {
 #endif
 
 typedef enum {
-  CU_BRM_NORMAL = 0,
-  CU_BRM_SILENT,
-  CU_BRM_VERBOSE
+  CU_BRM_NORMAL  = 0,
+  CU_BRM_SILENT  = 1,
+  CU_BRM_VERBOSE = 2
 } CU_BasicRunMode;
 
 void
@@ -63,6 +63,9 @@ CU_basic_get_mode(void);
 
 void
 CU_basic_exit();
+
+void
+mpispec_make_result_file(int *myrank);
 
 void
 mpispec_run_summary(void);
