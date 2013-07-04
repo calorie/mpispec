@@ -25,6 +25,9 @@ mpispec_show_result();
 int
 mpiut_rank();
 
+double
+gettimeofday_sec();
+
 #define mpispec_init            \
   int                           \
   main(int argc, char **argv) { \

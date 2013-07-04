@@ -105,4 +105,3 @@ CSpec_SetOutput(CSpecOutputStruct* output)
 {
     CSpec_output = output;
 }
-
