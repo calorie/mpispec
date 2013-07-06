@@ -22,7 +22,7 @@ export C_INCLUDE_PATH=$C_INCLUDE_PATH:/your/mpich/include/path
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/your/shared-object-file/path
 ```
 
-## run tests
+## run sample
 
 ```
 $ cd sample
@@ -35,10 +35,9 @@ if you had undefined reference and use ubuntu, you probably need to install binu
 $ apt-get install binutils-gold
 ```
 
-## uninstall
+## run unity test
 
 ```
-$ cd /path/to/mpispec
-$ sudo make uninstall
+$ rake test:all
 ```
 
