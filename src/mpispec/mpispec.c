@@ -75,10 +75,10 @@ mpiut_rank()
   return myrank;
 }
 
-double
+  double
 gettimeofday_sec()
 {
-    struct timeval tv;
-    gettimeofday(&tv, NULL);
-    return tv.tv_sec + tv.tv_usec * 1e-6;
+  struct timeval tv;
+  gettimeofday(&tv, NULL);
+  return tv.tv_sec + tv.tv_usec * 1e-6;
 }
