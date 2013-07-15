@@ -106,3 +106,20 @@ mpispec_run_summary(void)
       summary->Passed,
       summary->Total - summary->Passed);
 }
+
+unsigned int
+mpispec_get_number_of_specs(void)
+{
+  return get_mpi_run_summary()->Total;
+}
+unsigned int
+mpispec_get_number_of_successes(void)
+{
+  return get_mpi_run_summary()->Passed;
+}
+unsigned int
+mpispec_get_number_of_failures(void)
+{
+  MS_pRunSummary summary = get_mpi_run_summary();
+  return summary->Total - summary->Passed;
+}

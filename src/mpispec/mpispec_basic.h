@@ -70,6 +70,13 @@ mpispec_make_result_file(int *myrank);
 void
 mpispec_run_summary(void);
 
+unsigned int
+mpispec_get_number_of_specs(void);
+unsigned int
+mpispec_get_number_of_successes(void);
+unsigned int
+mpispec_get_number_of_failures(void);
+
 #ifdef __cplusplus
 }
 #endif
