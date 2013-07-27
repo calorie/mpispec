@@ -3,7 +3,7 @@
 
 mpispec_def(strcmp_spec)
 
-  describe(strcmp, "標準ライブラリのstrcmpの")
+  describe("標準ライブラリのstrcmpの")
 
     context("入力が一致するとき")
       it( "0を返す" )

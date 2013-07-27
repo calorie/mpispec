@@ -30,7 +30,7 @@ int CSpec_Run( CSpecDescriptionFun fun, CSpecOutputStruct* output);
 #define define_description(foo) void foo ## _describe();
 #define description(foo)        foo ## _describe
 
-#define describe(foo, caption)  { CSpec_SetOutput(CSpec_NewOutputVerbose());CSpec_StartDescribe(caption); {
+#define describe(caption)  { CSpec_SetOutput(CSpec_NewOutputVerbose());CSpec_StartDescribe(caption); {
 #define end_describe            } CSpec_EndDescribe(); }
 
 #define it(caption)             { CSpec_StartIt(caption); {
@@ -39,6 +39,8 @@ int CSpec_Run( CSpecDescriptionFun fun, CSpecOutputStruct* output);
 
 #define context(caption)        { CSpec_StartContext(caption); {
 #define end_context             } CSpec_EndContext() ; }
+
+// #define before(foo)             { void before_ ## foo() {
 
 
 

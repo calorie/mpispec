@@ -4,7 +4,7 @@
 /* Define tests */
 mpispec_def(fabs_spec)
 
-  describe(fabs, "標準ライブラリfabsの")
+  describe("標準ライブラリfabsの")
 
     context("入力が正の数の時")
       it("同じ数値を返す")

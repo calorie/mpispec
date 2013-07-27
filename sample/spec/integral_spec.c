@@ -16,7 +16,7 @@ pi_func(double x)
 /* Define tests */
 mpispec_def(integral_spec)
 
-  describe(integral, "integral関数は")
+  describe("integral関数は")
 
     it("積分値を返す")
       expect_to_equal_double(integral(0, 10, 100, f),

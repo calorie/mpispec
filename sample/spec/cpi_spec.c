@@ -4,7 +4,7 @@
 /* Define tests */
 mpispec_def(cpi_spec)
 
-  describe(cpi, "cpi関数は")
+  describe("cpi関数は")
 
     context("rank0なら")
       it("piを返す")

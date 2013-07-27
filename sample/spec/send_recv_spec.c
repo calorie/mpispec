@@ -3,7 +3,7 @@
 
 mpispec_def(send_recv_spec)
 
-  describe(send_recv, "send_recvは")
+  describe("send_recvは")
 
     it( "rank0とrank1で通信する" )
       int from    = 0;
