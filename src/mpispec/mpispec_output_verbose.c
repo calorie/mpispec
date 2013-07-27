@@ -58,19 +58,6 @@ endFunVerbose()
 }
 
 void
-startContextFunVerbose(const char *descr)
-{
-  fprintTab(++tab_num);
-  fprintf(__mpiut_result_file__, "- %s\n", descr);
-}
-
-void
-endContextFunVerbose(const char *descr)
-{
-  tab_num--;
-}
-
-void
 evalFunVerbose(const char*filename, int line_number, const char*assertion, int assertionResult)
 {
   verbose_summary->Total++;
@@ -103,8 +90,6 @@ CSpec_NewOutputVerbose()
   verbose.endDescribeFun   = endDescribeFunVerbose;
   verbose.startItFun       = startItFunVerbose;
   verbose.endItFun         = endItFunVerbose;
-  verbose.startContextFun  = startContextFunVerbose;
-  verbose.endContextFun    = endContextFunVerbose;
   verbose.endFun           = endFunVerbose;
   verbose.evalFun          = evalFunVerbose;
   verbose.pendingFun       = pendingFunVerbose;
