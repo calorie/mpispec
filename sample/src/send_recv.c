@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <math.h>
 
-/* #include "mpi.h" */
-#include "mpispec/mpi_stubs_c.h"
+#include "mpi.h"
+/* #include "mpispec/mpi_stubs_c.h" */
 
 void send_recv()
 {
