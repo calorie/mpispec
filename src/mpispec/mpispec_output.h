@@ -11,15 +11,15 @@
 
 extern FILE *__mpiut_result_file__;
 
-typedef void ( * CSpecOutputStartDescribeFun ) ( const char *descr);
-typedef void ( * CSpecOutputEndDescribeFun ) ( );
+typedef void ( * CSpecOutputStartDescribeFun )( const char *descr );
+typedef void ( * CSpecOutputEndDescribeFun )();
 
-typedef void ( * CSpecOutputStartItFun ) ( const char *descr);
-typedef void ( * CSpecOutputEndItFun ) ( );
-typedef void ( * CSpecOutputEndFun ) ( );
+typedef void ( * CSpecOutputStartItFun )( const char *descr );
+typedef void ( * CSpecOutputEndItFun )();
+typedef void ( * CSpecOutputEndFun )();
 
-typedef void ( * CSpecOutputEvalFun ) (const char*filename, int line_number, const char*assertion, int assertionResult);
-typedef void ( * CSpecOutputPendingFun ) (const char* reason);
+typedef void ( * CSpecOutputEvalFun )( const char*filename, int line_number, const char*assertion, int assertionResult );
+typedef void ( * CSpecOutputPendingFun )( const char* reason );
 
 typedef struct
 {
@@ -51,13 +51,12 @@ typedef MPISpecRunSummary* MS_pRunSummary;
 static MPISpecRunSummary mpi_run_summary;
 
 MS_pRunSummary
-get_mpi_run_summary(void);
+get_mpi_run_summary( void );
 
 void
-CSpec_InitOutput(CSpecOutputStruct* output);
+CSpec_InitOutput( CSpecOutputStruct* output );
 
 void
-CSpec_SetOutput(CSpecOutputStruct* output);
+CSpec_SetOutput( CSpecOutputStruct* output );
 
 #endif
-

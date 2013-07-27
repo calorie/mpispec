@@ -20,10 +20,10 @@ void
 MPISpec_init_all();
 
 int
-CSpec_StartDescribe(const char *descr)
+CSpec_StartDescribe( const char *descr )
 {
-  if( CSpec_output->startDescribeFun != NULL)
-    CSpec_output->startDescribeFun(descr);
+  if( CSpec_output->startDescribeFun != NULL )
+    CSpec_output->startDescribeFun( descr );
 
   return 0;
 }
@@ -31,16 +31,16 @@ CSpec_StartDescribe(const char *descr)
 void
 CSpec_EndDescribe()
 {
-  if( CSpec_output->endDescribeFun != NULL)
+  if( CSpec_output->endDescribeFun != NULL )
     CSpec_output->endDescribeFun();
 }
 
 int
-CSpec_StartIt(const char *descr)
+CSpec_StartIt( const char *descr )
 {
   MPISpec_run_before();
-  if(CSpec_output->startItFun != NULL)
-    CSpec_output->startItFun(descr);
+  if( CSpec_output->startItFun != NULL )
+    CSpec_output->startItFun( descr );
 
   return 0;
 }
@@ -48,36 +48,37 @@ CSpec_StartIt(const char *descr)
 void
 CSpec_EndIt()
 {
-  if(CSpec_output->endItFun != NULL)
+  if( CSpec_output->endItFun != NULL )
     CSpec_output->endItFun();
 }
 
 void
 CSpec_End()
 {
-  if(CSpec_output->endFun != NULL)
+  if( CSpec_output->endFun != NULL )
     CSpec_output->endFun();
 }
 
 void
-CSpec_Eval(const char*filename, int line_number, const char*assertion, int assertionResult)
+CSpec_Eval( const char*filename, int line_number,
+            const char*assertion, int assertionResult )
 {
-  if(CSpec_output->evalFun != NULL)
-    CSpec_output->evalFun(filename, line_number, assertion, assertionResult);
+  if( CSpec_output->evalFun != NULL )
+    CSpec_output->evalFun( filename, line_number, assertion, assertionResult );
 
-  if (!assertionResult)
+  if ( !assertionResult )
     CSpec_output->failed++;
 }
 
 void
-CSpec_Pending(const char* reason)
+CSpec_Pending( const char* reason )
 {
-  if(CSpec_output->pendingFun != NULL)
-    CSpec_output->pendingFun(reason);
+  if( CSpec_output->pendingFun != NULL )
+    CSpec_output->pendingFun( reason );
 }
 
 void
-CSpec_SetOutput(CSpecOutputStruct* output)
+CSpec_SetOutput( CSpecOutputStruct* output )
 {
   CSpec_output = output;
 }
@@ -86,8 +87,7 @@ void
 MPISpec_init_all()
 {
   int i;
-  for(i=0; i<MAX_ARRAY_SIZE; i++)
-  {
+  for( i = 0; i < MAX_ARRAY_SIZE; i++ ) {
     before_array[i] = NULL;
   }
 }
@@ -96,11 +96,10 @@ void
 MPISpec_set_before( MPISpecTmpFunction fun )
 {
   int i;
-  for(i=0; i<MAX_ARRAY_SIZE; i++)
-  {
-    if(before_array[i] == fun)
+  for( i = 0; i < MAX_ARRAY_SIZE; i++ ) {
+    if( before_array[i] == fun )
       break;
-    if(before_array[i] == NULL) {
+    if( before_array[i] == NULL ) {
       before_array[i] = fun;
       break;
     }
@@ -111,9 +110,8 @@ void
 MPISpec_run_before()
 {
   int i;
-  for(i=0; i<MAX_ARRAY_SIZE; i++)
-  {
-    if(before_array[i] != NULL)
+  for( i=0; i < MAX_ARRAY_SIZE; i++ ) {
+    if( before_array[i] != NULL )
       before_array[i]();
     else
       break;

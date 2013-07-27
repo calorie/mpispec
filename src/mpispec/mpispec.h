@@ -28,30 +28,30 @@ mpiut_rank();
 double
 gettimeofday_sec();
 
-#define mpispec_init            \
-  int                           \
-  main(int argc, char **argv) { \
-    MPI_Init(&argc, &argv);     \
+#define mpispec_init              \
+  int                             \
+  main( int argc, char **argv ) { \
+    MPI_Init( &argc, &argv );     \
     mpispec_setup();
 
 #define mpispec_prototype(test) \
   void test();
 
 #define mpispec_def(test) \
-  void test() {{
+  void test() { {
 
 #define end_def \
-  }}
+  } }
 
 #define mpispec_register(name, test) \
-  mpiut_register(name, test);
+  mpiut_register( name, test );
 
-#define mpispec_finalize       \
-  mpispec_run_summary();       \
-  CU_basic_exit();             \
-  MPI_Barrier(MPI_COMM_WORLD); \
+#define mpispec_finalize         \
+  mpispec_run_summary();         \
+  CU_basic_exit();               \
+  MPI_Barrier( MPI_COMM_WORLD ); \
   mpispec_show_result();         \
-  MPI_Finalize();              \
+  MPI_Finalize();                \
   return EXIT_SUCCESS; }
 
 #define mpispec_rank \

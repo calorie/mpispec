@@ -21,19 +21,22 @@
 
 /* Public function definition */
 
-typedef void ( * CSpecDescriptionFun ) ( );
-int CSpec_Run( CSpecDescriptionFun fun, CSpecOutputStruct* output);
-#define MPISpec_Run(foo) CSpec_Run(foo, CSpec_NewOutputVerbose())
+typedef void ( * CSpecDescriptionFun )();
+int CSpec_Run( CSpecDescriptionFun fun, CSpecOutputStruct* output );
+
+/* runner macros */
+
+#define MPISpec_Run(foo) CSpec_Run( foo, CSpec_NewOutputVerbose() )
 
 /* Structural macros */
 
-#define describe(caption) { CSpec_StartDescribe(caption); {
+#define describe(caption) { CSpec_StartDescribe( caption ); {
 #define end_describe      } CSpec_EndDescribe(); }
 
 #define context(caption)  describe(caption)
 #define end_context       end_describe
 
-#define it(caption)       { CSpec_StartIt(caption); {
+#define it(caption)       { CSpec_StartIt( caption ); {
 #define end_it            } CSpec_EndIt() ; }
 
 #define end               } CSpec_End() ; }
@@ -45,17 +48,17 @@ int CSpec_Run( CSpecDescriptionFun fun, CSpecOutputStruct* output);
 
 /* Expectation macros */
 
-#define should_be_true(x)                       CSPEC_EVAL ( (x) )
-#define should_equal(x, y)                      CSPEC_EVAL ( (x) == (y) )
-#define should_equal_double(x, y, delta)        CSPEC_EVAL ( cspec_fabs( (x) - (y) ) <= delta )
-#define should_match(x, y)                      CSPEC_EVAL ( cspec_strcmp(x, y) ==  0   )
-#define should_be_null(x)                       CSPEC_EVAL ( (x) == 0 )
+#define should_be_true(x)                       CSPEC_EVAL( (x) )
+#define should_equal(x, y)                      CSPEC_EVAL( (x) == (y) )
+#define should_equal_double(x, y, delta)        CSPEC_EVAL( cspec_fabs( (x) - (y) ) <= delta )
+#define should_match(x, y)                      CSPEC_EVAL( cspec_strcmp(x, y) == 0 )
+#define should_be_null(x)                       CSPEC_EVAL( (x) == 0 )
 
-#define should_be_false(x)                      CSPEC_EVAL ( !(x) )
-#define should_not_equal(x, y)                  CSPEC_EVAL ( (x) != (y) )
-#define should_not_equal_double(x, y, delta)    CSPEC_EVAL ( cspec_fabs( (x) - (y) ) > delta )
-#define should_not_match(x, y)                  CSPEC_EVAL ( cspec_strcmp(x, y) != 0   )
-#define should_not_be_null(x)                   CSPEC_EVAL ( (x) != 0 )
+#define should_be_false(x)                      CSPEC_EVAL( !(x) )
+#define should_not_equal(x, y)                  CSPEC_EVAL( (x) != (y) )
+#define should_not_equal_double(x, y, delta)    CSPEC_EVAL( cspec_fabs( (x) - (y) ) > delta )
+#define should_not_match(x, y)                  CSPEC_EVAL( cspec_strcmp(x, y) != 0 )
+#define should_not_be_null(x)                   CSPEC_EVAL( (x) != 0 )
 
 #define should_pending(reason)                  CSPEC_PENDING(reason)
 
@@ -75,9 +78,10 @@ int CSpec_Run( CSpecDescriptionFun fun, CSpecOutputStruct* output);
 
 #define expect_to_pending(reason)               should_pending(reason)
 
-// mpi macros
-#define should_send_recv(fun, from, to, tag, timeout)    CSPEC_EVAL ( mpispec_send_recv(fun, from, to, tag, timeout) == 0 )
-#define expect_to_send_recv(fun, from, to, tag, timeout) should_send_recv(fun, from, to, tag, timeout)
+/* mpi macros */
+
+#define should_send_recv(fun, from, to, tag, timeout)        CSPEC_EVAL ( mpispec_send_recv(fun, from, to, tag, timeout) == 0 )
+#define expect_to_send_recv(fun, from, to, tag, timeout)     should_send_recv(fun, from, to, tag, timeout)
 
 #define should_not_send_recv(fun, from, to, tag, timeout)    CSPEC_EVAL ( mpispec_send_recv(fun, from, to, tag, timeout) != 0 )
 #define expect_not_to_send_recv(fun, from, to, tag, timeout) should_not_send_recv(fun, from, to, tag, timeout)

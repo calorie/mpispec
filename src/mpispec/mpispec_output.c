@@ -12,11 +12,11 @@
 void
 CSpec_InitOutput( CSpecOutputStruct* output )
 {
-  memset(output, 0, sizeof(CSpecOutputStruct) );
+  memset(output, 0, sizeof( CSpecOutputStruct ) );
 }
 
 MS_pRunSummary
-get_mpi_run_summary(void)
+get_mpi_run_summary( void )
 {
   return &mpi_run_summary;
 }

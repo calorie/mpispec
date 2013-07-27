@@ -15,19 +15,21 @@ MS_pRunSummary verbose_summary;
 
 /* private functions */
 void
-fprintTab(int n);
+fprintTab( int n );
+
 static void
-coloredFprintf(CSpec_Color color, const char* format, ...);
+coloredFprintf( CSpec_Color color, const char* format, ... );
+
 static int
-getAnsiColorCode(CSpec_Color color);
+getAnsiColorCode( CSpec_Color color );
 
 
 void
-startDescribeFunVerbose(const char *descr)
+startDescribeFunVerbose( const char *descr )
 {
-  fprintf(__mpiut_result_file__, "\n");
-  fprintTab(++tab_num);
-  fprintf(__mpiut_result_file__, "%s\n", descr);
+  fprintf( __mpiut_result_file__, "\n" );
+  fprintTab( ++tab_num );
+  fprintf( __mpiut_result_file__, "%s\n", descr );
 
   verbose_summary = get_mpi_run_summary();
 }
@@ -39,10 +41,10 @@ endDescribeFunVerbose()
 }
 
 void
-startItFunVerbose(const char *descr)
+startItFunVerbose( const char *descr )
 {
-  fprintTab(++tab_num);
-  fprintf(__mpiut_result_file__, "- %s\n", descr);
+  fprintTab( ++tab_num );
+  fprintf( __mpiut_result_file__, "- %s\n", descr );
 }
 
 void
@@ -58,33 +60,34 @@ endFunVerbose()
 }
 
 void
-evalFunVerbose(const char*filename, int line_number, const char*assertion, int assertionResult)
+evalFunVerbose( const char*filename, int line_number,
+                const char*assertion, int assertionResult )
 {
+  fprintTab( tab_num + 1 );
+
   verbose_summary->Total++;
-  fprintTab(tab_num + 1);
-  if(assertionResult)
-  {
+
+  if( assertionResult ) {
     verbose_summary->Passed++;
-    coloredFprintf(CSPEC_COLOR_GREEN,
-        "OK: %s\n", assertion, filename, line_number);
-  }
-  else
-  {
-    coloredFprintf(CSPEC_COLOR_RED,
-        "Failed: %s in file %s at line %d\n", assertion, filename, line_number);
+    coloredFprintf( CSPEC_COLOR_GREEN,
+        "OK: %s\n", assertion, filename, line_number );
+  } else {
+    coloredFprintf( CSPEC_COLOR_RED,
+        "Failed: %s in file %s at line %d\n",
+        assertion, filename, line_number );
   }
 }
 
 void
 pendingFunVerbose(const char* reason)
 {
-  coloredFprintf(CSPEC_COLOR_YELLOW, "       Pending: %s\n", reason);
+  coloredFprintf( CSPEC_COLOR_YELLOW, "       Pending: %s\n", reason );
 }
 
 CSpecOutputStruct*
 CSpec_NewOutputVerbose()
 {
-  CSpec_InitOutput(&verbose);
+  CSpec_InitOutput( &verbose );
 
   verbose.startDescribeFun = startDescribeFunVerbose;
   verbose.endDescribeFun   = endDescribeFunVerbose;
@@ -98,13 +101,11 @@ CSpec_NewOutputVerbose()
 }
 
 static int
-getAnsiColorCode(CSpec_Color color)
+getAnsiColorCode( CSpec_Color color )
 {
   int color_code;
 
-
-  switch(color)
-  {
+  switch( color ) {
     case CSPEC_COLOR_RED:
       color_code = 31;
       break;
@@ -123,29 +124,29 @@ getAnsiColorCode(CSpec_Color color)
 }
 
 void
-fprintTab(int n)
+fprintTab( int n )
 {
   int i;
-  for (i = 0; i < n; i++)
-    fprintf(__mpiut_result_file__, "  ");
+  for ( i = 0; i < n; i++ )
+    fprintf( __mpiut_result_file__, "  " );
 }
 
 static void
-coloredFprintf(CSpec_Color color, const char* format, ...)
+coloredFprintf( CSpec_Color color, const char* format, ... )
 {
   va_list args;
 
-  va_start(args, format);
+  va_start( args, format );
 
   /* Set color */
-  fprintf(__mpiut_result_file__, "\033[0;%dm", getAnsiColorCode(color));
+  fprintf( __mpiut_result_file__, "\033[0;%dm", getAnsiColorCode( color ) );
 
   /* Print Text */
-  vfprintf(__mpiut_result_file__, format, args);
+  vfprintf( __mpiut_result_file__, format, args );
 
   /* Reset color */
-  fprintf(__mpiut_result_file__, "\033[m");
+  fprintf( __mpiut_result_file__, "\033[m" );
 
-  va_end(args);
+  va_end( args );
   return;
 }

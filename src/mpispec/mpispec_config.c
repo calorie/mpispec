@@ -26,17 +26,17 @@
 int
 cspec_strcmp ( const char * str1, const char * str2 )
 {
-  return strcmp(str1, str2);
+  return strcmp( str1, str2 );
 }
 
 cspec_double
 cspec_fabs( cspec_double arg )
 {
-  return fabs(arg);
+  return fabs( arg );
 }
 
 mpispec_bool
-mpispec_send_recv(MPISpecFun fun, int from, int to, int tag, double timeout )
+mpispec_send_recv( MPISpecFun fun, int from, int to, int tag, double timeout )
 {
   int i = 0;
   int test = MPISPEC_FALSE;
@@ -44,36 +44,36 @@ mpispec_send_recv(MPISpecFun fun, int from, int to, int tag, double timeout )
   int diff = MPISPEC_ZERO_POINT_ONE_SEC;
   MPI_Status status;
 
-  MPI_Comm_rank(MPI_COMM_WORLD, &myrank);
+  MPI_Comm_rank( MPI_COMM_WORLD, &myrank );
 
-  if (myrank == to) {
+  if( myrank == to ) {
     timeout *= MPISPEC_ONE_SEC;
-    if (timeout < 1)
+    if( timeout < 1 )
       timeout = MPISPEC_DEFAULT_TIMEOUT;
 
-    while (timeout > 0) {
-      MPI_Iprobe(from, tag, MPI_COMM_WORLD, &test, &status);
+    while( timeout > 0 ) {
+      MPI_Iprobe( from, tag, MPI_COMM_WORLD, &test, &status );
 
-      if (test == MPISPEC_TRUE)
+      if( test == MPISPEC_TRUE )
         break;
-      if (timeout < diff) {
-        usleep(timeout);
+      if( timeout < diff ) {
+        usleep( timeout );
         break;
       }
 
-      usleep(diff);
+      usleep( diff );
 
       timeout -= diff;
     }
   }
 
-  if (myrank == from)
+  if( myrank == from )
     fun();
 
-  if (myrank == to)
-    MPI_Send(&test, 1, MPI_INT, from, 0, MPI_COMM_WORLD);
-  else if(myrank == from)
-    MPI_Recv(&test, 1, MPI_INT, to, 0, MPI_COMM_WORLD, &status);
+  if( myrank == to )
+    MPI_Send( &test, 1, MPI_INT, from, 0, MPI_COMM_WORLD );
+  else if( myrank == from )
+    MPI_Recv( &test, 1, MPI_INT, to, 0, MPI_COMM_WORLD, &status );
 
   return test;
 }

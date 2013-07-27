@@ -15,6 +15,7 @@
 #include <dlfcn.h>
 #include <time.h>
 #include <mpi.h>
+#include <unistd.h>
 
 #define NANOSEC_MAX 300000
 
@@ -22,36 +23,36 @@ __attribute__((constructor))
 static void
 delay_setup()
 {
-  srandom(getpid());
+  srandom( getpid() );
 }
 
-__attribute__ ((no_instrument_function))
+__attribute__((no_instrument_function))
 static void
 delay();
 
-__attribute__ ((no_instrument_function))
+__attribute__((no_instrument_function))
 static void
 delay()
 {
-  if(!( random() % 2 ))
+  if( !( random() % 2 ) )
     return;
 
   struct timespec req;
 
   req.tv_sec = 0;
   req.tv_nsec = random() % NANOSEC_MAX;
-  nanosleep(&req, NULL);
+  nanosleep( &req, NULL );
 }
 
-__attribute__ ((no_instrument_function))
+__attribute__((no_instrument_function))
 void
-__cyg_profile_func_enter(void *func_addr, void *callsite)
+__cyg_profile_func_enter( void *func_addr, void *callsite )
 {
   /* delay(); */
 }
 
-__attribute__ ((no_instrument_function))
+__attribute__((no_instrument_function))
 void
-__cyg_profile_func_exit(void *func_addr, void *callsite)
+__cyg_profile_func_exit( void *func_addr, void *callsite )
 {
 }
