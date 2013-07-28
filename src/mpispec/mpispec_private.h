@@ -30,7 +30,11 @@ CSpec_Pending( const char* reason );
 #define CSPEC_PENDING(reason) { CSpec_Pending(reason); }
 
 typedef void ( *MPISpecTmpFunction )();
+
 void
 MPISpec_set_before( MPISpecTmpFunction fun );
+
+void
+MPISpec_set_after( MPISpecTmpFunction fun );
 
 #endif

@@ -30,19 +30,28 @@ int CSpec_Run( CSpecDescriptionFun fun, CSpecOutputStruct* output );
 
 /* Structural macros */
 
-#define describe(caption) { CSpec_StartDescribe( caption ); {
-#define end_describe      } CSpec_EndDescribe(); }
+#define describe(caption)     { CSpec_StartDescribe( caption ); {
+#define end_describe          } CSpec_EndDescribe(); }
 
-#define context(caption)  describe(caption)
-#define end_context       end_describe
+#define context(caption)      describe(caption)
+#define end_context           end_describe
 
-#define it(caption)       { CSpec_StartIt( caption ); {
-#define end_it            } CSpec_EndIt() ; }
+#define it(caption)           { CSpec_StartIt( caption ); {
+#define end_it                } CSpec_EndIt(); }
 
-#define end               } CSpec_End() ; }
+#define end                   } CSpec_End(); }
 
-#define before(foo)       void before_ ## foo () {
-#define end_before(foo)   } MPISpec_set_before( before_ ## foo );
+#define end_function          }
+
+#define before_prototype(foo) void before_ ## foo (void);
+#define before(foo)           void before_ ## foo () {
+#define end_before            end_function
+#define run_before(foo)       MPISpec_set_before( before_ ## foo );
+
+#define after_prototype(foo) void after_ ## foo (void);
+#define after(foo)           void after_ ## foo () {
+#define end_after            end_function
+#define run_after(foo)       MPISpec_set_after( after_ ## foo );
 
 
 

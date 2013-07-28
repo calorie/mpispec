@@ -9,19 +9,30 @@
 #include "mpispec_private.h"
 #include "mpispec_output.h"
 
-#define MAX_ARRAY_SIZE 64
-
 static CSpecOutputStruct* CSpec_output = 0;
-void ( *before_array[MAX_ARRAY_SIZE] )();
+
+#define MAX_ARRAY_SIZE 64
+#define MAX_NEST_NUM   16
+void ( *before_array[MAX_NEST_NUM][MAX_ARRAY_SIZE] )();
+void ( *after_array[MAX_NEST_NUM][MAX_ARRAY_SIZE] )();
+unsigned int nest_num = 0;
+
+void
+MPISpec_init_all();
+
+void
+MPISpec_remove_function();
 
 void
 MPISpec_run_before();
+
 void
-MPISpec_init_all();
+MPISpec_run_after();
 
 int
 CSpec_StartDescribe( const char *descr )
 {
+  nest_num++;
   if( CSpec_output->startDescribeFun != NULL )
     CSpec_output->startDescribeFun( descr );
 
@@ -31,6 +42,8 @@ CSpec_StartDescribe( const char *descr )
 void
 CSpec_EndDescribe()
 {
+  MPISpec_remove_function();
+
   if( CSpec_output->endDescribeFun != NULL )
     CSpec_output->endDescribeFun();
 }
@@ -39,6 +52,7 @@ int
 CSpec_StartIt( const char *descr )
 {
   MPISpec_run_before();
+
   if( CSpec_output->startItFun != NULL )
     CSpec_output->startItFun( descr );
 
@@ -50,6 +64,8 @@ CSpec_EndIt()
 {
   if( CSpec_output->endItFun != NULL )
     CSpec_output->endItFun();
+
+  MPISpec_run_before();
 }
 
 void
@@ -88,22 +104,34 @@ MPISpec_init_all()
 {
   int i;
   for( i = 0; i < MAX_ARRAY_SIZE; i++ ) {
-    before_array[i] = NULL;
+    before_array[nest_num][i] = NULL;
   }
 }
 
 void
 MPISpec_set_before( MPISpecTmpFunction fun )
 {
+
   int i;
   for( i = 0; i < MAX_ARRAY_SIZE; i++ ) {
-    if( before_array[i] == fun )
+    if( before_array[nest_num][i] == fun )
       break;
-    if( before_array[i] == NULL ) {
-      before_array[i] = fun;
+    if( before_array[nest_num][i] == NULL ) {
+      before_array[nest_num][i] = fun;
       break;
     }
   }
+}
+
+void
+MPISpec_remove_function()
+{
+  int i;
+  for( i = 0; i < MAX_ARRAY_SIZE; i++ ) {
+    before_array[nest_num][i] = NULL;
+    after_array[nest_num][i] = NULL;
+  }
+  nest_num--;
 }
 
 void
@@ -111,8 +139,35 @@ MPISpec_run_before()
 {
   int i;
   for( i=0; i < MAX_ARRAY_SIZE; i++ ) {
-    if( before_array[i] != NULL )
-      before_array[i]();
+    if( before_array[nest_num][i] != NULL )
+      before_array[nest_num][i]();
+    else
+      break;
+  }
+}
+
+void
+MPISpec_set_after( MPISpecTmpFunction fun )
+{
+
+  int i;
+  for( i = 0; i < MAX_ARRAY_SIZE; i++ ) {
+    if( after_array[nest_num][i] == fun )
+      break;
+    if( after_array[nest_num][i] == NULL ) {
+      after_array[nest_num][i] = fun;
+      break;
+    }
+  }
+}
+
+void
+MPISpec_run_after()
+{
+  int i;
+  for( i=0; i < MAX_ARRAY_SIZE; i++ ) {
+    if( after_array[nest_num][i] != NULL )
+      after_array[nest_num][i]();
     else
       break;
   }
