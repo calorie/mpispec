@@ -30,6 +30,24 @@ void
 MPISpec_pop_end_fun();
 
 int
+MPISpec_StartDef()
+{
+  if( CSpec_output->startDefFun != NULL )
+    CSpec_output->startDefFun();
+
+  MPISpec_push_end_fun( MPISpec_EndDef );
+
+  return 0;
+}
+
+void
+MPISpec_EndDef()
+{
+  if( CSpec_output->endDefFun != NULL )
+    CSpec_output->endDefFun();
+}
+
+int
 CSpec_StartDescribe( const char *descr )
 {
   nest_num++;
@@ -78,6 +96,8 @@ MPISpec_StartBefore()
     CSpec_output->startBeforeFun();
 
   MPISpec_push_end_fun( MPISpec_EndBefore );
+
+  return 0;
 }
 
 void

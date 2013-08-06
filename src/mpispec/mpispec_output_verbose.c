@@ -25,13 +25,22 @@ getAnsiColorCode( CSpec_Color color );
 
 
 void
+startDefFunVerbose()
+{
+  verbose_summary = get_mpi_run_summary();
+}
+
+void
+endDefFunVerbose()
+{
+}
+
+void
 startDescribeFunVerbose( const char *descr )
 {
   fprintf( __mpiut_result_file__, "\n" );
   fprintTab( ++tab_num );
   fprintf( __mpiut_result_file__, "%s\n", descr );
-
-  verbose_summary = get_mpi_run_summary();
 }
 
 void
@@ -99,6 +108,8 @@ CSpec_NewOutputVerbose()
 {
   CSpec_InitOutput( &verbose );
 
+  verbose.startDefFun      = startDefFunVerbose;
+  verbose.endDefFun        = endDefFunVerbose;
   verbose.startDescribeFun = startDescribeFunVerbose;
   verbose.endDescribeFun   = endDescribeFunVerbose;
   verbose.startItFun       = startItFunVerbose;

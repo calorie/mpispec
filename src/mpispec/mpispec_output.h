@@ -11,6 +11,9 @@
 
 extern FILE *__mpiut_result_file__;
 
+typedef void ( * CSpecOutputStartDefFun )();
+typedef void ( * CSpecOutputEndDefFun )();
+
 typedef void ( * CSpecOutputStartDescribeFun )( const char *descr );
 typedef void ( * CSpecOutputEndDescribeFun )();
 
@@ -27,6 +30,9 @@ typedef void ( * CSpecOutputPendingFun )( const char* reason );
 
 typedef struct
 {
+
+    CSpecOutputStartDefFun      startDefFun;
+    CSpecOutputEndDefFun        endDefFun;
 
     CSpecOutputStartDescribeFun startDescribeFun;
     CSpecOutputEndDescribeFun   endDescribeFun;

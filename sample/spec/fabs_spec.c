@@ -40,4 +40,4 @@ mpispec_def( fabs_spec )
 
   end
 
-end_def
+end

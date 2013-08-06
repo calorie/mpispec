@@ -8,6 +8,11 @@
 #define MPISPEC_PRIVATE_H
 
 int
+MPISpec_StartDef();
+void
+MPISpec_EndDef();
+
+int
 CSpec_StartDescribe( const char *descr );
 void
 CSpec_EndDescribe();
