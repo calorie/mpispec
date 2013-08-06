@@ -14,13 +14,10 @@ static CSpecOutputStruct* CSpec_output = 0;
 #define MAX_ARRAY_SIZE 64
 #define MAX_NEST_NUM   16
 void ( *before_array[MAX_NEST_NUM][MAX_ARRAY_SIZE] )();
-unsigned int nest_num = 0;
+static unsigned int nest_num = 0;
 
 void
-MPISpec_init_all();
-
-void
-MPISpec_remove_function();
+MPISpec_remove_before();
 
 void
 MPISpec_run_before();
@@ -38,7 +35,7 @@ CSpec_StartDescribe( const char *descr )
 void
 CSpec_EndDescribe()
 {
-  MPISpec_remove_function();
+  MPISpec_remove_before();
 
   if( CSpec_output->endDescribeFun != NULL )
     CSpec_output->endDescribeFun();
@@ -94,18 +91,8 @@ CSpec_SetOutput( CSpecOutputStruct* output )
 }
 
 void
-MPISpec_init_all()
-{
-  int i;
-  for( i = 0; i < MAX_ARRAY_SIZE; i++ ) {
-    before_array[nest_num][i] = NULL;
-  }
-}
-
-void
 MPISpec_set_before( MPISpecTmpFunction fun )
 {
-
   int i;
   for( i = 0; i < MAX_ARRAY_SIZE; i++ ) {
     if( before_array[nest_num][i] == fun )
@@ -118,23 +105,24 @@ MPISpec_set_before( MPISpecTmpFunction fun )
 }
 
 void
-MPISpec_remove_function()
+MPISpec_remove_before()
 {
   int i;
-  for( i = 0; i < MAX_ARRAY_SIZE; i++ ) {
+  for( i = 0; i < MAX_ARRAY_SIZE; i++ )
     before_array[nest_num][i] = NULL;
-  }
   nest_num--;
 }
 
 void
 MPISpec_run_before()
 {
-  int i;
-  for( i=0; i < MAX_ARRAY_SIZE; i++ ) {
-    if( before_array[nest_num][i] != NULL )
-      before_array[nest_num][i]();
-    else
-      break;
+  int i, j;
+  for( i = 1; i <= nest_num; i++ ) {
+    for( j = 0; j < MAX_ARRAY_SIZE; j++ ) {
+      if( before_array[i][j] != NULL )
+        before_array[i][j]();
+      else
+        break;
+    }
   }
 }
