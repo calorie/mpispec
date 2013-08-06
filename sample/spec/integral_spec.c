@@ -14,17 +14,17 @@ pi_func(double x)
 }
 
 /* Define tests */
-mpispec_def(integral_spec)
+mpispec_def( integral_spec )
 
-  describe("integral関数は")
+  describe( "integral関数は" )
 
-    it("積分値を返す")
-      expect_to_equal_double(integral(0, 10, 100, f),
-                             50.0000000, 0.001);
-      expect_to_equal_double(integral(0.0, 1.0, 100, pi_func),
-                             3.14159265, 0.001);
+    it( "積分値を返す" )
+      expect_to_equal_double( integral(0, 10, 100, f),
+                              50.0000000, 0.001 );
+      expect_to_equal_double( integral(0.0, 1.0, 100, pi_func),
+                              3.14159265, 0.001 );
     end
 
   end
 
-end_def
+end
