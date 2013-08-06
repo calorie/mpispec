@@ -17,6 +17,11 @@ CSpec_StartIt( const char *descr );
 void
 CSpec_EndIt();
 
+int
+MPISpec_StartBefore();
+void
+MPISpec_EndBefore();
+
 void
 CSpec_End();
 

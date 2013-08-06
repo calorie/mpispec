@@ -14,13 +14,13 @@ mpispec_def( fabs_spec )
         expect_to_equal( fabs(a), a )
       end
 
-    end_context
+    end
 
     before( fabs )
 
       a = rand() % 11;
 
-    end_before
+    end
 
     context( "入力が正の数の時" )
 
@@ -28,7 +28,7 @@ mpispec_def( fabs_spec )
         expect_to_equal( fabs(a), a )
       end
 
-    end_context
+    end
 
     context( "入力が負の数の時" )
 
@@ -36,8 +36,8 @@ mpispec_def( fabs_spec )
         expect_to_equal( fabs(-a), a )
       end
 
-    end_context
+    end
 
-  end_describe
+  end
 
 end_def

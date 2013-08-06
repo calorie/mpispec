@@ -41,13 +41,12 @@ int CSpec_Run( CSpecDescriptionFun fun, CSpecOutputStruct* output );
 
 #define end                   } CSpec_End(); }
 
-#define end_function          }
-
 #define before(foo)                       \
     auto void before_ ## foo (void);      \
     MPISpec_set_before( before_ ## foo ); \
-    void before_ ## foo () {
-#define end_before            end_function
+    void before_ ## foo () {              \
+    MPISpec_StartBefore(); {
+#define end_before         } MPISpec_EndBefore(); }
 
 
 /* Expectation macros */

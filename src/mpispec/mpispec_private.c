@@ -14,6 +14,7 @@ static CSpecOutputStruct* CSpec_output = 0;
 #define MAX_ARRAY_SIZE 64
 #define MAX_NEST_NUM   16
 void ( *before_array[MAX_NEST_NUM][MAX_ARRAY_SIZE] )();
+void ( *end_fun_stack[MAX_NEST_NUM + 1] )();
 static unsigned int nest_num = 0;
 
 void
@@ -22,12 +23,21 @@ MPISpec_remove_before();
 void
 MPISpec_run_before();
 
+void
+MPISpec_push_end_fun( MPISpecTmpFunction end_fun );
+
+void
+MPISpec_pop_end_fun();
+
 int
 CSpec_StartDescribe( const char *descr )
 {
   nest_num++;
+
   if( CSpec_output->startDescribeFun != NULL )
     CSpec_output->startDescribeFun( descr );
+
+  MPISpec_push_end_fun( CSpec_EndDescribe );
 
   return 0;
 }
@@ -49,6 +59,8 @@ CSpec_StartIt( const char *descr )
   if( CSpec_output->startItFun != NULL )
     CSpec_output->startItFun( descr );
 
+  MPISpec_push_end_fun( CSpec_EndIt );
+
   return 0;
 }
 
@@ -59,11 +71,26 @@ CSpec_EndIt()
     CSpec_output->endItFun();
 }
 
+int
+MPISpec_StartBefore()
+{
+  if( CSpec_output->startBeforeFun != NULL )
+    CSpec_output->startBeforeFun();
+
+  MPISpec_push_end_fun( MPISpec_EndBefore );
+}
+
+void
+MPISpec_EndBefore()
+{
+  if( CSpec_output->endBeforeFun != NULL )
+    CSpec_output->endBeforeFun();
+}
+
 void
 CSpec_End()
 {
-  if( CSpec_output->endFun != NULL )
-    CSpec_output->endFun();
+  MPISpec_pop_end_fun();
 }
 
 void
@@ -124,5 +151,32 @@ MPISpec_run_before()
       else
         break;
     }
+  }
+}
+
+void
+MPISpec_push_end_fun( MPISpecTmpFunction end_fun )
+{
+  int i;
+  for( i = 0; i < MAX_NEST_NUM; i++ ) {
+    if( end_fun_stack[i] == NULL ) {
+      end_fun_stack[i] = end_fun;
+      break;
+    }
+  }
+}
+
+
+void
+MPISpec_pop_end_fun()
+{
+  int i;
+  for( i = 1; i <= MAX_NEST_NUM; i++ )
+    if( end_fun_stack[i] == NULL )
+      break;
+
+  if( end_fun_stack[i - 1] != NULL) {
+    end_fun_stack[i - 1]();
+    end_fun_stack[i - 1] = NULL;
   }
 }
