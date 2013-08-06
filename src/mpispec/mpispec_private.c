@@ -60,8 +60,6 @@ CSpec_EndIt()
 {
   if( CSpec_output->endItFun != NULL )
     CSpec_output->endItFun();
-
-  MPISpec_run_before();
 }
 
 void
