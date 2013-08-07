@@ -18,7 +18,7 @@ mpispec_def( fabs_spec )
 
     before( fabs )
 
-      a = rand() % 11;
+      a = rand();
 
     end
 

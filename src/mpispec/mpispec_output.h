@@ -20,9 +20,6 @@ typedef void ( * CSpecOutputEndDescribeFun )();
 typedef void ( * CSpecOutputStartItFun )( const char *descr );
 typedef void ( * CSpecOutputEndItFun )();
 
-typedef void ( * CSpecOutputStartBeforeFun )();
-typedef void ( * CSpecOutputEndBeforeFun )();
-
 typedef void ( * CSpecOutputEndFun )();
 
 typedef void ( * CSpecOutputEvalFun )( const char*filename, int line_number, const char*assertion, int assertionResult );
@@ -39,9 +36,6 @@ typedef struct
 
     CSpecOutputStartItFun       startItFun;
     CSpecOutputEndItFun         endItFun;
-
-    CSpecOutputStartBeforeFun   startBeforeFun;
-    CSpecOutputEndBeforeFun     endBeforeFun;
 
     CSpecOutputEndFun           endFun;
 

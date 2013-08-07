@@ -63,16 +63,6 @@ endItFunVerbose()
 }
 
 void
-startBeforeFunVerbose()
-{
-}
-
-void
-endBeforeFunVerbose()
-{
-}
-
-void
 endFunVerbose()
 {
   tab_num--;
@@ -114,8 +104,6 @@ CSpec_NewOutputVerbose()
   verbose.endDescribeFun   = endDescribeFunVerbose;
   verbose.startItFun       = startItFunVerbose;
   verbose.endItFun         = endItFunVerbose;
-  verbose.startBeforeFun   = startBeforeFunVerbose;
-  verbose.endBeforeFun     = endBeforeFunVerbose;
   verbose.endFun           = endFunVerbose;
   verbose.evalFun          = evalFunVerbose;
   verbose.pendingFun       = pendingFunVerbose;

@@ -8,6 +8,19 @@
 #define MPISPEC_PRIVATE_H
 
 int
+MPISpec_StartRank();
+void
+MPISpec_EndRank();
+
+int
+MPISpec_StartRanks();
+void
+MPISpec_EndRanks();
+
+int
+MPISpec_ValidateRanks( int ranks[], const int size, int myrank );
+
+int
 MPISpec_StartDef();
 void
 MPISpec_EndDef();

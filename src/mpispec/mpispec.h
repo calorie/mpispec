@@ -40,7 +40,9 @@ gettimeofday_sec();
 typedef void ( * CSpecDescriptionFun )();
 int CSpec_Run( CSpecDescriptionFun fun, CSpecOutputStruct* output );
 
-#define MPISpec_Run(foo) CSpec_Run( foo, CSpec_NewOutputVerbose() )
+#define MPISpec_Run(foo) \
+    void foo();          \
+    CSpec_Run( foo, CSpec_NewOutputVerbose() );
 
 
 /* Config macros */
@@ -51,9 +53,6 @@ int CSpec_Run( CSpecDescriptionFun fun, CSpecOutputStruct* output );
     MPI_Init( &argc, &argv );     \
     mpispec_setup();
 
-#define mpispec_prototype(test) \
-  void test();
-
 #define mpispec_finalize         \
   mpispec_run_summary();         \
   CU_basic_exit();               \
@@ -61,12 +60,35 @@ int CSpec_Run( CSpecDescriptionFun fun, CSpecOutputStruct* output );
   mpispec_show_result();         \
   MPI_Finalize();                \
   return EXIT_SUCCESS; }
+#define mpispec_fin mpispec_finalize
 
 #define mpispec_rank \
   mpiut_rank()
 
 
 /* Structural macros */
+
+#define rank(rank)         { MPISpec_StartRank();       \
+                           if( mpispec_rank == rank ) {
+#define end_rank           } MPISpec_EndRank(); }
+
+#define exclude_rank(rank) { MPISpec_StartRank();       \
+                           if( mpispec_rank != rank ) {
+#define ex_rank(rank)      exclude_rank( rank )
+#define end_exclude_rank   } MPISpec_EndRank(); }
+#define end_ex_rank        end_exclude_rank
+
+#define ranks(ranks)        \
+    { MPISpec_StartRanks(); \
+    if( MPISpec_ValidateRanks( ranks, sizeof(ranks)/sizeof(ranks[0]), mpispec_rank ) == 0 ) {
+#define end_ranks            } MPISpec_EndRanks(); }
+
+#define exclude_ranks(ranks) \
+    { MPISpec_StartRanks();  \
+    if( MPISpec_ValidateRanks( ranks, sizeof(ranks)/sizeof(ranks[0]), mpispec_rank ) != 0 ) {
+#define ex_ranks(ranks)      exclude_ranks( ranks )
+#define end_exclude_ranks    } MPISpec_EndRanks(); }
+#define end_ex_ranks         end_exclude_ranks
 
 #define mpispec_def(test) void test() { MPISpec_StartDef(); {
 #define end_def           } MPISpec_EndDef(); }

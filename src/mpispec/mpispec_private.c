@@ -13,6 +13,7 @@ static CSpecOutputStruct* CSpec_output = 0;
 
 #define MAX_ARRAY_SIZE 64
 #define MAX_NEST_NUM   16
+#define MAX_RANKS_NUM  1024
 void ( *before_array[MAX_NEST_NUM][MAX_ARRAY_SIZE] )();
 void ( *end_fun_stack[MAX_NEST_NUM + 1] )();
 static unsigned int nest_num = 0;
@@ -28,6 +29,46 @@ MPISpec_push_end_fun( MPISpecTmpFunction end_fun );
 
 void
 MPISpec_pop_end_fun();
+
+int
+MPISpec_StartRank()
+{
+  MPISpec_push_end_fun( MPISpec_EndRank );
+  return 0;
+}
+
+void
+MPISpec_EndRank()
+{
+}
+
+int
+MPISpec_StartRanks()
+{
+  MPISpec_push_end_fun( MPISpec_EndRanks );
+  return 0;
+}
+
+void
+MPISpec_EndRanks()
+{
+}
+
+int
+MPISpec_ValidateRanks( int ranks[], const int size, int myrank )
+{
+  int i, result = 1;
+
+  for( i = 0; i < size; i++ ) {
+    if( i >= MAX_RANKS_NUM )
+      break;
+    if( ranks[i] == myrank ) {
+      result = 0;
+      break;
+    }
+  }
+  return result;
+}
 
 int
 MPISpec_StartDef()
@@ -92,19 +133,13 @@ CSpec_EndIt()
 int
 MPISpec_StartBefore()
 {
-  if( CSpec_output->startBeforeFun != NULL )
-    CSpec_output->startBeforeFun();
-
   MPISpec_push_end_fun( MPISpec_EndBefore );
-
   return 0;
 }
 
 void
 MPISpec_EndBefore()
 {
-  if( CSpec_output->endBeforeFun != NULL )
-    CSpec_output->endBeforeFun();
 }
 
 void
