@@ -60,8 +60,10 @@ MPISpec_ValidateRanks( int ranks[], const int size, int myrank )
   int i, result = 1;
 
   for( i = 0; i < size; i++ ) {
-    if( i >= MAX_RANKS_NUM )
+    if( i >= MAX_RANKS_NUM ) {
+      printf("\033[1;33mWARN : ranks size over max size.\033[0m\n");
       break;
+    }
     if( ranks[i] == myrank ) {
       result = 0;
       break;

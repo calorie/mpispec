@@ -8,22 +8,12 @@
 
 mpispec_init
 
+  MPISpec_Run( cpi_spec )
+
   int myranks[2] = {0, 1};
   ex_ranks( myranks )
 
     MPISpec_Run( strcmp_spec )
-
-  end
-
-  rank( 0 )
-
-    MPISpec_Run( cpi_spec )
-
-  end
-
-  ex_rank( 0 )
-
-    cpi();
 
   end
 
