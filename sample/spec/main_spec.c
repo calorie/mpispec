@@ -1,6 +1,3 @@
-
-/* Time-stamp: <2007-11-14 22:31:31 shinya> */
-
 #include "mpispec/mpispec.h"
 #include "../src/cpi.h"
 #include "../src/integral.h"
