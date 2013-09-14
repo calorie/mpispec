@@ -5,7 +5,9 @@ CC="mpicc"
 EXEC="exec_test"
 MPISPECFLAGS="-I${INSTDIR}/include -finstrument-functions -rdynamic"
 MPISPECLIBS="-L${INSTDIR}/lib -lmpispec -lm"
+MPISPECSRC=`find src -name *.c`
+MPISPECSPEC=`find spec -name *.c`
 
-$CC $MPISPECFLAGS $MPISPECLIBS src/*.c spec/*.c -o $EXEC
+$CC $MPISPECFLAGS $MPISPECLIBS $MPISPECSRC $MPISPECSPEC -o $EXEC
 mpirun $* ./$EXEC
 rm -f *.o $EXEC
