@@ -16,7 +16,7 @@ mpispec_def( fabs_spec )
 
     end
 
-    before( make_random_num )
+    before_each( make_random_num )
 
       n = rand();
 
