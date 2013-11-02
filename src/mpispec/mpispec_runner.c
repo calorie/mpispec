@@ -7,7 +7,7 @@
  *
  */
 
-#include "cspec.h"
+#include "mpispec.h"
 
 int
 CSpec_Run( CSpecDescriptionFun fun, CSpecOutputStruct* output )
