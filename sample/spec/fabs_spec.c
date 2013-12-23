@@ -15,6 +15,9 @@ mpispec_def(fabs_spec)
     before_each(make_random_num)
       n = rand();
     end
+    after_each(debug)
+      printf("%d\n", n+1);
+    end
 
     context("入力が正の数の時")
       it("同じ数値を返す")

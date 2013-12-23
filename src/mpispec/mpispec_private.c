@@ -14,10 +14,17 @@ static CSpecOutputStruct* CSpec_output = 0;
 #define MAX_ARRAY_SIZE 64
 #define MAX_NEST_NUM   16
 #define MAX_RANKS_NUM  1024
-void ( *before_array[MAX_NEST_NUM][MAX_ARRAY_SIZE] )();
-void ( *after_array[MAX_NEST_NUM][MAX_ARRAY_SIZE] )();
+typedef void ( *MPISpecActionArray[MAX_NEST_NUM][MAX_ARRAY_SIZE] )();
+MPISpecActionArray before_array, after_array;
 void ( *end_fun_stack[MAX_NEST_NUM + 1] )();
 static unsigned int nest_num = 0;
+
+void
+MPISpec_set_action( MPISpecActionArray aarray, MPISpecTmpFunction fun );
+void
+MPISpec_remove_action( MPISpecActionArray aarray );
+void
+MPISpec_run_action( MPISpecActionArray aarray );
 
 void
 MPISpec_remove_before();
@@ -196,75 +203,75 @@ CSpec_SetOutput( CSpecOutputStruct* output )
 }
 
 void
-MPISpec_set_before( MPISpecTmpFunction fun )
+MPISpec_set_action( MPISpecActionArray aarray, MPISpecTmpFunction fun )
 {
   int i;
   for( i = 0; i < MAX_ARRAY_SIZE; i++ ) {
-    if( before_array[nest_num][i] == fun )
+    if( aarray[nest_num][i] == fun )
       break;
-    if( before_array[nest_num][i] == NULL ) {
-      before_array[nest_num][i] = fun;
+    if( aarray[nest_num][i] == NULL ) {
+      aarray[nest_num][i] = fun;
       break;
     }
   }
+}
+
+void
+MPISpec_remove_action(MPISpecActionArray aarray)
+{
+  int i;
+  for( i = 0; i < MAX_ARRAY_SIZE; i++ )
+    aarray[nest_num][i] = NULL;
+}
+
+void
+MPISpec_run_action(MPISpecActionArray aarray)
+{
+  int i, j;
+  for( i = 1; i <= nest_num; i++ ) {
+    for( j = 0; j < MAX_ARRAY_SIZE; j++ ) {
+      if( aarray[i][j] != NULL )
+        aarray[i][j]();
+      else
+        break;
+    }
+  }
+}
+
+void
+MPISpec_set_before( MPISpecTmpFunction fun )
+{
+  MPISpec_set_action(before_array, fun);
 }
 
 void
 MPISpec_set_after( MPISpecTmpFunction fun )
 {
-  int i;
-  for( i = 0; i < MAX_ARRAY_SIZE; i++ ) {
-    if( after_array[nest_num][i] == fun )
-      break;
-    if( after_array[nest_num][i] == NULL ) {
-      after_array[nest_num][i] = fun;
-      break;
-    }
-  }
+  MPISpec_set_action(after_array, fun);
 }
 
 void
 MPISpec_remove_before()
 {
-  int i;
-  for( i = 0; i < MAX_ARRAY_SIZE; i++ )
-    before_array[nest_num][i] = NULL;
+  MPISpec_remove_action(before_array);
 }
 
 void
 MPISpec_run_before()
 {
-  int i, j;
-  for( i = 1; i <= nest_num; i++ ) {
-    for( j = 0; j < MAX_ARRAY_SIZE; j++ ) {
-      if( before_array[i][j] != NULL )
-        before_array[i][j]();
-      else
-        break;
-    }
-  }
+  MPISpec_run_action(before_array);
 }
 
 void
 MPISpec_remove_after()
 {
-  int i;
-  for( i = 0; i < MAX_ARRAY_SIZE; i++ )
-    after_array[nest_num][i] = NULL;
+  MPISpec_remove_action(after_array);
 }
 
 void
 MPISpec_run_after()
 {
-  int i, j;
-  for( i = 1; i <= nest_num; i++ ) {
-    for( j = 0; j < MAX_ARRAY_SIZE; j++ ) {
-      if( after_array[i][j] != NULL )
-        after_array[i][j]();
-      else
-        break;
-    }
-  }
+  MPISpec_run_action(after_array);
 }
 
 void
