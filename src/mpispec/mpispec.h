@@ -102,12 +102,19 @@ int CSpec_Run( CSpecDescriptionFun fun, CSpecOutputStruct* output );
 #define it(caption)       { CSpec_StartIt( caption ); {
 #define end_it            } CSpec_EndIt(); }
 
-#define before_each(foo)                       \
+#define before_each(foo)                  \
     auto void before_ ## foo (void);      \
     MPISpec_set_before( before_ ## foo ); \
     void before_ ## foo () {              \
     MPISpec_StartBefore(); {
 #define end_before         } MPISpec_EndBefore(); }
+
+#define after_each(foo)                 \
+    auto void after_ ## foo (void);     \
+    MPISpec_set_after( after_ ## foo ); \
+    void after_ ## foo () {             \
+    MPISpec_StartAfter(); {
+#define end_after         } MPISpec_EndAfter(); }
 
 #define end               } CSpec_End(); }
 

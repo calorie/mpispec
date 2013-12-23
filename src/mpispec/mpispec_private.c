@@ -15,14 +15,19 @@ static CSpecOutputStruct* CSpec_output = 0;
 #define MAX_NEST_NUM   16
 #define MAX_RANKS_NUM  1024
 void ( *before_array[MAX_NEST_NUM][MAX_ARRAY_SIZE] )();
+void ( *after_array[MAX_NEST_NUM][MAX_ARRAY_SIZE] )();
 void ( *end_fun_stack[MAX_NEST_NUM + 1] )();
 static unsigned int nest_num = 0;
 
 void
 MPISpec_remove_before();
-
 void
 MPISpec_run_before();
+
+void
+MPISpec_remove_after();
+void
+MPISpec_run_after();
 
 void
 MPISpec_push_end_fun( MPISpecTmpFunction end_fun );
@@ -107,6 +112,8 @@ void
 CSpec_EndDescribe()
 {
   MPISpec_remove_before();
+  MPISpec_remove_after();
+  nest_num--;
 
   if( CSpec_output->endDescribeFun != NULL )
     CSpec_output->endDescribeFun();
@@ -128,6 +135,8 @@ CSpec_StartIt( const char *descr )
 void
 CSpec_EndIt()
 {
+  MPISpec_run_after();
+
   if( CSpec_output->endItFun != NULL )
     CSpec_output->endItFun();
 }
@@ -141,6 +150,18 @@ MPISpec_StartBefore()
 
 void
 MPISpec_EndBefore()
+{
+}
+
+int
+MPISpec_StartAfter()
+{
+  MPISpec_push_end_fun( MPISpec_EndAfter );
+  return 0;
+}
+
+void
+MPISpec_EndAfter()
 {
 }
 
@@ -189,12 +210,25 @@ MPISpec_set_before( MPISpecTmpFunction fun )
 }
 
 void
+MPISpec_set_after( MPISpecTmpFunction fun )
+{
+  int i;
+  for( i = 0; i < MAX_ARRAY_SIZE; i++ ) {
+    if( after_array[nest_num][i] == fun )
+      break;
+    if( after_array[nest_num][i] == NULL ) {
+      after_array[nest_num][i] = fun;
+      break;
+    }
+  }
+}
+
+void
 MPISpec_remove_before()
 {
   int i;
   for( i = 0; i < MAX_ARRAY_SIZE; i++ )
     before_array[nest_num][i] = NULL;
-  nest_num--;
 }
 
 void
@@ -205,6 +239,28 @@ MPISpec_run_before()
     for( j = 0; j < MAX_ARRAY_SIZE; j++ ) {
       if( before_array[i][j] != NULL )
         before_array[i][j]();
+      else
+        break;
+    }
+  }
+}
+
+void
+MPISpec_remove_after()
+{
+  int i;
+  for( i = 0; i < MAX_ARRAY_SIZE; i++ )
+    after_array[nest_num][i] = NULL;
+}
+
+void
+MPISpec_run_after()
+{
+  int i, j;
+  for( i = 1; i <= nest_num; i++ ) {
+    for( j = 0; j < MAX_ARRAY_SIZE; j++ ) {
+      if( after_array[i][j] != NULL )
+        after_array[i][j]();
       else
         break;
     }

@@ -40,6 +40,11 @@ MPISpec_StartBefore();
 void
 MPISpec_EndBefore();
 
+int
+MPISpec_StartAfter();
+void
+MPISpec_EndAfter();
+
 void
 CSpec_End();
 
@@ -56,5 +61,8 @@ typedef void ( *MPISpecTmpFunction )();
 
 void
 MPISpec_set_before( MPISpecTmpFunction fun );
+
+void
+MPISpec_set_after( MPISpecTmpFunction fun );
 
 #endif
