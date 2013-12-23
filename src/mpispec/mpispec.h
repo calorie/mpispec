@@ -13,6 +13,7 @@
 
 #include <mpi.h>
 #include <stdlib.h>
+#include <string.h>
 #include "mpispec_basic.h"
 #include "mpispec_config.h"
 #include "mpispec_private.h"
@@ -102,17 +103,17 @@ int CSpec_Run( CSpecDescriptionFun fun, CSpecOutputStruct* output );
 #define it(caption)       { CSpec_StartIt( caption ); {
 #define end_it            } CSpec_EndIt(); }
 
-#define before_each(foo)                  \
-    auto void before_ ## foo (void);      \
-    MPISpec_set_before( before_ ## foo ); \
-    void before_ ## foo () {              \
+#define before_each(foo)                       \
+    auto void before_each_ ## foo (void);      \
+    MPISpec_set_before( before_each_ ## foo ); \
+    void before_each_ ## foo () {              \
     MPISpec_StartBefore(); {
 #define end_before         } MPISpec_EndBefore(); }
 
-#define after_each(foo)                 \
-    auto void after_ ## foo (void);     \
-    MPISpec_set_after( after_ ## foo ); \
-    void after_ ## foo () {             \
+#define after_each(foo)                      \
+    auto void after_each_ ## foo (void);     \
+    MPISpec_set_after( after_each_ ## foo ); \
+    void after_each_ ## foo () {             \
     MPISpec_StartAfter(); {
 #define end_after         } MPISpec_EndAfter(); }
 

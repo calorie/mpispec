@@ -38,7 +38,6 @@ cspec_fabs( cspec_double arg )
 mpispec_bool
 mpispec_send_recv( MPISpecFun fun, int from, int to, int tag, double timeout )
 {
-  int i = 0;
   int test = MPISPEC_FALSE;
   int myrank;
   int diff = MPISPEC_ZERO_POINT_ONE_SEC;

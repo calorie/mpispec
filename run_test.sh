@@ -2,7 +2,7 @@
 
 make
 sudo make install
-rake test:all
+# rake test:all
 cd sample/
 mpispec -np 3
 cd ..
