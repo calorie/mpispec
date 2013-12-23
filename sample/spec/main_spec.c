@@ -4,20 +4,14 @@
 #include "../src/send_recv.h"
 
 mpispec_init
+  MPISpec_Run(cpi_spec)
 
-  MPISpec_Run( cpi_spec )
-
-  int myranks[2] = {0, 1};
-  ex_ranks( myranks )
-
-    MPISpec_Run( strcmp_spec )
-
+  int strcmp_spec_ranks[2] = {0, 1};
+  ex_ranks(strcmp_spec_ranks)
+    MPISpec_Run(strcmp_spec)
   end
 
-  rank( 1 )
-
-    MPISpec_Run( fabs_spec )
-
+  rank(1)
+    MPISpec_Run(fabs_spec)
   end
-
 mpispec_fin
