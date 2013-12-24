@@ -103,6 +103,8 @@ int CSpec_Run( CSpecDescriptionFun fun, CSpecOutputStruct* output );
 #define it(caption)       { CSpec_StartIt( caption ); {
 #define end_it            } CSpec_EndIt(); }
 
+#ifndef __clang__
+
 #define before_each(foo)                       \
     auto void before_each_ ## foo (void);      \
     MPISpec_set_before( before_each_ ## foo ); \
@@ -116,6 +118,8 @@ int CSpec_Run( CSpecDescriptionFun fun, CSpecOutputStruct* output );
     void after_each_ ## foo () {             \
     MPISpec_StartAfter(); {
 #define end_after         } MPISpec_EndAfter(); }
+
+#endif
 
 #define end               } CSpec_End(); }
 
