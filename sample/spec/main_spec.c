@@ -12,6 +12,8 @@ mpispec_init
   end
 
   rank(1)
-    MPISpec_Run(fabs_spec)
+    MPISpec_JUnitXmlFileOpen("output.xml", "utf-8");
+    MPISpec_jxRun(fabs_spec)
+    MPISpec_JUnitXmlFileClose();
   end
 mpispec_fin

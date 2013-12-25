@@ -19,6 +19,7 @@
 #include "mpispec_private.h"
 #include "mpispec_output.h"
 #include "mpispec_output_verbose.h"
+#include "mpispec_output_junit_xml.h"
 
 void
 mpispec_setup();
@@ -44,6 +45,9 @@ int CSpec_Run( CSpecDescriptionFun fun, CSpecOutputStruct* output );
 #define MPISpec_Run(foo) \
     void foo();          \
     CSpec_Run( foo, CSpec_NewOutputVerbose() );
+#define MPISpec_jxRun(foo) \
+    void foo();          \
+    CSpec_Run( foo, CSpec_NewOutputJUnitXml() );
 
 
 /* Config macros */
