@@ -14,7 +14,7 @@ int tab_num = 0;
 MS_pRunSummary verbose_summary;
 
 /* private functions */
-void
+static void
 fprintTab( int n );
 
 static void
@@ -134,7 +134,7 @@ getAnsiColorCode( CSpec_Color color )
   return color_code;
 }
 
-void
+static void
 fprintTab( int n )
 {
   int i;

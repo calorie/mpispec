@@ -9,37 +9,37 @@
 #include "mpispec_private.h"
 #include "mpispec_output.h"
 
-static CSpecOutputStruct* CSpec_output = 0;
-
 #define MAX_ARRAY_SIZE 64
 #define MAX_NEST_NUM   16
 #define MAX_RANKS_NUM  1024
+
 typedef void ( *MPISpecActionArray[MAX_NEST_NUM][MAX_ARRAY_SIZE] )();
-MPISpecActionArray before_array, after_array;
-void ( *end_fun_stack[MAX_NEST_NUM + 1] )();
+
+static CSpecOutputStruct* CSpec_output = 0;
+static MPISpecActionArray before_array, after_array;
+static void ( *end_fun_stack[MAX_NEST_NUM + 1] )();
 static unsigned int nest_num = 0;
 
-void
+static void
 MPISpec_set_action( MPISpecActionArray aarray, MPISpecTmpFunction fun );
-void
+static void
 MPISpec_remove_action( MPISpecActionArray aarray );
-void
+static void
 MPISpec_run_action( MPISpecActionArray aarray );
 
-void
+static void
 MPISpec_remove_before();
-void
+static void
 MPISpec_run_before();
 
-void
+static void
 MPISpec_remove_after();
-void
+static void
 MPISpec_run_after();
 
-void
+static void
 MPISpec_push_end_fun( MPISpecTmpFunction end_fun );
-
-void
+static void
 MPISpec_pop_end_fun();
 
 int
@@ -202,7 +202,7 @@ CSpec_SetOutput( CSpecOutputStruct* output )
   CSpec_output = output;
 }
 
-void
+static void
 MPISpec_set_action( MPISpecActionArray aarray, MPISpecTmpFunction fun )
 {
   int i;
@@ -216,7 +216,7 @@ MPISpec_set_action( MPISpecActionArray aarray, MPISpecTmpFunction fun )
   }
 }
 
-void
+static void
 MPISpec_remove_action(MPISpecActionArray aarray)
 {
   int i;
@@ -224,7 +224,7 @@ MPISpec_remove_action(MPISpecActionArray aarray)
     aarray[nest_num][i] = NULL;
 }
 
-void
+static void
 MPISpec_run_action(MPISpecActionArray aarray)
 {
   int i, j;
@@ -250,31 +250,31 @@ MPISpec_set_after( MPISpecTmpFunction fun )
   MPISpec_set_action(after_array, fun);
 }
 
-void
+static void
 MPISpec_remove_before()
 {
   MPISpec_remove_action(before_array);
 }
 
-void
+static void
 MPISpec_run_before()
 {
   MPISpec_run_action(before_array);
 }
 
-void
+static void
 MPISpec_remove_after()
 {
   MPISpec_remove_action(after_array);
 }
 
-void
+static void
 MPISpec_run_after()
 {
   MPISpec_run_action(after_array);
 }
 
-void
+static void
 MPISpec_push_end_fun( MPISpecTmpFunction end_fun )
 {
   int i;
@@ -286,8 +286,7 @@ MPISpec_push_end_fun( MPISpecTmpFunction end_fun )
   }
 }
 
-
-void
+static void
 MPISpec_pop_end_fun()
 {
   int i;

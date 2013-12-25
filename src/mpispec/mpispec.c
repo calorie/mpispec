@@ -16,10 +16,10 @@
 
 #include "mpispec_basic.h"
 
-#define BAR "="
+#define MPISPEC_RESULT_BAR "="
 
-double gettimeofday_sec( void );
-double test_start_time;
+static double gettimeofday_sec( void );
+static double test_start_time;
 
 void
 mpispec_setup()
@@ -84,9 +84,9 @@ mpispec_show_result()
     fprintf( stdout, "\n[%d Process Results]\n", n_procs );
     for( i = 1; i <= 50; i++ ) {
       if( i <= s_rate / 2 )
-        fprintf( stdout, "\033[1;32m%s\033[0m", BAR );
+        fprintf( stdout, "\033[1;32m%s\033[0m", MPISPEC_RESULT_BAR );
       else
-        fprintf( stdout, "\033[1;31m%s\033[0m", BAR );
+        fprintf( stdout, "\033[1;31m%s\033[0m", MPISPEC_RESULT_BAR );
     }
     fprintf( stdout, "[%3.0lf%%]\n", s_rate );
     fprintf( stdout, "\nRun Time: %f sec\n", gettimeofday_sec() - test_start_time );
