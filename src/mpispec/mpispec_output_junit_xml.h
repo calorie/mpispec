@@ -10,7 +10,6 @@
 
 #include "mpispec_output.h"
 
-
 CSpecOutputStruct* CSpec_NewOutputJUnitXml();
 
 void MPISpec_JUnitXmlFileOpen(const char *filename, const char *encoding);

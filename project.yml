@@ -87,10 +87,10 @@
       - -np 1
       - ${1}
 
-:plugins:
-  :load_paths:
-    - vendor/ceedling/plugins
-  :enabled:
-    - stdout_pretty_tests_report
-    - module_generator
+# :plugins:
+#   :load_paths:
+#     - vendor/ceedling/plugins
+#   :enabled:
+#     - stdout_pretty_tests_report
+#     - module_generator
 ...

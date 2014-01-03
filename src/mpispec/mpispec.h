@@ -43,12 +43,12 @@ typedef void ( * CSpecDescriptionFun )();
 int CSpec_Run( CSpecDescriptionFun fun, CSpecOutputStruct* output );
 
 #define MPISpec_Run(test) \
-    void test();          \
-    CSpec_Run( test, CSpec_NewOutputVerbose() );
-#define MPISpec_jxRun(test)                          \
-    void test();                                     \
-    MPISpec_JUnitXmlFileOpen("output.xml", "utf-8"); \
-    CSpec_Run( test, CSpec_NewOutputJUnitXml() );
+  void test();            \
+  CSpec_Run( test, CSpec_NewOutputVerbose() );
+#define MPISpec_jxRun(test)                        \
+  void test();                                     \
+  MPISpec_JUnitXmlFileOpen("output.xml", "utf-8"); \
+  CSpec_Run( test, CSpec_NewOutputJUnitXml() );
 
 
 /* Config macros */
@@ -85,14 +85,14 @@ int CSpec_Run( CSpecDescriptionFun fun, CSpecOutputStruct* output );
 #define end_exclude_rank   } MPISpec_EndRank(); }
 #define end_ex_rank        end_exclude_rank
 
-#define ranks(ranks)        \
-    { MPISpec_StartRanks(); \
-    if( MPISpec_ValidateRanks( ranks, sizeof(ranks)/sizeof(ranks[0]), mpispec_rank ) == 0 ) {
+#define ranks(ranks)      \
+  { MPISpec_StartRanks(); \
+  if( MPISpec_ValidateRanks( ranks, sizeof(ranks)/sizeof(ranks[0]), mpispec_rank ) == 0 ) {
 #define end_ranks            } MPISpec_EndRanks(); }
 
 #define exclude_ranks(ranks) \
-    { MPISpec_StartRanks();  \
-    if( MPISpec_ValidateRanks( ranks, sizeof(ranks)/sizeof(ranks[0]), mpispec_rank ) != 0 ) {
+  { MPISpec_StartRanks();    \
+  if( MPISpec_ValidateRanks( ranks, sizeof(ranks)/sizeof(ranks[0]), mpispec_rank ) != 0 ) {
 #define ex_ranks(ranks)      exclude_ranks( ranks )
 #define end_exclude_ranks    } MPISpec_EndRanks(); }
 #define end_ex_ranks         end_exclude_ranks
@@ -109,21 +109,22 @@ int CSpec_Run( CSpecDescriptionFun fun, CSpecOutputStruct* output );
 #define it(caption)       { CSpec_StartIt( caption ); {
 #define end_it            } CSpec_EndIt(); }
 
+/* gcc only */
 #ifndef __clang__
 
-#define before_each(foo)                       \
-    auto void before_each_ ## foo (void);      \
-    MPISpec_set_before( before_each_ ## foo ); \
-    void before_each_ ## foo () {              \
-    MPISpec_StartBefore(); {
+#define before_each(foo)                     \
+  auto void before_each_ ## foo (void);      \
+  MPISpec_set_before( before_each_ ## foo ); \
+  void before_each_ ## foo () {              \
+  MPISpec_StartBefore(); {
 #define end_before         } MPISpec_EndBefore(); }
 
-#define after_each(foo)                      \
-    auto void after_each_ ## foo (void);     \
-    MPISpec_set_after( after_each_ ## foo ); \
-    void after_each_ ## foo () {             \
-    MPISpec_StartAfter(); {
-#define end_after         } MPISpec_EndAfter(); }
+#define after_each(foo)                    \
+  auto void after_each_ ## foo (void);     \
+  MPISpec_set_after( after_each_ ## foo ); \
+  void after_each_ ## foo () {             \
+  MPISpec_StartAfter(); {
+#define end_after       } MPISpec_EndAfter(); }
 
 #endif
 
