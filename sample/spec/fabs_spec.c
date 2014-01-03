@@ -5,30 +5,21 @@
 int n = 1;
 
 mpispec_def(fabs_spec)
-  describe("標準ライブラリfabsの")
-    context("入力が0の時")
-      it("同じ数値を返す")
+  describe("function fabs")
+    context("arg is 0")
+      it("return same value")
         expect_to_equal(fabs(0), 0)
       end
     end
 
-#ifndef __clang__
-    before_each(make_random_num)
-      n = rand();
-    end
-    after_each(make_random_num)
-      printf("%d\n", n+1);
-    end
-#endif
-
-    context("入力が正の数の時")
-      it("同じ数値を返す")
+    context("arg is positive")
+      it("return same value")
         expect_to_equal(fabs(n), n)
       end
     end
 
-    context("入力が負の数の時")
-      it("正の数を返す")
+    context("arg is negative")
+      it("return positive value")
         expect_to_equal(fabs(-n), n)
       end
     end

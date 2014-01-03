@@ -4,6 +4,7 @@
  * See copyright notice in cspec.h
  *
  */
+#define _GNU_SOURCE
 #include <stdio.h>
 #include <stdlib.h> /* realloc, free */
 #include <string.h> /* strdup */
@@ -271,7 +272,7 @@ startDescribeFunJUnitXml_expand_if_needed()
 int
 startDescribeFunJUnitXml_init_descr(descrOutputs_t* const target_descr, const char* descr)
 {
-  char* name;
+  char* name = "";
   char* d = strdup(descr);
 
   descrName(&name, d);
@@ -437,7 +438,7 @@ CSpec_NewOutputJUnitXml()
 static void
 descrName(char** name, char* descr)
 {
-  char* prefix;
+  char* prefix = "";
   descrPrefixName(&prefix);
   // [TODO] - remove asprintf
   asprintf(name, "%s %s", prefix, descr);
@@ -450,10 +451,7 @@ descrPrefixName(char** prefix)
   for( i = 0; i < MPISPEC_MAX_NEST_NUM; i++ ) {
     if ( descr_name_prefix_array[i] != NULL ) {
       // [TODO] - remove asprintf
-      if (*prefix == NULL)
-        asprintf(prefix, "%s", descr_name_prefix_array[i]);
-      else
-        asprintf(prefix, "%s %s", *prefix, descr_name_prefix_array[i]);
+      asprintf(prefix, "%s %s", *prefix, descr_name_prefix_array[i]);
     } else {
       break;
     }
