@@ -38,6 +38,7 @@ $ apt-get install binutils-gold
 ## run unity test
 
 ```
-$ rake test:all
+$ bundle install --path vendor/bundle --binstubs .bundle/bin
+$ rake
 ```
 

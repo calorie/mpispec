@@ -42,12 +42,13 @@ gettimeofday_sec();
 typedef void ( * CSpecDescriptionFun )();
 int CSpec_Run( CSpecDescriptionFun fun, CSpecOutputStruct* output );
 
-#define MPISpec_Run(foo) \
-    void foo();          \
-    CSpec_Run( foo, CSpec_NewOutputVerbose() );
-#define MPISpec_jxRun(foo) \
-    void foo();          \
-    CSpec_Run( foo, CSpec_NewOutputJUnitXml() );
+#define MPISpec_Run(test) \
+    void test();          \
+    CSpec_Run( test, CSpec_NewOutputVerbose() );
+#define MPISpec_jxRun(test)                          \
+    void test();                                     \
+    MPISpec_JUnitXmlFileOpen("output.xml", "utf-8"); \
+    CSpec_Run( test, CSpec_NewOutputJUnitXml() );
 
 
 /* Config macros */
@@ -59,6 +60,7 @@ int CSpec_Run( CSpecDescriptionFun fun, CSpecOutputStruct* output );
     mpispec_setup();
 
 #define mpispec_finalize         \
+  MPISpec_JUnitXmlFileClose();   \
   mpispec_run_summary();         \
   CU_basic_exit();               \
   MPI_Barrier( MPI_COMM_WORLD ); \

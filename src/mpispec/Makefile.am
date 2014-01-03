@@ -12,5 +12,5 @@ pkginclude_HEADERS = mpispec.h mpispec_basic.h \
 mpi_stub.h mpispec_config.h mpispec_output.h \
 mpispec_output_verbose.h mpispec_private.h \
 mpispec_output_junit_xml.h mpispec_private_output_junit_xml.h \
-array.h
+mpispec_consts.h array.h
 

@@ -50,3 +50,8 @@ stamp-h?
 src/cspec/
 src/mpiunit/
 /build/**
+
+.bundle
+/vendor/bundle
+rank*.xml
+.watsonrc

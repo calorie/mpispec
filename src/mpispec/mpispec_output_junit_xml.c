@@ -10,6 +10,7 @@
 #include <mpi.h>
 #include "mpispec_output_junit_xml.h"
 #include "mpispec_private_output_junit_xml.h"
+#include "mpispec_consts.h"
 
 static CSpecOutputStruct xml;
 static FILE *outputXmlFile = NULL;
@@ -20,8 +21,18 @@ static descrOutputs_t* descrOutputs;
 static const char* const g_failure_message = "Failed";
 static const char* const g_failure_type = "";
 
+static char* descr_name_prefix_array[MPISPEC_MAX_NEST_NUM];
+
+static void descrName(char** name, char* descr);
+static void descrPrefixName(char** prefix);
+static void pushDescrPrefixName(char* descr);
+static void popDescrPrefixName();
+
 void MPISpec_JUnitXmlFileOpen(const char *filename, const char *encoding)
 {
+  if (outputXmlFile != NULL)
+    return;
+
   char xml_filename[64];
   int myrank;
   MPI_Comm_rank( MPI_COMM_WORLD, &myrank );
@@ -62,12 +73,16 @@ void output_footer()
 }
 void output_describe()
 {
-    int i;
+  int i;
 
   for (i = 0; i < n_descrOutputs; ++i) {
-        output_describe_header(descrOutputs + i);
-        output_describe_main(descrOutputs + i);
-        output_describe_footer();
+    const descrOutputs_t* const descr = descrOutputs + i;
+    if (descr->itOutputs == 0)
+      continue;
+
+    output_describe_header(descr);
+    output_describe_main(descr);
+    output_describe_footer();
   }
 }
 void output_describe_header(const descrOutputs_t* const descr)
@@ -233,13 +248,20 @@ int startDescribeFunJUnitXml_expand_if_needed()
 }
 int startDescribeFunJUnitXml_init_descr(descrOutputs_t* const target_descr, const char* descr)
 {
-  target_descr->descr = strdup(descr);
+  char* name = "a";
+  char* d    = strdup(descr);
+
+  descrName(&name, d);
+
+  target_descr->descr = name;
   target_descr->n_itOutputs = 0;
   target_descr->itOutputs = NULL;
-    return 0;
+  pushDescrPrefixName(d);
+  return 0;
 }
 void endDescribeFunJUnitXml(void)
 {
+  popDescrPrefixName();
 }
 
 void startItFunJUnitXml(const char *descr)
@@ -385,4 +407,49 @@ CSpecOutputStruct* CSpec_NewOutputJUnitXml()
   xml.pendingFun       = pendingFunJUnitXml;
 
   return &xml;
+}
+
+static void descrName(char** name, char* descr)
+{
+  char* prefix;
+  descrPrefixName(&prefix);
+  // [todo] - remove asprintf
+  asprintf(name, "%s %s", prefix, descr);
+}
+
+static void descrPrefixName(char** prefix)
+{
+  int i;
+  for( i = 0; i < MPISPEC_MAX_NEST_NUM; i++ ) {
+    if( descr_name_prefix_array[i] != NULL ) {
+      // [todo] - remove asprintf
+      if (*prefix == NULL)
+        asprintf(prefix, "%s", descr_name_prefix_array[i]);
+      else
+        asprintf(prefix, "%s %s", *prefix, descr_name_prefix_array[i]);
+    } else {
+      break;
+    }
+  }
+}
+
+static void pushDescrPrefixName(char* descr)
+{
+  int i;
+  for( i = 0; i < MPISPEC_MAX_NEST_NUM; i++ ) {
+    if( descr_name_prefix_array[i] == NULL ) {
+      descr_name_prefix_array[i] = descr;
+      break;
+    }
+  }
+}
+
+static void popDescrPrefixName()
+{
+  int i;
+  for( i = 1; i <= MPISPEC_MAX_NEST_NUM; i++ )
+    if( descr_name_prefix_array[i] == NULL )
+      break;
+  if( descr_name_prefix_array[i - 1] != NULL)
+    descr_name_prefix_array[i - 1] = NULL;
 }

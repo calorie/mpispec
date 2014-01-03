@@ -8,16 +8,15 @@
 #include <stdio.h>
 #include "mpispec_private.h"
 #include "mpispec_output.h"
+#include "mpispec_consts.h"
 
-#define MAX_ARRAY_SIZE 64
-#define MAX_NEST_NUM   16
-#define MAX_RANKS_NUM  1024
+#define MPISPEC_MAX_ACTION_ARRAY_SIZE 64
 
-typedef void ( *MPISpecActionArray[MAX_NEST_NUM][MAX_ARRAY_SIZE] )();
+typedef void ( *MPISpecActionArray[MPISPEC_MAX_NEST_NUM][MPISPEC_MAX_ACTION_ARRAY_SIZE] )();
 
 static CSpecOutputStruct* CSpec_output = 0;
 static MPISpecActionArray before_array, after_array;
-static void ( *end_fun_stack[MAX_NEST_NUM + 1] )();
+static void ( *end_fun_stack[MPISPEC_MAX_NEST_NUM + 1] )();
 static unsigned int nest_num = 0;
 
 static void
@@ -72,7 +71,7 @@ MPISpec_ValidateRanks( int ranks[], const int size, int myrank )
   int i, result = 1;
 
   for( i = 0; i < size; i++ ) {
-    if( i >= MAX_RANKS_NUM ) {
+    if( i >= MPISPEC_MAX_RANKS_NUM ) {
       printf("\033[1;33mWARN : ranks size over max size.\033[0m\n");
       break;
     }
@@ -206,7 +205,7 @@ static void
 MPISpec_set_action( MPISpecActionArray aarray, MPISpecTmpFunction fun )
 {
   int i;
-  for( i = 0; i < MAX_ARRAY_SIZE; i++ ) {
+  for( i = 0; i < MPISPEC_MAX_ACTION_ARRAY_SIZE; i++ ) {
     if( aarray[nest_num][i] == fun )
       break;
     if( aarray[nest_num][i] == NULL ) {
@@ -220,7 +219,7 @@ static void
 MPISpec_remove_action(MPISpecActionArray aarray)
 {
   int i;
-  for( i = 0; i < MAX_ARRAY_SIZE; i++ )
+  for( i = 0; i < MPISPEC_MAX_ACTION_ARRAY_SIZE; i++ )
     aarray[nest_num][i] = NULL;
 }
 
@@ -229,7 +228,7 @@ MPISpec_run_action(MPISpecActionArray aarray)
 {
   int i, j;
   for( i = 1; i <= nest_num; i++ ) {
-    for( j = 0; j < MAX_ARRAY_SIZE; j++ ) {
+    for( j = 0; j < MPISPEC_MAX_ACTION_ARRAY_SIZE; j++ ) {
       if( aarray[i][j] != NULL )
         aarray[i][j]();
       else
@@ -278,7 +277,7 @@ static void
 MPISpec_push_end_fun( MPISpecTmpFunction end_fun )
 {
   int i;
-  for( i = 0; i < MAX_NEST_NUM; i++ ) {
+  for( i = 0; i < MPISPEC_MAX_NEST_NUM; i++ ) {
     if( end_fun_stack[i] == NULL ) {
       end_fun_stack[i] = end_fun;
       break;
@@ -290,7 +289,7 @@ static void
 MPISpec_pop_end_fun()
 {
   int i;
-  for( i = 1; i <= MAX_NEST_NUM; i++ )
+  for( i = 1; i <= MPISPEC_MAX_NEST_NUM; i++ )
     if( end_fun_stack[i] == NULL )
       break;
 
