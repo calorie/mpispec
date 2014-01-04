@@ -10,12 +10,7 @@
   :use_test_preprocessor: TRUE
   :use_auxiliary_dependencies: TRUE
   :build_root: build
-#  :release_build: TRUE
   :test_file_prefix: test_
-
-#:release_build:
-#  :output: MyApp.out
-#  :use_assembly: FALSE
 
 :environment:
 
@@ -39,6 +34,7 @@
   :test:
     - *common_defines
     - TEST
+    - __AVAILABILITY__
   :test_preprocess:
     - *common_defines
     - TEST
@@ -87,10 +83,10 @@
       - -np 1
       - ${1}
 
-# :plugins:
-#   :load_paths:
-#     - vendor/ceedling/plugins
-#   :enabled:
-#     - stdout_pretty_tests_report
-#     - module_generator
+:plugins:
+  :load_paths:
+    - vendor/bundle/ruby/2.1.0/gems/ceedling-0.13.0/plugins
+  :enabled:
+    - stdout_pretty_tests_report
+    - module_generator
 ...
