@@ -22,17 +22,9 @@
 #include "mpispec_output_junit_xml.h"
 #include "mpispec_output_xml.h"
 
-void
-mpispec_setup();
-
-void
-mpispec_show_result();
-
-int
-mpiut_rank();
-
-double
-gettimeofday_sec();
+void mpispec_setup();
+void mpispec_show_result();
+int mpiut_rank();
 
 /*               */
 /* Public macros */

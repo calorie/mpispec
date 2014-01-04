@@ -1,5 +1,6 @@
-#include "unity.h"
 #include <mpi.h>
+#include <stdlib.h>
+#include "unity.h"
 #include "mpispec_config.h"
 
 void setUp(void)

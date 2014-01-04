@@ -6,6 +6,7 @@ SUBDIRS = src script share
 runtest:	FORCE
 	make all
 	sudo make install
+	rake test:all
 	make sample
 
 reinstall:	FORCE
