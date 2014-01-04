@@ -20,6 +20,7 @@
 #include "mpispec_output.h"
 #include "mpispec_output_verbose.h"
 #include "mpispec_output_junit_xml.h"
+#include "mpispec_output_xml.h"
 
 void
 mpispec_setup();
@@ -47,8 +48,12 @@ int CSpec_Run( CSpecDescriptionFun fun, CSpecOutputStruct* output );
   CSpec_Run( test, CSpec_NewOutputVerbose() );
 #define MPISpec_jxRun(test)                        \
   void test();                                     \
-  MPISpec_JUnitXmlFileOpen("output.xml", "utf-8"); \
+  MPISpec_JUnitXmlFileOpen("junit_output.xml", "utf-8"); \
   CSpec_Run( test, CSpec_NewOutputJUnitXml() );
+#define MPISpec_xRun(test)                        \
+  void test();                                     \
+  MPISpec_XmlFileOpen("output.xml", "utf-8"); \
+  CSpec_Run( test, CSpec_NewOutputXml() );
 
 
 /* Config macros */
@@ -61,6 +66,7 @@ int CSpec_Run( CSpecDescriptionFun fun, CSpecOutputStruct* output );
 
 #define mpispec_finalize         \
   MPISpec_JUnitXmlFileClose();   \
+  MPISpec_XmlFileClose();   \
   mpispec_run_summary();         \
   CU_basic_exit();               \
   MPI_Barrier( MPI_COMM_WORLD ); \

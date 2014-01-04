@@ -8,7 +8,7 @@ mpispec_init
 
   int strcmp_spec_ranks[2] = {0, 1};
   ex_ranks(strcmp_spec_ranks)
-    MPISpec_jxRun(strcmp_spec)
+    MPISpec_xRun(strcmp_spec)
   end
 
   rank(1)

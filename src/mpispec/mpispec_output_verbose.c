@@ -8,9 +8,10 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include "mpispec_output_verbose.h"
+#include "mpispec_consts.h"
 
 static CSpecOutputStruct verbose;
-int tab_num = 0;
+static int mpispec_tab_num = 0;
 MS_pRunSummary verbose_summary;
 
 /* private functions */
@@ -39,40 +40,40 @@ void
 startDescribeFunVerbose( const char *descr )
 {
   fprintf( __mpiut_result_file__, "\n" );
-  fprintTab( ++tab_num );
+  fprintTab( ++mpispec_tab_num );
   fprintf( __mpiut_result_file__, "%s\n", descr );
 }
 
 void
 endDescribeFunVerbose()
 {
-  tab_num--;
+  mpispec_tab_num--;
 }
 
 void
 startItFunVerbose( const char *descr )
 {
-  fprintTab( ++tab_num );
+  fprintTab( ++mpispec_tab_num );
   fprintf( __mpiut_result_file__, "- %s\n", descr );
 }
 
 void
 endItFunVerbose()
 {
-  tab_num--;
+  mpispec_tab_num--;
 }
 
 void
 endFunVerbose()
 {
-  tab_num--;
+  mpispec_tab_num--;
 }
 
 void
 evalFunVerbose( const char*filename, int line_number,
                 const char*assertion, int assertionResult )
 {
-  fprintTab( tab_num + 1 );
+  fprintTab( mpispec_tab_num + 1 );
 
   verbose_summary->Total++;
 
@@ -139,7 +140,7 @@ fprintTab( int n )
 {
   int i;
   for ( i = 0; i < n; i++ )
-    fprintf( __mpiut_result_file__, "  " );
+    fprintf( __mpiut_result_file__, MPISPEC_TAB );
 }
 
 static void

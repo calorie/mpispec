@@ -35,7 +35,7 @@ MPISpec_JUnitXmlFileOpen(const char *filename, const char *encoding)
   if (outputXmlFile != NULL)
     return;
 
-  char xml_filename[64];
+  char xml_filename[MPISPEC_MAX_XML_FILENAME_LEN];
   int myrank;
   MPI_Comm_rank( MPI_COMM_WORLD, &myrank );
 
