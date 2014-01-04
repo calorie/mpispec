@@ -1,5 +1,7 @@
 mpispec
 =======
+Behavior Driven Development framework for MPI
+
 ## requirements
 
 - MPICH >= 1.2.0
