@@ -89,5 +89,8 @@
       </table>
 
     </xsl:for-each>
+
+    <xsl:apply-templates select="DESCRIBE" />
+
   </xsl:template>
 </xsl:stylesheet>
