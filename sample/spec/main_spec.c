@@ -4,11 +4,11 @@
 #include "../src/send_recv.h"
 
 mpispec_init
-  MPISpec_jxRun(cpi_spec)
+  MPISpec_xRun(cpi_spec)
 
   int strcmp_spec_ranks[2] = {0, 1};
   ex_ranks(strcmp_spec_ranks)
-    MPISpec_xRun(strcmp_spec)
+    MPISpec_jxRun(strcmp_spec)
   end
 
   rank(1)

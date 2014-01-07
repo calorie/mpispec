@@ -43,7 +43,7 @@ MPISpec_XmlFileOpen(const char *filename, const char *encoding)
   timeStr[strlen(timeStr) - 1] = '\0';
 
   fprintf(outputXmlFile, "<?xml version=\"1.0\" encoding=\"%s\" ?>\n", encoding);
-  fprintf(outputXmlFile, "<?xml-stylesheet type=\"text/xsl\" href=\"CSpec-Run.xsl\" ?>\n");
+  fprintf(outputXmlFile, "<?xml-stylesheet type=\"text/xsl\" href=\"MPISpec-Run.xsl\" ?>\n");
   fprintf(outputXmlFile, "<BEHAVIOUR timestump=\"%s\">\n", timeStr);
   mpispec_tab_num++;
 }
