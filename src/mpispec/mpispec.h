@@ -35,26 +35,32 @@ int mpiut_rank();
 typedef void ( * CSpecDescriptionFun )();
 int CSpec_Run( CSpecDescriptionFun fun, CSpecOutputStruct* output );
 
-#define MPISpec_Run(test) \
-  void test();            \
+#define MPISpec_VerboseRun(test) \
+  void test();                   \
   CSpec_Run( test, CSpec_NewOutputVerbose() );
-#define MPISpec_jxRun(test)                        \
-  void test();                                     \
+#define MPISpec_Run(test) MPISpec_VerboseRun(test)
+
+#define MPISpec_JUnitXmlRun(test)                        \
+  void test();                                           \
   MPISpec_JUnitXmlFileOpen("junit_output.xml", "utf-8"); \
   CSpec_Run( test, CSpec_NewOutputJUnitXml() );
-#define MPISpec_xRun(test)                        \
-  void test();                                     \
+#define MPISpec_jxRun(test) MPISpec_JUnitXmlRun(test)
+
+#define MPISpec_XmlRun(test)                  \
+  void test();                                \
   MPISpec_XmlFileOpen("output.xml", "utf-8"); \
   CSpec_Run( test, CSpec_NewOutputXml() );
+#define MPISpec_xRun(test) MPISpec_XmlRun(test)
 
 
 /* Config macros */
 
-#define mpispec_init              \
+#define mpispec_initialize        \
   int                             \
   main( int argc, char **argv ) { \
     MPI_Init( &argc, &argv );     \
     mpispec_setup();
+#define mpispec_init mpispec_initialize
 
 #define mpispec_finalize         \
   MPISpec_JUnitXmlFileClose();   \
