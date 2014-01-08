@@ -1,105 +1,85 @@
 ---
-
-# Notes:
-# Sample project C code is not presently written to produce a release artifact.
-# As such, release build options are disabled.
-# This sample, therefore, only demonstrates running a collection of unit tests.
-
 :project:
-  :use_exceptions: FALSE
-  :use_test_preprocessor: TRUE
-  :use_auxiliary_dependencies: TRUE
+  :use_exceptions: false
+  :use_test_preprocessor: true
+  :use_auxiliary_dependencies: true
   :build_root: build
   :test_file_prefix: test_
-
-:environment:
-
+:environment: 
 :extension:
-  :executable: .out
-
+  :executable: ".out"
 :paths:
   :test:
-    - +:test/**
-    - -:test/support
+  - "+:test/**"
+  - "-:test/support"
   :source:
-    - src/**
+  - src/**
   :support:
-    - test/support
-
+  - test/support
 :defines:
-  # in order to add common defines:
-  #  1) remove the trailing [] from the :common: section
-  #  2) add entries to the :common: section (e.g. :test: has TEST defined)
-  :commmon: &common_defines []
+  :commmon: &1 []
   :test:
-    - *common_defines
-    - TEST
+  - *1
+  - TEST
   :test_preprocess:
-    - *common_defines
-    - TEST
-
+  - *1
+  - TEST
 :cmock:
   :mock_prefix: mock_
   :when_no_prototypes: :warn
-  :enforce_strict_ordering: TRUE
+  :enforce_strict_ordering: true
   :plugins:
-    - :ignore
-    - :callback
+  - :ignore
+  - :callback
   :treat_as:
-    uint8:    HEX8
-    uint16:   HEX16
-    uint32:   UINT32
-    int8:     INT8
-    bool:     UINT8
-
+    uint8: HEX8
+    uint16: HEX16
+    uint32: UINT32
+    int8: INT8
+    bool: UINT8
 :tools:
-# Ceedling defaults to using gcc for compiling, linking, etc.
-# As [:tools] is blank, gcc will be used (so long as it's in your system path)
-# See documentation to configure a given toolchain for use
   :test_includes_preprocessor:
     :executable: gcc
     :arguments:
-      - -E
-      - -MM
-      - -MG
-      - -I"$": COLLECTION_PATHS_TEST_SUPPORT_SOURCE_INCLUDE_VENDOR
-      - -I"$": COLLECTION_PATHS_TEST_TOOLCHAIN_INCLUDE
-      - -D"$": COLLECTION_DEFINES_TEST_AND_VENDOR
-      - -D"$": DEFINES_TEST_PREPROCESS
-      - -DGNU_COMPILER
-      - -w
-      - -nostdinc
-      - ${1}
+    - "-E"
+    - "-MM"
+    - "-MG"
+    - "-I\"$\"": COLLECTION_PATHS_TEST_SUPPORT_SOURCE_INCLUDE_VENDOR
+    - "-I\"$\"": COLLECTION_PATHS_TEST_TOOLCHAIN_INCLUDE
+    - "-D\"$\"": COLLECTION_DEFINES_TEST_AND_VENDOR
+    - "-D\"$\"": DEFINES_TEST_PREPROCESS
+    - "-DGNU_COMPILER"
+    - "-w"
+    - "-nostdinc"
+    - "${1}"
   :test_compiler:
     :executable: mpicc
-    :name: 'mpi_test_compiler'
+    :name: mpi_test_compiler
     :arguments:
-      - -I"$": COLLECTION_PATHS_TEST_SUPPORT_SOURCE_INCLUDE_VENDOR
-      - -I"$": COLLECTION_PATHS_TEST_TOOLCHAIN_INCLUDE
-      - -D$: COLLECTION_DEFINES_TEST_AND_VENDOR
-      - -DGNU_COMPILER
-      - -c ${1}
-      - -o ${2}
+    - "-I\"$\"": COLLECTION_PATHS_TEST_SUPPORT_SOURCE_INCLUDE_VENDOR
+    - "-I\"$\"": COLLECTION_PATHS_TEST_TOOLCHAIN_INCLUDE
+    - "-D$": COLLECTION_DEFINES_TEST_AND_VENDOR
+    - "-DGNU_COMPILER"
+    - "-c ${1}"
+    - "-o ${2}"
   :test_linker:
     :executable: mpicc
-    :name: 'mpi_test_linker'
+    :name: mpi_test_linker
     :arguments:
-      - -I/usr/local/include
-      - -L/usr/local/lib
-      - ${1}
-      - -o ${2}
-      - -lmpispec
+    - "-I/usr/local/include"
+    - "-L/usr/local/lib"
+    - "${1}"
+    - "-o ${2}"
+    - "-lmpispec"
   :test_fixture:
     :executable: mpirun
-    :name: 'mpi_test_fixture'
+    :name: mpi_test_fixture
     :arguments:
-      - -np 1
-      - ${1}
-
+    - "-np 1"
+    - "${1}"
 :plugins:
   :load_paths:
-    - vendor/bundle/ruby/2.1.0/gems/ceedling-0.13.0/plugins
+  - vendor/bundle/ruby/2.1.0/gems/ceedling-0.13.0/plugins
   :enabled:
-    - stdout_pretty_tests_report
-    - module_generator
-...
+  - stdout_pretty_tests_report
+  - module_generator
