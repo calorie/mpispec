@@ -12,6 +12,7 @@
   :test:
   - "+:test/**"
   - "-:test/support"
+  - "-:test/datareplay"
   :source:
   - src/**
   :support:
