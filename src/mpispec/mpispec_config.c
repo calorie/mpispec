@@ -1,4 +1,12 @@
 /*
+ *  MPISpec - A Behavior Driven Development Framework for MPI Programs, based on CUnit, CSpec and MPIUnit.
+ *
+ *  License:    LGPL
+ *  Author:     Yuu Shigetani
+ *  Time-stamp: 2014/01/17 05:57:45
+ */
+
+/*
  *  cspec_config.c   :  This file depends on the capabilities of your hardware/platform
  *
  * In case your platform does not support double or provides another function to compute the absolute
@@ -8,6 +16,10 @@
  *
  * See copyright notice in cspec.h
  *
+ */
+
+/*
+ * MPISpec doesn't contain cspec.h. So, please see mpispec.h.
  */
 
 #include <string.h>

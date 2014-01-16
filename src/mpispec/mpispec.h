@@ -1,3 +1,10 @@
+/*
+ *  MPISpec - A Behavior Driven Development Framework for MPI Programs, based on CUnit, CSpec and MPIUnit.
+ *
+ *  License:    LGPL
+ *  Author:     Yuu Shigetani
+ *  Time-stamp: 2014/01/17 05:50:31
+ */
 
 /* Time-stamp: <2007-11-14 22:36:36 shinya> */
 
@@ -6,6 +13,13 @@
  *
  *  Author: Shinya Abe
  *  License: LGPL
+ */
+
+/*
+ *  cspec.h   :   the main header file
+ *
+ * See copyright notice at the end of this file
+ *
  */
 
 #ifndef MPISPEC_H
@@ -178,3 +192,19 @@ int CSpec_Run( CSpecDescriptionFun fun, CSpecOutputStruct* output );
 #define expect_not_to_send_recv(fun, from, to, tag, timeout) should_not_send_recv(fun, from, to, tag, timeout)
 
 #endif
+
+/*
+ * Copyright 2008 Arnaud Brejeon.
+ *
+ * Cspec is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as 
+ * published by the Free Software Foundation, version 3.
+ *
+ * CSpec is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>
+ *
+ */

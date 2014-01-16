@@ -1,6 +1,6 @@
-mpispec
+MPISpec
 =======
-Behavior Driven Development framework for MPI
+A Behavior Driven Development Framework for MPI Programs, based on CUnit, CSpec and MPIUnit.
 
 ## requirements
 
@@ -17,7 +17,7 @@ $ make
 $ sudo make install
 ```
 
-if you had errors, you had to write in your .bashrc etc.
+if you have errors, you have to write in your .bashrc etc:
 
 ```
 export C_INCLUDE_PATH=$C_INCLUDE_PATH:/your/mpich/include/path
@@ -31,7 +31,7 @@ $ cd sample
 $ mpispec -np 3
 ```
 
-if you had undefined reference and use ubuntu, you probably need to install binutils-gold.
+if you have errors of undefined reference, you probably need to install binutils-gold.
 
 ```
 $ apt-get install binutils-gold
@@ -41,6 +41,13 @@ $ apt-get install binutils-gold
 
 ```
 $ bundle install --path vendor/bundle --binstubs .bundle/bin
-$ rake
+$ bundle exec rake
 ```
+
+=======
+LGPL Lisence
+
+Author: Yuu Shigetani
+
+Year:   2013, 2014
 
