@@ -10,4 +10,3 @@ MPISPECSPEC=`find spec -name *.c`
 
 $CC $MPISPECFLAGS $MPISPECSRC $MPISPECSPEC -o $EXEC $MPISPECLIBS
 mpirun $* ./$EXEC
-rm -f *.o $EXEC
