@@ -11,10 +11,10 @@ A Behavior Driven Development Framework for MPI Programs, based on CUnit, CSpec 
 ```
 $ git clone git@github.com:YuuShigetani/mpispec.git
 $ cd mpispec
-$ ./bootstrap
+$ ./autogen.sh
 $ ./configure
 $ make
-$ sudo make install
+$ make install
 ```
 
 if you have errors, you have to write in your .bashrc etc:
