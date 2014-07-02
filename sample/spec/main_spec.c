@@ -1,7 +1,6 @@
 #include "mpispec/mpispec.h"
 #include "../src/cpi.h"
 #include "../src/integral.h"
-#include "../src/send_recv.h"
 
 mpispec_init
 

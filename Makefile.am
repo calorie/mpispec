@@ -6,12 +6,11 @@ SUBDIRS = src script share
 runtest:	FORCE
 	make all
 	sudo make install
-	rake test:all
 	make sample
 
 reinstall:	FORCE
 	sudo make uninstall clean
-	./bootstrap
+	./autogen.sh
 	./configure --prefix=/usr/local
 	make runtest
 

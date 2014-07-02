@@ -4,7 +4,7 @@ A Behavior Driven Development Framework for MPI Programs, based on CUnit, CSpec 
 
 ## requirements
 
-- MPICH >= 1.2.0
+- MPICH >= 1.2.0 or OpenMPI
 
 ## install
 
@@ -35,13 +35,6 @@ if you have errors of undefined reference, you probably need to install binutils
 
 ```
 $ apt-get install binutils-gold
-```
-
-## run unity test
-
-```
-$ bundle install --path vendor/bundle --binstubs .bundle/bin
-$ bundle exec rake
 ```
 
 =======

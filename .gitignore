@@ -47,13 +47,11 @@ stamp-h?
 /README
 /README.ja
 
-src/cspec/
-src/mpiunit/
-/build/**
-
 .bundle
 /vendor/bundle
 rank*.xml
 .watsonrc
 
 Gemfile.lock
+
+exec_test

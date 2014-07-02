@@ -24,23 +24,22 @@
 
 extern FILE *__mpiut_result_file__;
 
-typedef void ( * CSpecOutputStartDefFun )();
-typedef void ( * CSpecOutputEndDefFun )();
+typedef void (*CSpecOutputStartDefFun)();
+typedef void (*CSpecOutputEndDefFun)();
 
-typedef void ( * CSpecOutputStartDescribeFun )( const char *descr );
-typedef void ( * CSpecOutputEndDescribeFun )();
+typedef void (*CSpecOutputStartDescribeFun)(const char *descr);
+typedef void (*CSpecOutputEndDescribeFun)();
 
-typedef void ( * CSpecOutputStartItFun )( const char *descr );
-typedef void ( * CSpecOutputEndItFun )();
+typedef void (*CSpecOutputStartItFun)(const char *descr);
+typedef void (*CSpecOutputEndItFun)();
 
-typedef void ( * CSpecOutputEndFun )();
+typedef void (*CSpecOutputEndFun)();
 
-typedef void ( * CSpecOutputEvalFun )( const char*filename, int line_number, const char*assertion, int assertionResult );
-typedef void ( * CSpecOutputPendingFun )( const char* reason );
+typedef void (*CSpecOutputEvalFun)(const char *filename, int line_number, const char *assertion, int assertionResult);
+typedef void (*CSpecOutputPendingFun)(const char *reason);
 
 typedef struct
 {
-
     CSpecOutputStartDefFun      startDefFun;
     CSpecOutputEndDefFun        endDefFun;
 
@@ -56,27 +55,20 @@ typedef struct
     CSpecOutputPendingFun       pendingFun;
 
     int failed;
-
 } CSpecOutputStruct;
 
 typedef struct
 {
-
     unsigned int Passed;
     unsigned int Total;
-
 } MPISpecRunSummary;
-typedef MPISpecRunSummary* MS_pRunSummary;
+
+typedef MPISpecRunSummary *MS_pRunSummary;
 
 static MPISpecRunSummary mpi_run_summary;
 
-MS_pRunSummary
-get_mpi_run_summary( void );
-
-void
-CSpec_InitOutput( CSpecOutputStruct* output );
-
-void
-CSpec_SetOutput( CSpecOutputStruct* output );
+MS_pRunSummary get_mpi_run_summary(void);
+void CSpec_InitOutput(CSpecOutputStruct *output);
+void CSpec_SetOutput(CSpecOutputStruct *output);
 
 #endif

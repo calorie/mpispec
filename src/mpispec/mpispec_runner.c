@@ -22,10 +22,10 @@
 #include "mpispec.h"
 
 int
-CSpec_Run( CSpecDescriptionFun fun, CSpecOutputStruct* output )
+CSpec_Run(CSpecDescriptionFun fun, CSpecOutputStruct* output)
 {
-  CSpec_SetOutput( output );
-  fun();
-  return output->failed;
+    CSpec_SetOutput(output);
+    fun();
+    return output->failed;
 }
 
