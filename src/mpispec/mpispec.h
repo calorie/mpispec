@@ -46,18 +46,18 @@ int mpiut_rank();
 
 /* Runner macros */
 
-typedef void ( * CSpecDescriptionFun )();
-int CSpec_Run( CSpecDescriptionFun fun, CSpecOutputStruct* output );
+typedef void (*CSpecDescriptionFun)();
+int CSpec_Run(CSpecDescriptionFun fun, CSpecOutputStruct *output);
 
 #define MPISpec_VerboseRun(test) \
   void test();                   \
-  CSpec_Run( test, CSpec_NewOutputVerbose() );
+  CSpec_Run(test, CSpec_NewOutputVerbose());
 #define MPISpec_Run(test) MPISpec_VerboseRun(test)
 
 #define MPISpec_JUnitXmlRun(test)                        \
   void test();                                           \
   MPISpec_JUnitXmlFileOpen("junit_output.xml", "utf-8"); \
-  CSpec_Run( test, CSpec_NewOutputJUnitXml() );
+  CSpec_Run(test, CSpec_NewOutputJUnitXml());
 #define MPISpec_jxRun(test) MPISpec_JUnitXmlRun(test)
 
 #define MPISpec_XmlRun(test)                  \
@@ -69,19 +69,19 @@ int CSpec_Run( CSpecDescriptionFun fun, CSpecOutputStruct* output );
 
 /* Config macros */
 
-#define mpispec_initialize        \
-  int                             \
-  main( int argc, char **argv ) { \
-    MPI_Init( &argc, &argv );     \
+#define mpispec_initialize       \
+  int                            \
+  main (int argc, char **argv) { \
+    MPI_Init(&argc, &argv);      \
     mpispec_setup();
 #define mpispec_init mpispec_initialize
 
 #define mpispec_finalize         \
   MPISpec_JUnitXmlFileClose();   \
-  MPISpec_XmlFileClose();   \
+  MPISpec_XmlFileClose();        \
   mpispec_run_summary();         \
   CU_basic_exit();               \
-  MPI_Barrier( MPI_COMM_WORLD ); \
+  MPI_Barrier(MPI_COMM_WORLD);   \
   mpispec_show_result();         \
   MPI_Finalize();                \
   return EXIT_SUCCESS; }
@@ -94,37 +94,37 @@ int CSpec_Run( CSpecDescriptionFun fun, CSpecOutputStruct* output );
 /* Structural macros */
 
 #define rank(rank)         { MPISpec_StartRank();       \
-                           if( mpispec_rank == rank ) {
+                           if (mpispec_rank == rank) {
 #define end_rank           } MPISpec_EndRank(); }
 
 #define exclude_rank(rank) { MPISpec_StartRank();       \
-                           if( mpispec_rank != rank ) {
-#define ex_rank(rank)      exclude_rank( rank )
+                           if (mpispec_rank != rank) {
+#define ex_rank(rank)      exclude_rank(rank)
 #define end_exclude_rank   } MPISpec_EndRank(); }
 #define end_ex_rank        end_exclude_rank
 
 #define ranks(ranks)      \
   { MPISpec_StartRanks(); \
-  if( MPISpec_ValidateRanks( ranks, sizeof(ranks)/sizeof(ranks[0]), mpispec_rank ) == 0 ) {
+  if (MPISpec_ValidateRanks(ranks, sizeof(ranks) / sizeof(ranks[0]), mpispec_rank) == 0) {
 #define end_ranks            } MPISpec_EndRanks(); }
 
 #define exclude_ranks(ranks) \
   { MPISpec_StartRanks();    \
-  if( MPISpec_ValidateRanks( ranks, sizeof(ranks)/sizeof(ranks[0]), mpispec_rank ) != 0 ) {
-#define ex_ranks(ranks)      exclude_ranks( ranks )
+  if (MPISpec_ValidateRanks(ranks, sizeof(ranks) / sizeof(ranks[0]), mpispec_rank) != 0) {
+#define ex_ranks(ranks)      exclude_ranks(ranks)
 #define end_exclude_ranks    } MPISpec_EndRanks(); }
 #define end_ex_ranks         end_exclude_ranks
 
 #define mpispec_def(test) void test() { MPISpec_StartDef(); {
 #define end_def           } MPISpec_EndDef(); }
 
-#define describe(caption) { CSpec_StartDescribe( caption ); {
+#define describe(caption) { CSpec_StartDescribe(caption); {
 #define end_describe      } CSpec_EndDescribe(); }
 
 #define context(caption)  describe(caption)
 #define end_context       end_describe
 
-#define it(caption)       { CSpec_StartIt( caption ); {
+#define it(caption)       { CSpec_StartIt(caption); {
 #define end_it            } CSpec_EndIt(); }
 
 /* gcc only */
@@ -132,38 +132,38 @@ int CSpec_Run( CSpecDescriptionFun fun, CSpecOutputStruct* output );
 
 #define before_each(foo)                     \
   auto void before_each_ ## foo (void);      \
-  MPISpec_set_before( before_each_ ## foo ); \
+  MPISpec_set_before(before_each_ ## foo);   \
   void before_each_ ## foo () {              \
   MPISpec_StartBefore(); {
-#define end_before         } MPISpec_EndBefore(); }
+#define end_before } MPISpec_EndBefore(); }
 
 #define after_each(foo)                    \
   auto void after_each_ ## foo (void);     \
-  MPISpec_set_after( after_each_ ## foo ); \
+  MPISpec_set_after(after_each_ ## foo); \
   void after_each_ ## foo () {             \
   MPISpec_StartAfter(); {
-#define end_after       } MPISpec_EndAfter(); }
+#define end_after } MPISpec_EndAfter(); }
 
 #endif
 
-#define end               } CSpec_End(); }
+#define end } CSpec_End(); }
 
 
 /* Expectation macros */
 
-#define should_be_true(x)                       CSPEC_EVAL( (x) )
-#define should_equal(x, y)                      CSPEC_EVAL( (x) == (y) )
-#define should_equal_double(x, y, delta)        CSPEC_EVAL( cspec_fabs( (x) - (y) ) <= delta )
-#define should_match(x, y)                      CSPEC_EVAL( cspec_strcmp(x, y) == 0 )
-#define should_be_null(x)                       CSPEC_EVAL( (x) == 0 )
+#define should_be_true(x)                    CSPEC_EVAL((x))
+#define should_equal(x, y)                   CSPEC_EVAL((x) == (y))
+#define should_equal_double(x, y, delta)     CSPEC_EVAL(cspec_fabs((x) - (y)) <= delta)
+#define should_match(x, y)                   CSPEC_EVAL(cspec_strcmp(x, y) == 0)
+#define should_be_null(x)                    CSPEC_EVAL((x) == 0)
 
-#define should_be_false(x)                      CSPEC_EVAL( !(x) )
-#define should_not_equal(x, y)                  CSPEC_EVAL( (x) != (y) )
-#define should_not_equal_double(x, y, delta)    CSPEC_EVAL( cspec_fabs( (x) - (y) ) > delta )
-#define should_not_match(x, y)                  CSPEC_EVAL( cspec_strcmp(x, y) != 0 )
-#define should_not_be_null(x)                   CSPEC_EVAL( (x) != 0 )
+#define should_be_false(x)                   CSPEC_EVAL(!(x))
+#define should_not_equal(x, y)               CSPEC_EVAL((x) != (y))
+#define should_not_equal_double(x, y, delta) CSPEC_EVAL(cspec_fabs( (x) - (y) ) > delta)
+#define should_not_match(x, y)               CSPEC_EVAL(cspec_strcmp(x, y) != 0)
+#define should_not_be_null(x)                CSPEC_EVAL((x) != 0)
 
-#define should_pending(reason)                  CSPEC_PENDING(reason)
+#define should_pending(reason)               CSPEC_PENDING(reason)
 
 
 /* Alias Expectation macros */
@@ -181,15 +181,6 @@ int CSpec_Run( CSpecDescriptionFun fun, CSpecOutputStruct* output );
 #define expect_not_to_be_null(x)                should_not_be_null(x)
 
 #define expect_to_pending(reason)               should_pending(reason)
-
-
-/* MPI Expectation macros */
-
-#define should_send_recv(fun, from, to, tag, timeout)        CSPEC_EVAL ( mpispec_send_recv(fun, from, to, tag, timeout) == 0 )
-#define expect_to_send_recv(fun, from, to, tag, timeout)     should_send_recv(fun, from, to, tag, timeout)
-
-#define should_not_send_recv(fun, from, to, tag, timeout)    CSPEC_EVAL ( mpispec_send_recv(fun, from, to, tag, timeout) != 0 )
-#define expect_not_to_send_recv(fun, from, to, tag, timeout) should_not_send_recv(fun, from, to, tag, timeout)
 
 #endif
 

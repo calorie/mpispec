@@ -4,14 +4,14 @@
 #include <stdio.h>
 
 typedef struct {
-  /** size of an element */
-  size_t element_size;
-  /** size of the number of elements held in the array */
-  size_t size;
-  /** size of allocated storage capacity */
-  size_t capacity;
-  /** real data */
-  char* data;
+    /** size of an element */
+    size_t element_size;
+    /** size of the number of elements held in the array */
+    size_t size;
+    /** size of allocated storage capacity */
+    size_t capacity;
+    /** real data */
+    char* data;
 } array_t;
 
 /** construct array */

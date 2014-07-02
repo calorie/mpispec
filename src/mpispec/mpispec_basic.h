@@ -62,27 +62,15 @@ typedef enum {
   CU_BRM_VERBOSE = 2
 } CU_BasicRunMode;
 
-void
-CU_basic_set_mode( CU_BasicRunMode mode );
+void CU_basic_set_mode(CU_BasicRunMode mode);
+CU_BasicRunMode CU_basic_get_mode(void);
+void CU_basic_exit();
 
-CU_BasicRunMode
-CU_basic_get_mode( void );
-
-void
-CU_basic_exit();
-
-void
-mpispec_make_result_file( int *myrank );
-
-void
-mpispec_run_summary( void );
-
-unsigned int
-mpispec_get_number_of_specs( void );
-unsigned int
-mpispec_get_number_of_successes( void );
-unsigned int
-mpispec_get_number_of_failures( void );
+void mpispec_make_result_file(int *myrank);
+void mpispec_run_summary(void);
+unsigned int mpispec_get_number_of_specs(void);
+unsigned int mpispec_get_number_of_successes(void);
+unsigned int mpispec_get_number_of_failures(void);
 
 #ifdef __cplusplus
 }

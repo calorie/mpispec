@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([mpispec], [0.1], [s2g4t1n2@gmail.com])
+AC_INIT([mpispec], [1.1.0], [s2g4t1n2@gmail.com])
 AC_CONFIG_AUX_DIR(config)
 AM_INIT_AUTOMAKE
 
@@ -65,6 +65,5 @@ AC_CONFIG_FILES([Makefile
                  script/mpispec
                  share/Makefile
                  src/Makefile
-                 src/datareplay/Makefile
                  src/mpispec/Makefile])
 AC_OUTPUT
