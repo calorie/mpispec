@@ -45,12 +45,12 @@ mpispec_setup()
 void
 mpispec_show_result()
 {
-  int myrank, n_procs, i;
+  int myrank, n_procs, i, ch;
   unsigned int local_specs, total_specs;
   unsigned int local_successspecs, total_successspecs;
   unsigned int local_failspecs, total_failspecs;
   double s_rate;
-  char result_filename[32], ch;
+  char result_filename[32];
   FILE *fp;
 
   MPI_Comm_rank( MPI_COMM_WORLD, &myrank );
