@@ -17,45 +17,47 @@
  * MPISpec doesn't contain cspec.h. So, please see mpispec.h.
  */
 
-#ifndef CSPEC_OUTPUT_H
-#define CSPEC_OUTPUT_H
+#ifndef MPISPEC_OUTPUT_H
+#define MPISPEC_OUTPUT_H
 
 #include <stdio.h>
 
-extern FILE *__mpiut_result_file__;
+extern FILE *MPISPEC_GLOBAL_FP;
 
-typedef void (*CSpecOutputStartDefFun)();
-typedef void (*CSpecOutputEndDefFun)();
+typedef void (*MPISpecDescFun)(void);
 
-typedef void (*CSpecOutputStartDescribeFun)(const char *descr);
-typedef void (*CSpecOutputEndDescribeFun)();
+typedef void (*MPISpecOutputStartDefFun)(void);
+typedef void (*MPISpecOutputEndDefFun)(void);
 
-typedef void (*CSpecOutputStartItFun)(const char *descr);
-typedef void (*CSpecOutputEndItFun)();
+typedef void (*MPISpecOutputStartDescribeFun)(const char *descr);
+typedef void (*MPISpecOutputEndDescribeFun)(void);
 
-typedef void (*CSpecOutputEndFun)();
+typedef void (*MPISpecOutputStartItFun)(const char *descr);
+typedef void (*MPISpecOutputEndItFun)(void);
 
-typedef void (*CSpecOutputEvalFun)(const char *filename, int line_number, const char *assertion, int assertionResult);
-typedef void (*CSpecOutputPendingFun)(const char *reason);
+typedef void (*MPISpecOutputEndFun)(void);
+
+typedef void (*MPISpecOutputEvalFun)(const char *filename, int line_number, const char *assertion, int assertionResult);
+typedef void (*MPISpecOutputPendingFun)(const char *reason);
 
 typedef struct
 {
-    CSpecOutputStartDefFun      startDefFun;
-    CSpecOutputEndDefFun        endDefFun;
+    MPISpecOutputStartDefFun      start_def_fun;
+    MPISpecOutputEndDefFun        end_def_fun;
 
-    CSpecOutputStartDescribeFun startDescribeFun;
-    CSpecOutputEndDescribeFun   endDescribeFun;
+    MPISpecOutputStartDescribeFun start_describe_fun;
+    MPISpecOutputEndDescribeFun   end_describe_fun;
 
-    CSpecOutputStartItFun       startItFun;
-    CSpecOutputEndItFun         endItFun;
+    MPISpecOutputStartItFun       start_it_fun;
+    MPISpecOutputEndItFun         end_it_fun;
 
-    CSpecOutputEndFun           endFun;
+    MPISpecOutputEndFun           end_fun;
 
-    CSpecOutputEvalFun          evalFun;
-    CSpecOutputPendingFun       pendingFun;
+    MPISpecOutputEvalFun          eval_fun;
+    MPISpecOutputPendingFun       pending_fun;
 
     int failed;
-} CSpecOutputStruct;
+} MPISpecOutputStruct;
 
 typedef struct
 {
@@ -63,12 +65,9 @@ typedef struct
     unsigned int Total;
 } MPISpecRunSummary;
 
-typedef MPISpecRunSummary *MS_pRunSummary;
+typedef MPISpecRunSummary *pMPISpecRunSummary;
 
-static MPISpecRunSummary mpi_run_summary;
-
-MS_pRunSummary get_mpi_run_summary(void);
-void CSpec_InitOutput(CSpecOutputStruct *output);
-void CSpec_SetOutput(CSpecOutputStruct *output);
+pMPISpecRunSummary get_mpi_run_summary(void);
+void MPISpec_InitOutput(MPISpecOutputStruct *output);
 
 #endif

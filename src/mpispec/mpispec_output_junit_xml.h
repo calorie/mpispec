@@ -22,7 +22,7 @@
 
 #include "mpispec_output.h"
 
-CSpecOutputStruct* CSpec_NewOutputJUnitXml();
+MPISpecOutputStruct* MPISpec_NewOutputJUnitXml(void);
 
 void MPISpec_JUnitXmlFileOpen(const char *filename, const char *encoding);
 void MPISpec_JUnitXmlFileClose(void);

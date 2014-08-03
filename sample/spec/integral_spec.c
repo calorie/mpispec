@@ -13,11 +13,11 @@ pi_func(double x)
   return 4.0 / (1.0 + x * x);
 }
 
-mpispec_def(integral_spec)
-  describe("integral関数は")
-    it("積分値を返す")
-      expect_to_equal_double(integral(0, 10, 100, f), 50.0000000, 0.001)
-      expect_to_equal_double(integral(0.0, 1.0, 100, pi_func), 3.14159265, 0.001)
-    end
-  end
-end
+MPISPEC_DEF(integral_spec)
+  DESCRIBE("integral function")
+    IT("return integral")
+      SHOULD_EQUAL_DOUBLE(integral(0, 10, 100, f), 50.0000000, 0.001)
+      SHOULD_EQUAL_DOUBLE(integral(0.0, 1.0, 100, pi_func), 3.14159265, 0.001)
+    END
+  END
+END

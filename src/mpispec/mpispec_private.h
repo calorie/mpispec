@@ -20,42 +20,46 @@
 #ifndef MPISPEC_PRIVATE_H
 #define MPISPEC_PRIVATE_H
 
-int MPISpec_StartRank();
-void MPISpec_EndRank();
+#include "mpispec_output.h"
 
-int MPISpec_StartRanks();
-void MPISpec_EndRanks();
+int MPISpec_StartRank(void);
+void MPISpec_EndRank(void);
 
-int MPISpec_ValidateRanks(int ranks[], const int size, int myrank);
+int MPISpec_StartRanks(void);
+void MPISpec_EndRanks(void);
 
-int MPISpec_StartDef();
-void MPISpec_EndDef();
+int MPISpec_ValidateRanks(int ranks[], const int size, int rank);
 
-int CSpec_StartDescribe(const char *descr);
-void CSpec_EndDescribe();
+int MPISpec_StartDef(void);
+void MPISpec_EndDef(void);
 
-int CSpec_StartIt(const char *descr);
-void CSpec_EndIt();
+int MPISpec_StartDescribe(const char *descr);
+void MPISpec_EndDescribe(void);
 
-int MPISpec_StartBefore();
-void MPISpec_EndBefore();
+int MPISpec_StartIt(const char *descr);
+void MPISpec_EndIt(void);
 
-int MPISpec_StartAfter();
-void MPISpec_EndAfter();
+int MPISpec_StartBefore(void);
+void MPISpec_EndBefore(void);
 
-void CSpec_End();
+int MPISpec_StartAfter(void);
+void MPISpec_EndAfter(void);
 
-void CSpec_Eval(const char *filename, int line_number,
-        const char *assertion, int assertionResult);
+void MPISpec_End(void);
 
-void CSpec_Pending(const char *reason);
+void MPISpec_Eval(const char *filename, int line_number,
+        const char *assertion, int assertion_result);
 
-#define CSPEC_EVAL(x)         { CSpec_Eval(__FILE__, __LINE__, #x, (x)); }
-#define CSPEC_PENDING(reason) { CSpec_Pending(reason); }
+void MPISpec_Pending(const char *reason);
 
-typedef void (*MPISpecTmpFunction)();
+void MPISpec_SetOutput(MPISpecOutputStruct *output);
 
-void MPISpec_set_before(MPISpecTmpFunction fun);
-void MPISpec_set_after(MPISpecTmpFunction fun);
+#define MPISPEC_EVAL(x)         { MPISpec_Eval(__FILE__, __LINE__, #x, (x)); }
+#define MPISPEC_PENDING(reason) { MPISpec_Pending(reason); }
+
+typedef void (*MPISpecTmpFunction)(void);
+
+void MPISpec_Set_Before(MPISpecTmpFunction fun);
+void MPISpec_Set_After(MPISpecTmpFunction fun);
 
 #endif

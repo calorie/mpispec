@@ -1,21 +1,21 @@
 #include "mpispec/mpispec.h"
 #include "../src/cpi.h"
 
-mpispec_def(cpi_spec)
-  describe("function cpi")
-    rank(0)
-      context("rank0")
-        it("return pi")
-          expect_to_equal_double(cpi(), 3.1415926535, 0.001)
-        end
-      end
-    end
-    ex_rank(0)
-      context("rank0")
-        it("return 0")
-          expect_to_equal_double(cpi(), 0.0, 0.001)
-        end
-      end
-    end
-  end
-end
+MPISPEC_DEF(cpi_spec)
+  DESCRIBE("function cpi")
+    RANK(0)
+      CONTEXT("rank0")
+        IT("return pi")
+          SHOULD_EQUAL_DOUBLE(cpi(), 3.1415926535, 0.001)
+        END
+      END
+    END
+    EX_RANK(0)
+      CONTEXT("rank0")
+        IT("return 0")
+          SHOULD_EQUAL_DOUBLE(cpi(), 0.0, 0.001)
+        END
+      END
+    END
+  END
+END

@@ -57,20 +57,17 @@ extern "C" {
 #endif
 
 typedef enum {
-  CU_BRM_NORMAL  = 0,
-  CU_BRM_SILENT  = 1,
-  CU_BRM_VERBOSE = 2
-} CU_BasicRunMode;
+  MPISPEC_NORMAL  = 0,
+  MPISPEC_SILENT  = 1,
+  MPISPEC_VERBOSE = 2
+} MPISPEC_MODE;
 
-void CU_basic_set_mode(CU_BasicRunMode mode);
-CU_BasicRunMode CU_basic_get_mode(void);
-void CU_basic_exit();
-
-void mpispec_make_result_file(int *myrank);
-void mpispec_run_summary(void);
-unsigned int mpispec_get_number_of_specs(void);
-unsigned int mpispec_get_number_of_successes(void);
-unsigned int mpispec_get_number_of_failures(void);
+void MPISpec_Basic_Set_Mode(MPISPEC_MODE mode);
+MPISPEC_MODE MPISpec_Basic_Get_Mode(void);
+void MPISpec_Basic_Setup(void);
+void MPISpec_Run_Summary(void);
+void MPISpec_Result_File_Close(void);
+void MPISpec_Display_Results(void);
 
 #ifdef __cplusplus
 }

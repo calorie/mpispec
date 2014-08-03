@@ -4,24 +4,24 @@
 
 int n = 1;
 
-mpispec_def(fabs_spec)
-  describe("function fabs")
-    context("arg is 0")
-      it("return same value")
-        expect_to_equal(fabs(0), 0)
-      end
-    end
+MPISPEC_DEF(fabs_spec)
+  DESCRIBE("function fabs")
+    CONTEXT("arg is 0")
+      IT("return same value")
+        SHOULD_EQUAL(fabs(0), 0)
+      END
+    END
 
-    context("arg is positive")
-      it("return same value")
-        expect_to_equal(fabs(n), n)
-      end
-    end
+    CONTEXT("arg is positive")
+      IT("return same value")
+        SHOULD_EQUAL(fabs(n), n)
+      END
+    END
 
-    context("arg is negative")
-      it("return positive value")
-        expect_to_equal(fabs(-n), n)
-      end
-    end
-  end
-end
+    CONTEXT("arg is negative")
+      IT("return positive value")
+        SHOULD_EQUAL(fabs(-n), n)
+      END
+    END
+  END
+END

@@ -28,25 +28,61 @@
 #include "mpispec_private_output_junit_xml.h"
 #include "mpispec_consts.h"
 
-static CSpecOutputStruct xml;
-static FILE *outputXmlFile = NULL;
-static int n_descrOutputs;
-static descrOutputs_t *descrOutputs;
+#define DESCRIBE_NUM 10
+#define IT_NUM 10
 
-static const char* const g_failure_message = "Failed";
-static const char* const g_failure_type = "";
+static MPISpecOutputStruct xml;
+static FILE *output_xml_file = NULL;
+static int desc_outputs_num;
+static MPISpecDescOutputStruct *desc_outputs;
 
-static char *descr_name_prefix_array[MPISPEC_MAX_NEST_NUM];
+static const char* const failure_message = "Failed";
+static const char* const failure_type = "";
 
-static void descrName(char **name, char *descr);
-static void descrPrefixName(char **prefix);
-static void pushDescrPrefixName(char *descr);
-static void popDescrPrefixName();
+static char *desc_name_prefix_array[MPISPEC_MAX_NEST_NUM];
+
+static void desc_name(char **name, char *descr);
+static void desc_prefix_name(char **prefix);
+static void push_desc_prefix_name(char *descr);
+static void pop_desc_prefix_name(void);
+
+static void start_describe_fun_junit_xml(const char *descr);
+static int start_describe_fun_junit_xml_expand_if_needed(void);
+static int start_describe_fun_junit_xml_init_descr(MPISpecDescOutputStruct* const target_descr, const char *descr);
+static void end_describe_fun_junit_xml(void);
+static void start_it_fun_junit_xml(const char *descr);
+static int start_it_fun_junit_xml_expand_if_needed(MPISpecDescOutputStruct* const target_descr);
+static int start_it_fun_junit_xml_init_it(MPISpecDescOutputStruct* const target_descr, const char* const descr);
+static int start_it_fun_junit_xml_set_descr(MPISpecItOutputStruct* const target_it, const char* const descr);
+static int start_it_fun_junit_xml_set_failure(MPISpecItOutputStruct* const target_it);
+static void end_it_fun_junit_xml(void);
+static void eval_fun_junit_xml(const char *filename, int line_number, const char *assertion, int assertionResult);
+static void pending_fun_junit_xml(const char *reason);
+
+static void output_header(const char *encoding);
+static void output_footer(void);
+static void output_describe(void);
+static void output_describe_header(const MPISpecDescOutputStruct* const descr);
+static void output_describe_main(const MPISpecDescOutputStruct* const descr);
+static void output_describe_footer(void);
+static void output_it(const MPISpecItOutputStruct* const it);
+static void output_it_header(const MPISpecItOutputStruct* const it);
+static void output_it_main(const MPISpecItOutputStruct* const it);
+static void output_it_footer(void);
+static int sumup_failure(const MPISpecDescOutputStruct* const p);
+static void destruct(void);
+static void destruct_descr(MPISpecDescOutputStruct* const descr);
+static void destruct_it(MPISpecItOutputStruct* const it);
+static void xml_file_close(void);
+static int is_failure_struct(const MPISpecFailureStruct* const fail);
+static void test_fails(const char *filename, int line_number, const char *assertion);
+static void add_failure(MPISpecFailureStruct *failure);
+
 
 void
 MPISpec_JUnitXmlFileOpen(const char *filename, const char *encoding)
 {
-    if (outputXmlFile != NULL)
+    if (output_xml_file != NULL)
         return;
 
     char xml_filename[MPISPEC_MAX_XML_FILENAME_LEN];
@@ -54,13 +90,13 @@ MPISpec_JUnitXmlFileOpen(const char *filename, const char *encoding)
     MPI_Comm_rank(MPI_COMM_WORLD, &myrank);
 
     sprintf(xml_filename, "rank%d_%s", myrank, filename);
-    outputXmlFile = fopen(xml_filename, "w");
+    output_xml_file = fopen(xml_filename, "w");
 
-    if (outputXmlFile == NULL)
+    if (output_xml_file == NULL)
         return;
 
-    n_descrOutputs = 0;
-    descrOutputs = NULL;
+    desc_outputs_num = 0;
+    desc_outputs = NULL;
 
     output_header(encoding);
 }
@@ -68,7 +104,7 @@ MPISpec_JUnitXmlFileOpen(const char *filename, const char *encoding)
 void
 MPISpec_JUnitXmlFileClose(void)
 {
-    if (outputXmlFile == NULL)
+    if (output_xml_file == NULL)
         return;
 
     output_describe();
@@ -82,23 +118,23 @@ MPISpec_JUnitXmlFileClose(void)
 void
 output_header(const char *encoding)
 {
-    fprintf(outputXmlFile, "<?xml version=\"1.0\" encoding=\"%s\" ?>\n", encoding);
-    fprintf(outputXmlFile, "<testsuites>\n");
+    fprintf(output_xml_file, "<?xml version=\"1.0\" encoding=\"%s\" ?>\n", encoding);
+    fprintf(output_xml_file, "<testsuites>\n");
 }
 
 void
-output_footer()
+output_footer(void)
 {
-    fprintf(outputXmlFile, "</testsuites>\n");
+    fprintf(output_xml_file, "</testsuites>\n");
 }
 
 void
-output_describe()
+output_describe(void)
 {
     int i;
-    for (i = 0; i < n_descrOutputs; ++i) {
-        const descrOutputs_t* const descr = descrOutputs + i;
-        if (descr->itOutputs == 0)
+    for (i = 0; i < desc_outputs_num; ++i) {
+        const MPISpecDescOutputStruct* const descr = desc_outputs + i;
+        if (descr->it_outputs == 0)
             continue;
 
         output_describe_header(descr);
@@ -108,42 +144,42 @@ output_describe()
 }
 
 void
-output_describe_header(const descrOutputs_t* const descr)
+output_describe_header(const MPISpecDescOutputStruct* const descr)
 {
     int n_failure = sumup_failure(descr);
-    fprintf(outputXmlFile,
+    fprintf(output_xml_file,
             "  <testsuite errors=\"0\" failures=\"%d\" name=\"%s\" tests=\"%d\">\n",
             n_failure,
             descr->descr,
-            descr->n_itOutputs);
+            descr->it_output_num);
 }
 
 void
-output_describe_main(const descrOutputs_t* const descr)
+output_describe_main(const MPISpecDescOutputStruct* const descr)
 {
     int j;
-    for (j = 0; j < descr->n_itOutputs; ++j)
-        output_it(descr->itOutputs + j);
+    for (j = 0; j < descr->it_output_num; ++j)
+        output_it(descr->it_outputs + j);
 }
 
 void
-output_describe_footer()
+output_describe_footer(void)
 {
-    fprintf(outputXmlFile, "  </testsuite>\n");
+    fprintf(output_xml_file, "  </testsuite>\n");
 }
 
 int
-sumup_failure(const descrOutputs_t* const descr)
+sumup_failure(const MPISpecDescOutputStruct* const descr)
 {
     int j;
     int sum = 0;
-    for (j = 0; j < descr->n_itOutputs; ++j)
-        sum += descr->itOutputs[j].failures->size;
+    for (j = 0; j < descr->it_output_num; ++j)
+        sum += descr->it_outputs[j].failures->size;
     return sum;
 }
 
 void
-output_it(const itOutputs_t* const it)
+output_it(const MPISpecItOutputStruct* const it)
 {
     output_it_header(it);
     output_it_main(it);
@@ -151,63 +187,54 @@ output_it(const itOutputs_t* const it)
 }
 
 void
-output_it_header(const itOutputs_t* const it)
+output_it_header(const MPISpecItOutputStruct* const it)
 {
-    fprintf(outputXmlFile,
+    fprintf(output_xml_file,
             "    <testcase name=\"%s\" assertions=\"%d\">\n",
             it->descr,
-            it->n_assert - it->n_pending);
+            it->assert_num - it->pending_num);
 }
 
 void
-output_it_main(const itOutputs_t* const it)
+output_it_main(const MPISpecItOutputStruct* const it)
 {
     size_t k;
 
     for (k = 0; k < it->failures->size; ++k) {
-        const failure_t* const fail = array_get_element(it->failures, k);
-        if (NULL == fail) {
-            fprintf(stderr,
-                    "[ERR] %s(%d) array_get_element(%p, %d) returns NULL\n",
-                    __FILE__,
-                    __LINE__,
-                    it->failures, (int) k);
-            destruct();
-            xml_file_close();
-            return;
-        }
+        const MPISpecFailureStruct* const fail = array_get_element(it->failures, k);
+        if (is_failure_struct(fail) < 0) return;
 
-        fprintf(outputXmlFile,
+        fprintf(output_xml_file,
                 "      <failure message=\"%s\" type=\"%s\">\n",
                 fail->message,
                 fail->type);
-        fprintf(outputXmlFile,
+        fprintf(output_xml_file,
                 "%s:%d: %s\n",
                 fail->fname,
                 fail->line,
                 fail->assertion_descr);
-        fprintf(outputXmlFile, "      </failure>\n");
+        fprintf(output_xml_file, "      </failure>\n");
     }
 }
 
 void
-output_it_footer()
+output_it_footer(void)
 {
-    fprintf(outputXmlFile, "    </testcase>\n");
+    fprintf(output_xml_file, "    </testcase>\n");
 }
 
 void
-destruct()
+destruct(void)
 {
     int i;
-    for (i = 0; i < n_descrOutputs; ++i)
-        destruct_descr(descrOutputs + i);
-    free(descrOutputs);
-    descrOutputs = NULL;
+    for (i = 0; i < desc_outputs_num; ++i)
+        destruct_descr(desc_outputs + i);
+    free(desc_outputs);
+    desc_outputs = NULL;
 }
 
 void
-destruct_descr(descrOutputs_t* const descr)
+destruct_descr(MPISpecDescOutputStruct* const descr)
 {
     if (NULL == descr)
         return;
@@ -217,17 +244,17 @@ destruct_descr(descrOutputs_t* const descr)
         free(descr->descr);
         descr->descr = NULL;
     }
-    if (NULL != descr->itOutputs) {
-        for (j = 0; j < descr->n_itOutputs; ++j)
-            destruct_it(descr->itOutputs + j);
-        free(descr->itOutputs);
-        descr->itOutputs = NULL;
+    if (NULL != descr->it_outputs) {
+        for (j = 0; j < descr->it_output_num; ++j)
+            destruct_it(descr->it_outputs + j);
+        free(descr->it_outputs);
+        descr->it_outputs = NULL;
     }
-    descr->n_itOutputs = 0;
+    descr->it_output_num = 0;
 }
 
 void
-destruct_it(itOutputs_t* const it)
+destruct_it(MPISpecItOutputStruct* const it)
 {
     if (NULL == it)
         return;
@@ -239,125 +266,125 @@ destruct_it(itOutputs_t* const it)
 }
 
 void
-xml_file_close()
+xml_file_close(void)
 {
-    int ret = fclose(outputXmlFile);
+    int ret = fclose(output_xml_file);
     if (0 != ret)
         fprintf(stderr, "[ERR] %s(%d) fclose() failed\n", __FILE__, __LINE__);
-    outputXmlFile = NULL;
+    output_xml_file = NULL;
 }
 
 void
-startDescribeFunJUnitXml(const char *descr)
+start_describe_fun_junit_xml(const char *descr)
 {
-    if (outputXmlFile == NULL)
+    if (output_xml_file == NULL)
         return;
 
     int ret;
-    ret = startDescribeFunJUnitXml_expand_if_needed();
+    ret = start_describe_fun_junit_xml_expand_if_needed();
     if (0 != ret)
         return;
 
-    ret = startDescribeFunJUnitXml_init_descr(descrOutputs + n_descrOutputs, descr);
+    ret = start_describe_fun_junit_xml_init_descr(desc_outputs + desc_outputs_num, descr);
     if (0 != ret)
         return;
 
-    ++n_descrOutputs;
+    ++desc_outputs_num;
 }
 
 int
-startDescribeFunJUnitXml_expand_if_needed()
+start_describe_fun_junit_xml_expand_if_needed(void)
 {
-    if (0 == (n_descrOutputs % N_DESCRIBE)) {
-        descrOutputs_t* p = realloc(descrOutputs, (n_descrOutputs + N_DESCRIBE) * sizeof(descrOutputs_t));
+    if (0 == (desc_outputs_num % DESCRIBE_NUM)) {
+        MPISpecDescOutputStruct* p = realloc(desc_outputs, (desc_outputs_num + DESCRIBE_NUM) * sizeof(MPISpecDescOutputStruct));
         if (NULL == p) {
             fprintf(stderr, "[ERR] %s(%d) realloc(%d * %d) failed\n", __FILE__, __LINE__,
-                    n_descrOutputs + N_DESCRIBE,
-                    (int) sizeof(descrOutputs_t));
+                    desc_outputs_num + DESCRIBE_NUM,
+                    (int) sizeof(MPISpecDescOutputStruct));
             destruct();
             xml_file_close();
             return -1;
         }
-        descrOutputs = p;
+        desc_outputs = p;
     }
     return 0;
 }
 
 int
-startDescribeFunJUnitXml_init_descr(descrOutputs_t* const target_descr, const char *descr)
+start_describe_fun_junit_xml_init_descr(MPISpecDescOutputStruct* const target_descr, const char *descr)
 {
     char *name = "";
     char *d    = strdup(descr);
 
-    descrName(&name, d);
+    desc_name(&name, d);
 
     target_descr->descr       = name;
-    target_descr->n_itOutputs = 0;
-    target_descr->itOutputs   = NULL;
-    pushDescrPrefixName(d);
+    target_descr->it_output_num = 0;
+    target_descr->it_outputs   = NULL;
+    push_desc_prefix_name(d);
     return 0;
 }
 
 void
-endDescribeFunJUnitXml(void)
+end_describe_fun_junit_xml(void)
 {
-    popDescrPrefixName();
+    pop_desc_prefix_name();
 }
 
 void
-startItFunJUnitXml(const char *descr)
+start_it_fun_junit_xml(const char *descr)
 {
-    if (outputXmlFile == NULL) return;
+    if (output_xml_file == NULL) return;
 
-    descrOutputs_t *target_descr;
+    MPISpecDescOutputStruct *target_descr;
     int ret;
 
-    target_descr = descrOutputs + (n_descrOutputs - 1);
-    ret = startItFunJUnitXml_expand_if_needed(target_descr);
+    target_descr = desc_outputs + (desc_outputs_num - 1);
+    ret = start_it_fun_junit_xml_expand_if_needed(target_descr);
     if (0 != ret) return;
 
-    ret = startItFunJUnitXml_init_it(target_descr, descr);
+    ret = start_it_fun_junit_xml_init_it(target_descr, descr);
     if (0 != ret) return;
 
-    ++(target_descr->n_itOutputs);
+    ++(target_descr->it_output_num);
 }
 
 int
-startItFunJUnitXml_expand_if_needed(descrOutputs_t* const target_descr)
+start_it_fun_junit_xml_expand_if_needed(MPISpecDescOutputStruct* const target_descr)
 {
-    if (0 == (target_descr->n_itOutputs % N_IT)) {
-        itOutputs_t *p = realloc(target_descr->itOutputs,
-                (target_descr->n_itOutputs + N_IT) * sizeof(itOutputs_t));
+    if (0 == (target_descr->it_output_num % IT_NUM)) {
+        MPISpecItOutputStruct *p = realloc(target_descr->it_outputs,
+                (target_descr->it_output_num + IT_NUM) * sizeof(MPISpecItOutputStruct));
         if (NULL == p) {
             fprintf(stderr, "[ERR] %s(%d) realloc(%d * %d) failed\n", __FILE__, __LINE__,
-                    target_descr->n_itOutputs + N_IT,
-                    (int) sizeof(itOutputs_t));
+                    target_descr->it_output_num + IT_NUM,
+                    (int) sizeof(MPISpecItOutputStruct));
             destruct();
             xml_file_close();
             return -1;
         }
-        target_descr->itOutputs = p;
+        target_descr->it_outputs = p;
     }
     return 0;
 }
 
 int
-startItFunJUnitXml_init_it(descrOutputs_t* const target_descr, const char* const descr)
+start_it_fun_junit_xml_init_it(MPISpecDescOutputStruct* const target_descr, const char* const descr)
 {
     int ret;
-    itOutputs_t *target_it = target_descr->itOutputs + target_descr->n_itOutputs;
+    MPISpecItOutputStruct *target_it = target_descr->it_outputs + target_descr->it_output_num;
 
-    target_it->n_assert = 0;
-    target_it->n_pending = 0;
-    ret = startItFunJUnitXml_set_descr(target_it, descr);
+    target_it->assert_num = 0;
+    target_it->pending_num = 0;
+    ret = start_it_fun_junit_xml_set_descr(target_it, descr);
     if (0 != ret) return -1;
-    ret = startItFunJUnitXml_set_failure(target_it);
+    ret = start_it_fun_junit_xml_set_failure(target_it);
     if (0 != ret) return -2;
     return 0;
 }
 
 int
-startItFunJUnitXml_set_descr(itOutputs_t* const target_it, const char* const descr)
+start_it_fun_junit_xml_set_descr(MPISpecItOutputStruct* const target_it, const char* const descr)
 {
     target_it->descr = strdup(descr);
     if (NULL == target_it->descr) {
@@ -370,11 +397,11 @@ startItFunJUnitXml_set_descr(itOutputs_t* const target_it, const char* const des
 }
 
 int
-startItFunJUnitXml_set_failure(itOutputs_t* const target_it)
+start_it_fun_junit_xml_set_failure(MPISpecItOutputStruct* const target_it)
 {
-    target_it->failures = array_new(sizeof(failure_t));
+    target_it->failures = array_new(sizeof(MPISpecFailureStruct));
     if (NULL == target_it->failures) {
-        fprintf(stderr, "[ERR] %s(%d) array_new(%d) failed\n", __FILE__, __LINE__, (int) sizeof(failure_t));
+        fprintf(stderr, "[ERR] %s(%d) array_new(%d) failed\n", __FILE__, __LINE__, (int) sizeof(MPISpecFailureStruct));
         destruct();
         xml_file_close();
         return -1;
@@ -383,83 +410,66 @@ startItFunJUnitXml_set_failure(itOutputs_t* const target_it)
 }
 
 void
-endItFunJUnitXml()
+end_it_fun_junit_xml(void)
 {
 }
 
 void
-evalFunJUnitXml(const char *filename, int line_number, const char *assertion, int assertionResult)
+eval_fun_junit_xml(const char *filename, int line_number, const char *assertion, int assertion_result)
 {
-    if (outputXmlFile == NULL) return;
+    if (output_xml_file == NULL) return;
 
-    ++(descrOutputs[n_descrOutputs - 1].itOutputs[descrOutputs[n_descrOutputs - 1].n_itOutputs - 1].n_assert);
+    ++(desc_outputs[desc_outputs_num - 1].it_outputs[desc_outputs[desc_outputs_num - 1].it_output_num - 1].assert_num);
 
-    if (! assertionResult) {
-        failure_t failure;
-        int ret;
-
-        failure.message         = g_failure_message;
-        failure.type            = g_failure_type;
-        failure.fname           = filename;
-        failure.line            = line_number;
-        failure.assertion_descr = assertion;
-        ret = array_add(descrOutputs[n_descrOutputs - 1].itOutputs[descrOutputs[n_descrOutputs - 1].n_itOutputs - 1].failures, &failure);
-        if (0 != ret) {
-            fprintf(stderr,
-                    "[ERR] %s(%d) array_add() failed (ret=%d,descrOutputs=%p,n_descrOutputs=%d,itOutputs=%p,n_itOutputs=%d,failures=%p)\n",
-                    __FILE__,
-                    __LINE__,
-                    ret,
-                    descrOutputs,
-                    n_descrOutputs,
-                    descrOutputs[n_descrOutputs - 1].itOutputs,
-                    descrOutputs[n_descrOutputs - 1].n_itOutputs,
-                    descrOutputs[n_descrOutputs - 1].itOutputs[descrOutputs[n_descrOutputs - 1].n_itOutputs - 1].failures);
-            destruct();
-            xml_file_close();
-        }
-    }
+    if (! assertion_result)
+        test_fails(filename, line_number, assertion);
 }
 
 void
-pendingFunJUnitXml(const char *reason)
+pending_fun_junit_xml(const char *reason)
 {
-    if (outputXmlFile == NULL) return;
-    ++(descrOutputs[n_descrOutputs - 1].itOutputs[descrOutputs[n_descrOutputs - 1].n_itOutputs - 1].n_pending);
+    if (output_xml_file == NULL) return;
+    ++(desc_outputs[desc_outputs_num - 1].it_outputs[desc_outputs[desc_outputs_num - 1].it_output_num - 1].pending_num);
 }
 
-CSpecOutputStruct*
-CSpec_NewOutputJUnitXml()
+MPISpecOutputStruct*
+MPISpec_NewOutputJUnitXml(void)
 {
-    CSpec_InitOutput(&xml);
+    MPISpec_InitOutput(&xml);
 
-    xml.startDescribeFun = startDescribeFunJUnitXml;
-    xml.endDescribeFun   = endDescribeFunJUnitXml;
-    xml.startItFun       = startItFunJUnitXml;
-    xml.endItFun         = endItFunJUnitXml;
-    xml.evalFun          = evalFunJUnitXml;
-    xml.pendingFun       = pendingFunJUnitXml;
+    xml.start_describe_fun = start_describe_fun_junit_xml;
+    xml.end_describe_fun   = end_describe_fun_junit_xml;
+    xml.start_it_fun       = start_it_fun_junit_xml;
+    xml.end_it_fun         = end_it_fun_junit_xml;
+    xml.eval_fun           = eval_fun_junit_xml;
+    xml.pending_fun        = pending_fun_junit_xml;
 
     return &xml;
 }
 
 static void
-descrName(char **name, char *descr)
+desc_name(char **name, char *descr)
 {
     char *prefix = "";
-    descrPrefixName(&prefix);
+    desc_prefix_name(&prefix);
     // [TODO] - remove asprintf
-    asprintf(name, "%s %s", prefix, descr);
+    if (asprintf(name, "%s %s", prefix, descr) < 0) {
+        printf("Couldn't combine prefix & description names.\n");
+        exit(-1);
+    }
 }
 
 static void
-descrPrefixName(char **prefix)
+desc_prefix_name(char **prefix)
 {
     int i;
     for(i = 0; i < MPISPEC_MAX_NEST_NUM; i++) {
-        if (descr_name_prefix_array[i] != NULL) {
+        if (desc_name_prefix_array[i] != NULL) {
             // [TODO] - remove asprintf
-            asprintf(prefix, "%s %s", *prefix, descr_name_prefix_array[i]);
+            if (asprintf(prefix, "%s %s", *prefix, desc_name_prefix_array[i]) < 0) {
+                printf("Couldn't combine prefix & description names.\n");
+                exit(-1);
+            }
         }
         else {
             break;
@@ -468,24 +478,70 @@ descrPrefixName(char **prefix)
 }
 
 static void
-pushDescrPrefixName(char *descr)
+push_desc_prefix_name(char *descr)
 {
     int i;
     for (i = 0; i < MPISPEC_MAX_NEST_NUM; i++) {
-        if (descr_name_prefix_array[i] == NULL) {
-            descr_name_prefix_array[i] = descr;
+        if (desc_name_prefix_array[i] == NULL) {
+            desc_name_prefix_array[i] = descr;
             break;
         }
     }
 }
 
 static void
-popDescrPrefixName()
+pop_desc_prefix_name(void)
 {
     int i;
     for (i = 1; i <= MPISPEC_MAX_NEST_NUM; i++)
-        if (descr_name_prefix_array[i] == NULL)
+        if (desc_name_prefix_array[i] == NULL)
             break;
-    if (descr_name_prefix_array[i - 1] != NULL)
-        descr_name_prefix_array[i - 1] = NULL;
+    if (desc_name_prefix_array[i - 1] != NULL)
+        desc_name_prefix_array[i - 1] = NULL;
+}
+
+int
+is_failure_struct(const MPISpecFailureStruct* const fail)
+{
+    if (fail != NULL) return 0;
+    fprintf(stderr,
+            "[ERR] %s(%d) array_get_element returns NULL\n",
+            __FILE__,
+            __LINE__);
+    destruct();
+    xml_file_close();
+    return -1;
+}
+
+void
+test_fails(const char *filename, int line_number, const char *assertion)
+{
+    MPISpecFailureStruct failure;
+
+    failure.message         = failure_message;
+    failure.type            = failure_type;
+    failure.fname           = filename;
+    failure.line            = line_number;
+    failure.assertion_descr = assertion;
+    add_failure(&failure);
+}
+
+void
+add_failure(MPISpecFailureStruct *failure)
+{
+    int ret;
+    ret = array_add(desc_outputs[desc_outputs_num - 1].it_outputs[desc_outputs[desc_outputs_num - 1].it_output_num - 1].failures, failure);
+    if (ret == 0) return;
+    fprintf(stderr,
+            "[ERR] %s(%d) array_add() failed (ret=%d,desc_outputs=%p,desc_outputs_num=%d,it_outputs=%p,it_output_num=%d,failures=%p)\n",
+            __FILE__,
+            __LINE__,
+            ret,
+            desc_outputs,
+            desc_outputs_num,
+            desc_outputs[desc_outputs_num - 1].it_outputs,
+            desc_outputs[desc_outputs_num - 1].it_output_num,
+            desc_outputs[desc_outputs_num - 1].it_outputs[desc_outputs[desc_outputs_num - 1].it_output_num - 1].failures);
+    destruct();
+    xml_file_close();
 }

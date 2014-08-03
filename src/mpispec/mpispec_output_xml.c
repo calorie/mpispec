@@ -26,163 +26,189 @@
 #include "mpispec_output_xml.h"
 #include "mpispec_consts.h"
 
-static CSpecOutputStruct xml;
-static FILE *outputXmlFile = NULL;
+static MPISpecOutputStruct xml;
+static FILE *output_xml_file = NULL;
 static int mpispec_tab_num = 0;
 
-static void fprintTab(int n);
+static void fprint_tab(int n);
+static void get_xml_file_name(char *xml_filename, const char *filename);
+static void write_behavior(const char *encoding);
+static void write_result(const char *filename, int line_number, const char *assertion, int assertion_result);
+static void test_success(const char *assertion);
+static void test_fails(const char *filename, int line_number, const char *assertion);
 
 void
 MPISpec_XmlFileOpen(const char *filename, const char *encoding)
 {
-    if (outputXmlFile != NULL) return;
+    if (output_xml_file != NULL) return;
 
-    time_t timeValue;
-    char   *timeStr;
-    char   xml_filename[MPISPEC_MAX_XML_FILENAME_LEN];
-    int    myrank;
-    MPI_Comm_rank(MPI_COMM_WORLD, &myrank);
+    char xml_filename[MPISPEC_MAX_XML_FILENAME_LEN];
+    get_xml_file_name(xml_filename, filename);
 
-    sprintf(xml_filename, "rank%d_%s", myrank, filename);
-    outputXmlFile = fopen(xml_filename, "w");
+    output_xml_file = fopen(xml_filename, "w");
+    if (output_xml_file == NULL) return;
 
-    if (outputXmlFile == NULL) return;
-
-    time(&timeValue);
-    timeStr = ctime(&timeValue);
-    timeStr[strlen(timeStr) - 1] = '\0';
-
-    fprintf(outputXmlFile, "<?xml version=\"1.0\" encoding=\"%s\" ?>\n", encoding);
-    fprintf(outputXmlFile, "<?xml-stylesheet type=\"text/xsl\" href=\"MPISpec-Run.xsl\" ?>\n");
-    fprintf(outputXmlFile, "<BEHAVIOUR timestump=\"%s\">\n", timeStr);
-    mpispec_tab_num++;
+    write_behavior(encoding);
 }
 
 void
 MPISpec_XmlFileClose(void)
 {
-    if (outputXmlFile == NULL) return;
+    if (output_xml_file == NULL) return;
 
     mpispec_tab_num--;
-    fprintTab(mpispec_tab_num);
-    fprintf(outputXmlFile, "</BEHAVIOUR>\n");
+    fprint_tab(mpispec_tab_num);
+    fprintf(output_xml_file, "</BEHAVIOUR>\n");
 
-    fclose(outputXmlFile);
+    fclose(output_xml_file);
 }
 
 
 void
-startDescribeFunXml(const char *descr)
+start_describe_fun_xml(const char *descr)
 {
-    if (outputXmlFile == NULL) return;
+    if (output_xml_file == NULL) return;
 
-    fprintTab(mpispec_tab_num);
-    fprintf(outputXmlFile, "<DESCRIBE>\n");
-    fprintTab(mpispec_tab_num + 1);
-    fprintf(outputXmlFile, "<DESCRIPTION><![CDATA[%s]]></DESCRIPTION>\n", descr);
+    fprint_tab(mpispec_tab_num);
+    fprintf(output_xml_file, "<DESCRIBE>\n");
+    fprint_tab(mpispec_tab_num + 1);
+    fprintf(output_xml_file, "<DESCRIPTION><![CDATA[%s]]></DESCRIPTION>\n", descr);
     mpispec_tab_num++;
 }
 
 void
-endDescribeFunXml(void)
+end_describe_fun_xml(void)
 {
-    if (outputXmlFile == NULL) return;
+    if (output_xml_file == NULL) return;
 
     mpispec_tab_num--;
-    fprintTab(mpispec_tab_num);
-    fprintf(outputXmlFile, "</DESCRIBE>\n");
+    fprint_tab(mpispec_tab_num);
+    fprintf(output_xml_file, "</DESCRIBE>\n");
 }
 
 void
-startItFunXml(const char *descr)
+start_it_fun_xml(const char *descr)
 {
-    if (outputXmlFile == NULL) return;
+    if (output_xml_file == NULL) return;
 
-    fprintTab(mpispec_tab_num);
-    fprintf(outputXmlFile, "<IT>\n");
-    fprintTab(mpispec_tab_num + 1);
-    fprintf(outputXmlFile, "<DESCRIPTION><![CDATA[it %s]]></DESCRIPTION>\n", descr);
+    fprint_tab(mpispec_tab_num);
+    fprintf(output_xml_file, "<IT>\n");
+    fprint_tab(mpispec_tab_num + 1);
+    fprintf(output_xml_file, "<DESCRIPTION><![CDATA[it %s]]></DESCRIPTION>\n", descr);
 }
 
 void
-endItFunXml()
+end_it_fun_xml(void)
 {
-    if (outputXmlFile == NULL) return;
+    if (output_xml_file == NULL) return;
 
-    fprintTab(mpispec_tab_num);
-    fprintf(outputXmlFile, "</IT>\n");
+    fprint_tab(mpispec_tab_num);
+    fprintf(output_xml_file, "</IT>\n");
 }
 
 void
-evalFunXml(const char *filename, int line_number, const char *assertion, int assertionResult)
+eval_fun_xml(const char *filename, int line_number, const char *assertion, int assertion_result)
 {
-    if (outputXmlFile == NULL) return;
+    if (output_xml_file == NULL) return;
 
     mpispec_tab_num++;
-    if (assertionResult) {
-        fprintTab(mpispec_tab_num);
-        fprintf(outputXmlFile, "<ASSERTION>\n");
+    fprint_tab(mpispec_tab_num);
+    fprintf(output_xml_file, "<ASSERTION>\n");
+    fprint_tab(mpispec_tab_num + 1);
 
-        fprintTab(mpispec_tab_num + 1);
-        fprintf(outputXmlFile, "<RESULT>OK</RESULT>\n");
-        fprintTab(mpispec_tab_num + 1);
-        fprintf(outputXmlFile, "<MESSAGE><![CDATA[%s]]></MESSAGE>\n", assertion);
+    write_result(filename, line_number, assertion, assertion_result);
 
-        fprintTab(mpispec_tab_num);
-        fprintf(outputXmlFile, "</ASSERTION>\n");
-    }
-    else {
-        fprintTab(mpispec_tab_num);
-        fprintf(outputXmlFile, "<ASSERTION>\n");
-
-        fprintTab(mpispec_tab_num + 1);
-        fprintf(outputXmlFile, "<RESULT>Failure</RESULT>\n");
-        fprintTab(mpispec_tab_num + 1);
-        fprintf(outputXmlFile, "<MESSAGE><![CDATA[%s in file %s at line %d]]></MESSAGE>\n", assertion, filename, line_number);
-
-        fprintTab(mpispec_tab_num);
-        fprintf(outputXmlFile, "</ASSERTION>\n");
-    }
+    fprint_tab(mpispec_tab_num);
+    fprintf(output_xml_file, "</ASSERTION>\n");
     mpispec_tab_num--;
 }
 
 void
-pendingFunXml(const char *reason)
+pending_fun_xml(const char *reason)
 {
-    if (outputXmlFile == NULL) return;
+    if (output_xml_file == NULL) return;
 
     mpispec_tab_num++;
-    fprintTab(mpispec_tab_num);
-    fprintf(outputXmlFile, "<ASSERTION>\n");
+    fprint_tab(mpispec_tab_num);
+    fprintf(output_xml_file, "<ASSERTION>\n");
 
-    fprintTab(mpispec_tab_num + 1);
-    fprintf(outputXmlFile, "<RESULT>Pending</RESULT>\n");
-    fprintTab(mpispec_tab_num + 1);
-    fprintf(outputXmlFile, "<MESSAGE><![CDATA[%s]]></MESSAGE>\n", reason);
+    fprint_tab(mpispec_tab_num + 1);
+    fprintf(output_xml_file, "<RESULT>Pending</RESULT>\n");
+    fprint_tab(mpispec_tab_num + 1);
+    fprintf(output_xml_file, "<MESSAGE><![CDATA[%s]]></MESSAGE>\n", reason);
 
-    fprintTab(mpispec_tab_num);
-    fprintf(outputXmlFile, "</ASSERTION>\n");
+    fprint_tab(mpispec_tab_num);
+    fprintf(output_xml_file, "</ASSERTION>\n");
 }
 
-CSpecOutputStruct *
-CSpec_NewOutputXml()
+MPISpecOutputStruct *
+MPISpec_NewOutputXml(void)
 {
-    CSpec_InitOutput(&xml);
+    MPISpec_InitOutput(&xml);
 
-    xml.startDescribeFun = startDescribeFunXml;
-    xml.endDescribeFun   = endDescribeFunXml;
-    xml.startItFun       = startItFunXml;
-    xml.endItFun         = endItFunXml;
-    xml.evalFun          = evalFunXml;
-    xml.pendingFun       = pendingFunXml;
+    xml.start_describe_fun = start_describe_fun_xml;
+    xml.end_describe_fun   = end_describe_fun_xml;
+    xml.start_it_fun       = start_it_fun_xml;
+    xml.end_it_fun         = end_it_fun_xml;
+    xml.eval_fun           = eval_fun_xml;
+    xml.pending_fun        = pending_fun_xml;
 
     return &xml;
 }
 
-static void
-fprintTab(int n)
+void
+get_xml_file_name(char *xml_filename, const char *filename)
+{
+    int rank;
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    sprintf(xml_filename, "rank%d_%s", rank, filename);
+}
+
+void 
+write_behavior(const char *encoding)
+{
+    time_t time_value;
+    char   *time_str;
+
+    time(&time_value);
+    time_str = ctime(&time_value);
+    time_str[strlen(time_str) - 1] = '\0';
+
+    fprintf(output_xml_file, "<?xml version=\"1.0\" encoding=\"%s\" ?>\n", encoding);
+    fprintf(output_xml_file, "<?xml-stylesheet type=\"text/xsl\" href=\"MPISpec-Run.xsl\" ?>\n");
+    fprintf(output_xml_file, "<BEHAVIOUR timestump=\"%s\">\n", time_str);
+    mpispec_tab_num++;
+}
+
+void
+fprint_tab(int n)
 {
     int i;
     for (i = 0; i < n; i++)
-        fprintf(outputXmlFile, MPISPEC_TAB);
+        fprintf(output_xml_file, MPISPEC_TAB);
+}
+
+void
+write_result(const char *filename, int line_number, const char *assertion, int assertion_result)
+{
+    if (assertion_result)
+        test_success(assertion);
+    else
+        test_fails(filename, line_number, assertion);
+}
+
+void
+test_success(const char *assertion)
+{
+    fprintf(output_xml_file, "<RESULT>OK</RESULT>\n");
+    fprint_tab(mpispec_tab_num + 1);
+    fprintf(output_xml_file, "<MESSAGE><![CDATA[%s]]></MESSAGE>\n", assertion);
+}
+
+void
+test_fails(const char *filename, int line_number, const char *assertion)
+{
+    fprintf(output_xml_file, "<RESULT>Failure</RESULT>\n");
+    fprint_tab(mpispec_tab_num + 1);
+    fprintf(output_xml_file, "<MESSAGE><![CDATA[%s in file %s at line %d]]></MESSAGE>\n", assertion, filename, line_number);
 }

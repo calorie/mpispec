@@ -23,111 +23,117 @@
 #include "mpispec_output_verbose.h"
 #include "mpispec_consts.h"
 
-static CSpecOutputStruct verbose;
-static int mpispec_tab_num = 0;
-MS_pRunSummary verbose_summary;
+typedef enum
+{
+  MPISPEC_COLOR_RED    = 1,
+  MPISPEC_COLOR_GREEN  = 2,
+  MPISPEC_COLOR_YELLOW = 3
+} MPISpec_Color;
 
-/* private functions */
-static void fprintTab(int n);
-static void coloredFprintf(CSpec_Color color, const char* format, ...);
-static int getAnsiColorCode(CSpec_Color color);
+static MPISpecOutputStruct verbose;
+static int mpispec_tab_num = 0;
+pMPISpecRunSummary verbose_summary;
+
+static void fprint_tab(int n);
+static void colored_fprintf(MPISpec_Color color, const char* format, ...);
+static int get_ansi_color_code(MPISpec_Color color);
 
 void
-startDefFunVerbose()
+start_def_fun_verbose(void)
 {
     verbose_summary = get_mpi_run_summary();
 }
 
 void
-endDefFunVerbose()
+end_def_fun_verbose(void)
 {
 }
 
 void
-startDescribeFunVerbose(const char *descr)
+start_describe_fun_verbose(const char *descr)
 {
-    fprintf(__mpiut_result_file__, "\n");
-    fprintTab(++mpispec_tab_num);
-    fprintf(__mpiut_result_file__, "%s\n", descr);
+    fprintf(MPISPEC_GLOBAL_FP, "\n");
+    fprint_tab(++mpispec_tab_num);
+    fprintf(MPISPEC_GLOBAL_FP, "%s\n", descr);
 }
 
 void
-endDescribeFunVerbose()
+end_describe_fun_verbose(void)
 {
     mpispec_tab_num--;
 }
 
 void
-startItFunVerbose(const char *descr)
+start_it_fun_verbose(const char *descr)
 {
-    fprintTab(++mpispec_tab_num);
-    fprintf(__mpiut_result_file__, "- %s\n", descr);
+    fprint_tab(++mpispec_tab_num);
+    fprintf(MPISPEC_GLOBAL_FP, "- %s\n", descr);
 }
 
 void
-endItFunVerbose()
+end_it_fun_verbose(void)
 {
     mpispec_tab_num--;
 }
 
 void
-endFunVerbose()
+end_fun_verbose(void)
 {
     mpispec_tab_num--;
 }
 
 void
-evalFunVerbose(const char *filename, int line_number,
-        const char *assertion, int assertionResult)
+eval_fun_verbose(const char *filename, int line_number,
+        const char *assertion, int assertion_result)
 {
-    fprintTab(mpispec_tab_num + 1);
+    fprint_tab(mpispec_tab_num + 1);
     verbose_summary->Total++;
-    if (assertionResult) {
+    if (assertion_result) {
         verbose_summary->Passed++;
-        coloredFprintf(CSPEC_COLOR_GREEN, "OK: %s\n", assertion, filename, line_number);
+        colored_fprintf(MPISPEC_COLOR_GREEN, "OK: %s\n", assertion, filename, line_number);
     }
     else {
-        coloredFprintf(CSPEC_COLOR_RED, "Failed: %s in file %s at line %d\n", assertion, filename, line_number);
+        colored_fprintf(MPISPEC_COLOR_RED, "Failed: %s in file %s at line %d\n", assertion, filename, line_number);
     }
 }
 
 void
-pendingFunVerbose(const char *reason)
+pending_fun_verbose(const char *reason)
 {
-    coloredFprintf(CSPEC_COLOR_YELLOW, "       Pending: %s\n", reason);
+    colored_fprintf(MPISPEC_COLOR_YELLOW, "       Pending: %s\n", reason);
 }
 
-CSpecOutputStruct*
-CSpec_NewOutputVerbose()
+MPISpecOutputStruct*
+MPISpec_NewOutputVerbose(void)
 {
-    CSpec_InitOutput(&verbose);
+    MPISpec_InitOutput(&verbose);
 
-    verbose.startDefFun      = startDefFunVerbose;
-    verbose.endDefFun        = endDefFunVerbose;
-    verbose.startDescribeFun = startDescribeFunVerbose;
-    verbose.endDescribeFun   = endDescribeFunVerbose;
-    verbose.startItFun       = startItFunVerbose;
-    verbose.endItFun         = endItFunVerbose;
-    verbose.endFun           = endFunVerbose;
-    verbose.evalFun          = evalFunVerbose;
-    verbose.pendingFun       = pendingFunVerbose;
+    verbose.start_def_fun      = start_def_fun_verbose;
+    verbose.end_def_fun        = end_def_fun_verbose;
+    verbose.start_describe_fun = start_describe_fun_verbose;
+    verbose.end_describe_fun   = end_describe_fun_verbose;
+    verbose.start_it_fun       = start_it_fun_verbose;
+    verbose.end_it_fun         = end_it_fun_verbose;
+    verbose.end_fun            = end_fun_verbose;
+    verbose.eval_fun           = eval_fun_verbose;
+    verbose.pending_fun        = pending_fun_verbose;
 
     return &verbose;
 }
 
 static int
-getAnsiColorCode(CSpec_Color color)
+get_ansi_color_code(MPISpec_Color color)
 {
     int color_code;
 
     switch (color) {
-        case CSPEC_COLOR_RED:
+        case MPISPEC_COLOR_RED:
             color_code = 31;
             break;
-        case CSPEC_COLOR_GREEN:
+        case MPISPEC_COLOR_GREEN:
             color_code = 32;
             break;
-        case CSPEC_COLOR_YELLOW:
+        case MPISPEC_COLOR_YELLOW:
             color_code = 33;
             break;
         default:
@@ -138,28 +144,28 @@ getAnsiColorCode(CSpec_Color color)
 }
 
 static void
-fprintTab(int n)
+fprint_tab(int n)
 {
     int i;
     for (i = 0; i < n; i++)
-        fprintf(__mpiut_result_file__, MPISPEC_TAB);
+        fprintf(MPISPEC_GLOBAL_FP, MPISPEC_TAB);
 }
 
 static void
-coloredFprintf(CSpec_Color color, const char* format, ...)
+colored_fprintf(MPISpec_Color color, const char* format, ...)
 {
     va_list args;
 
     va_start(args, format);
 
     /* Set color */
-    fprintf(__mpiut_result_file__, "\033[0;%dm", getAnsiColorCode(color));
+    fprintf(MPISPEC_GLOBAL_FP, "\033[0;%dm", get_ansi_color_code(color));
 
     /* Print Text */
-    vfprintf(__mpiut_result_file__, format, args);
+    vfprintf(MPISPEC_GLOBAL_FP, format, args);
 
     /* Reset color */
-    fprintf(__mpiut_result_file__, "\033[m");
+    fprintf(MPISPEC_GLOBAL_FP, "\033[m");
 
     va_end(args);
     return;

@@ -2,18 +2,18 @@
 #include "../src/cpi.h"
 #include "../src/integral.h"
 
-mpispec_init
+MPISPEC_INIT
 
   MPISpec_XmlRun(cpi_spec)
 
   int strcmp_spec_ranks[2] = {0, 1};
-  ex_ranks(strcmp_spec_ranks)
+  EX_RANKS(strcmp_spec_ranks)
     MPISpec_XmlRun(strcmp_spec)
     MPISpec_JUnitXmlRun(strcmp_spec)
-  end
+  END
 
-  rank(1)
+  RANK(1)
     MPISpec_VerboseRun(fabs_spec)
-  end
+  END
 
-mpispec_fin
+MPISPEC_FINALIZE

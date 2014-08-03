@@ -22,13 +22,15 @@
 
 #include "mpispec_output.h"
 
+static MPISpecRunSummary mpi_run_summary;
+
 void
-CSpec_InitOutput(CSpecOutputStruct *output)
+MPISpec_InitOutput(MPISpecOutputStruct *output)
 {
-    memset(output, 0, sizeof(CSpecOutputStruct));
+    memset(output, 0, sizeof(MPISpecOutputStruct));
 }
 
-MS_pRunSummary
+pMPISpecRunSummary
 get_mpi_run_summary(void)
 {
     return &mpi_run_summary;

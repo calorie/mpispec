@@ -19,13 +19,14 @@
  * MPISpec doesn't contain cspec.h. So, please see mpispec.h.
  */
 
-#include "mpispec.h"
+#include "mpispec_output.h"
+#include "mpispec_private.h"
+#include "mpispec_runner.h"
 
 int
-CSpec_Run(CSpecDescriptionFun fun, CSpecOutputStruct* output)
+MPISpec_Run(MPISpecDescFun fun, MPISpecOutputStruct* output)
 {
-    CSpec_SetOutput(output);
+    MPISpec_SetOutput(output);
     fun();
     return output->failed;
 }
-
