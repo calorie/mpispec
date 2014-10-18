@@ -4,7 +4,7 @@
 AC_PREREQ([2.69])
 AC_INIT([mpispec], [1.1.0], [s2g4t1n2@gmail.com])
 AC_CONFIG_AUX_DIR(config)
-AM_INIT_AUTOMAKE
+AM_INIT_AUTOMAKE([subdir-objects])
 
 AC_ARG_ENABLE(debug,
 [  --enable-debug          turn on debugging],
