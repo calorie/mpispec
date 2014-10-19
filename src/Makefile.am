@@ -17,6 +17,8 @@ mpispec/mpispec_private.c \
 mpispec/mpispec_output.c \
 mpispec/mpispec_output_junit_xml.c \
 mpispec/mpispec_output_xml.c \
+mpispec/mpispec_send.c \
+mpispec/mpispec_recv.c \
 mpispec/mpispec_isend.c \
 mpispec/mpispec_irecv.c \
 parson/parson.c \
