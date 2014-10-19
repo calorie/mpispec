@@ -16,6 +16,7 @@ MPISpec_Dispatch(void)
     MPISpec_Result_File_Close();
     MPI_Barrier(MPI_COMM_WORLD);
     MPISpec_Display_Results();
+    MPISpec_Redis_Disconnect();
     MPI_Finalize();
 }
 
