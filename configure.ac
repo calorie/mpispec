@@ -64,6 +64,5 @@ AC_CONFIG_FILES([Makefile
                  script/Makefile
                  script/mpispec
                  share/Makefile
-                 src/Makefile
-                 src/mpispec/Makefile])
+                 src/Makefile])
 AC_OUTPUT

@@ -1,48 +1,31 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <mpi.h>
-#include "parson/parson.h"
-#include "http-get/http-get.h"
+#include "mpispec/mpispec_redis.h"
 
-#define URL_MAX_LENGTH 128
+#define KEY_MAX_LENGTH 32
 
 int MPI_Recv(void *buf, int count, MPI_Datatype type, int source,
              int tag, MPI_Comm comm, MPI_Status *status)
 {
     int rank, cache = 0;
-    char url[URL_MAX_LENGTH];
-    http_get_response_t *res;
-    char *json = NULL;
-    JSON_Value *root_value;
-    JSON_Object *root;
+    char key[KEY_MAX_LENGTH];
+    if (getenv("MPISPEC_CACHE") != NULL) goto leave;
+
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    redisContext *redis = MPISpec_Redis_Connect();
+    if (redis == NULL) goto leave;
 
-    sprintf(url, "http://localhost:4567/send/get?from=%d&to=%d&tag=%d", source, rank, tag);
-    res = http_get(url);
-    if (res->status != 200) {
-        printf("[ERROR] API server not found.\n");
-        goto leave;
-    }
-
-    json = calloc(res->size + 1, 1);
-    if (!json) {
-        printf("[ERROR] JSON response not found.\n");
-        goto leave;
-    }
-    strncpy(json, res->data, res->size);
-
-    root_value = json_parse_string(json);
-    root = json_value_get_object(root_value);
-    if (json_object_get_boolean(root, "is_exist") == 1) {
+    sprintf(key, "mpispec:send:%d_%d_%d", source, rank, tag);
+    redisReply *res = redisCommand(redis, "EXISTS %s", key);
+    if ((int)res->integer == 1) {
         cache = 1;
-        *((int *)buf) = (int)json_object_get_number(root, "data");
+        res = redisCommand(redis, "GET %s", key);
+        *((int *)buf) = atoi(res->str);
         status = MPI_STATUS_IGNORE;
     }
-    json_value_free(root_value);
+    freeReplyObject(res);
 
 leave:
-    if (res) http_get_free(res);
-    if (json) free(json);
     return (cache == 1) ? MPI_SUCCESS : PMPI_Recv(buf, count, type, source, tag, comm, status);
 }

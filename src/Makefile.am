@@ -1,8 +1,7 @@
 
 # Time-stamp: <2007-11-14 22:32:38 shinya>
 
-# SUBDIRS = mpispec
-CFLAGS+=-finstrument-functions -rdynamic -Wall -lcurl -I.
+CFLAGS+=-finstrument-functions -rdynamic -Wall -lcurl -lhiredis -I.
 
 lib_LTLIBRARIES = libmpispec.la
 
@@ -21,6 +20,7 @@ mpispec/mpispec_send.c \
 mpispec/mpispec_recv.c \
 mpispec/mpispec_isend.c \
 mpispec/mpispec_irecv.c \
+mpispec/mpispec_redis.c \
 parson/parson.c \
 http-get/http-get.c
 
@@ -37,5 +37,6 @@ mpispec/mpispec_output_xml.h \
 mpispec/mpispec_private.h \
 mpispec/mpispec_private_output_junit_xml.h \
 mpispec/mpispec_runner.h \
+mpispec/mpispec_redis.h \
 parson/parson.h \
 http-get/http-get.h

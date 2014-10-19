@@ -36,6 +36,7 @@
 #include "mpispec_output_junit_xml.h"
 #include "mpispec_output_xml.h"
 #include "mpispec_runner.h"
+#include "mpispec_redis.h"
 
 void MPISpec_Setup(int argc, char **argv);
 void MPISpec_Dispatch(void);
@@ -66,7 +67,7 @@ int MPISpec_Rank(void);
 
 #define MPISPEC_INIT             \
   int                            \
-  main (int argc, char **argv) { \
+  main (int argc, char **argv, char **envp) { \
       MPISpec_Setup(argc, argv);
 
 #define MPISPEC_FINALIZE   \
