@@ -3,14 +3,28 @@ CFLAGS+=-finstrument-functions -rdynamic -Wall
 
 lib_LTLIBRARIES = libmpispec.la
 
-libmpispec_la_SOURCES = mpispec.c mpispec_basic.c \
-mpispec_output_verbose.c mpispec_runner.c \
-mpispec_config.c mpispec_private.c mpispec_output.c \
-mpispec_output_junit_xml.c mpispec_output_xml.c array.c
+libmpispec_la_SOURCES = \
+    array.c \
+    mpispec.c \
+    mpispec_basic.c \
+    mpispec_config.c \
+    mpispec_output.c \
+    mpispec_output_junit_xml.c \
+    mpispec_output_verbose.c \
+    mpispec_output_xml.c \
+    mpispec_private.c \
+    mpispec_runner.c
 
-pkginclude_HEADERS = array.h mpispec.h mpispec_basic.h \
-mpispec_config.h mpispec_consts.h mpispec_output.h \
-mpispec_output_junit_xml.h mpispec_output_verbose.h \
-mpispec_output_xml.h mpispec_private.h \
-mpispec_private_output_junit_xml.h \
-mpispec_runner.h
+pkginclude_HEADERS = \
+    array.h \
+    mpispec.h \
+    mpispec_basic.h \
+    mpispec_config.h \
+    mpispec_consts.h \
+    mpispec_output.h \
+    mpispec_output_junit_xml.h \
+    mpispec_output_verbose.h \
+    mpispec_output_xml.h \
+    mpispec_private.h \
+    mpispec_private_output_junit_xml.h \
+    mpispec_runner.h
