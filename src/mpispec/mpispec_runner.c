@@ -1,5 +1,6 @@
 /*
- *  MPISpec - A Behavior Driven Development Framework for MPI Programs, based on CUnit, CSpec and MPIUnit.
+ *  MPISpec - A Behavior Driven Development Framework for MPI Programs, based on
+ *CUnit, CSpec and MPIUnit.
  *
  *  License:    LGPL
  *  Author:     Yuu Shigetani
@@ -23,9 +24,7 @@
 #include "mpispec_private.h"
 #include "mpispec_runner.h"
 
-int
-MPISpec_Run(MPISpecDescFun fun, MPISpecOutputStruct* output)
-{
+int MPISpec_Run(MPISpecDescFun fun, MPISpecOutputStruct* output) {
     MPISpec_SetOutput(output);
     fun();
     return output->failed;

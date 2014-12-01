@@ -1,5 +1,6 @@
 /*
- *  MPISpec - A Behavior Driven Development Framework for MPI Programs, based on CUnit, CSpec and MPIUnit.
+ *  MPISpec - A Behavior Driven Development Framework for MPI Programs, based on
+ *CUnit, CSpec and MPIUnit.
  *
  *  License:    LGPL
  *  Author:     Yuu Shigetani
@@ -37,30 +38,30 @@ typedef void (*MPISpecOutputEndItFun)(void);
 
 typedef void (*MPISpecOutputEndFun)(void);
 
-typedef void (*MPISpecOutputEvalFun)(const char *filename, int line_number, const char *assertion, int assertionResult);
+typedef void (*MPISpecOutputEvalFun)(const char *filename, int line_number,
+                                     const char *assertion,
+                                     int assertionResult);
 typedef void (*MPISpecOutputPendingFun)(const char *reason);
 
-typedef struct
-{
-    MPISpecOutputStartDefFun      start_def_fun;
-    MPISpecOutputEndDefFun        end_def_fun;
+typedef struct {
+    MPISpecOutputStartDefFun start_def_fun;
+    MPISpecOutputEndDefFun end_def_fun;
 
     MPISpecOutputStartDescribeFun start_describe_fun;
-    MPISpecOutputEndDescribeFun   end_describe_fun;
+    MPISpecOutputEndDescribeFun end_describe_fun;
 
-    MPISpecOutputStartItFun       start_it_fun;
-    MPISpecOutputEndItFun         end_it_fun;
+    MPISpecOutputStartItFun start_it_fun;
+    MPISpecOutputEndItFun end_it_fun;
 
-    MPISpecOutputEndFun           end_fun;
+    MPISpecOutputEndFun end_fun;
 
-    MPISpecOutputEvalFun          eval_fun;
-    MPISpecOutputPendingFun       pending_fun;
+    MPISpecOutputEvalFun eval_fun;
+    MPISpecOutputPendingFun pending_fun;
 
     int failed;
 } MPISpecOutputStruct;
 
-typedef struct
-{
+typedef struct {
     unsigned int Passed;
     unsigned int Total;
 } MPISpecRunSummary;

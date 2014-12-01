@@ -1,5 +1,6 @@
 /*
- *  MPISpec - A Behavior Driven Development Framework for MPI Programs, based on CUnit, CSpec and MPIUnit.
+ *  MPISpec - A Behavior Driven Development Framework for MPI Programs, based on
+ *CUnit, CSpec and MPIUnit.
  *
  *  License:    LGPL
  *  Author:     Yuu Shigetani
@@ -71,67 +72,52 @@
 
 static double gettimeofday_sec(void);
 static void mpispec_make_result_file(int *myrank);
-static void get_total_results(unsigned int *total_specs, unsigned int *total_successes, unsigned int *total_fails);
-static void get_local_results(unsigned int *local_specs, unsigned int *local_successes, unsigned int *local_fails);
+static void get_total_results(unsigned int *total_specs,
+                              unsigned int *total_successes,
+                              unsigned int *total_fails);
+static void get_local_results(unsigned int *local_specs,
+                              unsigned int *local_successes,
+                              unsigned int *local_fails);
 static unsigned int mpispec_get_number_of_specs(void);
 static unsigned int mpispec_get_number_of_successes(void);
 static unsigned int mpispec_get_number_of_failures(void);
 static void display_results(int procs, unsigned int specs, unsigned int fails);
 static void display_test_results(int procs);
-static void display_successes_rate(int procs, unsigned int specs, unsigned int fails);
+static void display_successes_rate(int procs, unsigned int specs,
+                                   unsigned int fails);
 static void display_run_time(void);
 
 FILE *MPISPEC_GLOBAL_FP;
 static double test_start_time;
 static MPISPEC_MODE run_mode = MPISPEC_NORMAL;
 
-void
-MPISpec_Basic_Set_Mode(MPISPEC_MODE mode)
-{
-    run_mode = mode;
-}
+void MPISpec_Basic_Set_Mode(MPISPEC_MODE mode) { run_mode = mode; }
 
-MPISPEC_MODE
-MPISpec_Basic_Get_Mode(void)
-{
-    return run_mode;
-}
+MPISPEC_MODE MPISpec_Basic_Get_Mode(void) { return run_mode; }
 
-void
-MPISpec_Basic_Setup(void)
-{
+void MPISpec_Basic_Setup(void) {
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-    if (rank == 0)
-        test_start_time = gettimeofday_sec();
+    if (rank == 0) test_start_time = gettimeofday_sec();
 
     MPISpec_Basic_Set_Mode(MPISPEC_VERBOSE);
 
     mpispec_make_result_file(&rank);
 }
 
-void
-MPISpec_Run_Summary(void)
-{
+void MPISpec_Run_Summary(void) {
     pMPISpecRunSummary summary = get_mpi_run_summary();
 
-    fprintf(MPISPEC_GLOBAL_FP,"\n--Run Summary: Type      Total  Passed  Failed"
+    fprintf(MPISPEC_GLOBAL_FP,
+            "\n--Run Summary: Type      Total  Passed  Failed"
             "\n               tests  %8u%8u%8u\n",
-            summary->Total,
-            summary->Passed,
-            summary->Total - summary->Passed);
+            summary->Total, summary->Passed, summary->Total - summary->Passed);
 }
 
-void
-MPISpec_Result_File_Close(void)
-{
-    fclose(MPISPEC_GLOBAL_FP);
-}
+void MPISpec_Result_File_Close(void) { fclose(MPISPEC_GLOBAL_FP); }
 
-void
-MPISpec_Display_Results(void)
-{
+void MPISpec_Display_Results(void) {
     int rank, procs;
     unsigned int specs, successes, fails;
 
@@ -140,15 +126,12 @@ MPISpec_Display_Results(void)
 
     get_total_results(&specs, &successes, &fails);
 
-    if (rank != 0)
-        return;
+    if (rank != 0) return;
 
     display_results(procs, specs, fails);
 }
 
-void
-mpispec_make_result_file(int *myrank)
-{
+void mpispec_make_result_file(int *myrank) {
     char result_filename[32];
 
     MPI_Comm_rank(MPI_COMM_WORLD, myrank);
@@ -160,70 +143,56 @@ mpispec_make_result_file(int *myrank)
     fprintf(MPISPEC_GLOBAL_FP, "\nrank  %d:", *myrank);
 }
 
-unsigned int
-mpispec_get_number_of_specs(void)
-{
+unsigned int mpispec_get_number_of_specs(void) {
     return get_mpi_run_summary()->Total;
 }
 
-unsigned int
-mpispec_get_number_of_successes(void)
-{
+unsigned int mpispec_get_number_of_successes(void) {
     return get_mpi_run_summary()->Passed;
 }
 
-unsigned int
-mpispec_get_number_of_failures(void)
-{
+unsigned int mpispec_get_number_of_failures(void) {
     pMPISpecRunSummary summary = get_mpi_run_summary();
     return summary->Total - summary->Passed;
 }
 
-double
-gettimeofday_sec(void)
-{
+double gettimeofday_sec(void) {
     struct timeval tv;
     gettimeofday(&tv, NULL);
     return tv.tv_sec + tv.tv_usec * 1e-6;
 }
 
-void
-get_total_results(unsigned int *total_specs, unsigned int *total_successes, unsigned int *total_fails)
-{
+void get_total_results(unsigned int *total_specs, unsigned int *total_successes,
+                       unsigned int *total_fails) {
     unsigned int local_specs;
     unsigned int local_successes;
     unsigned int local_fails;
 
     get_local_results(&local_specs, &local_successes, &local_fails);
 
-    PMPI_Reduce(&local_specs, total_specs, 1, MPI_UNSIGNED,
-            MPI_SUM, 0, MPI_COMM_WORLD);
-    PMPI_Reduce(&local_successes, total_successes, 1, MPI_UNSIGNED,
-            MPI_SUM, 0, MPI_COMM_WORLD);
-    PMPI_Reduce(&local_fails, total_fails, 1, MPI_UNSIGNED,
-            MPI_SUM, 0, MPI_COMM_WORLD);
+    PMPI_Reduce(&local_specs, total_specs, 1, MPI_UNSIGNED, MPI_SUM, 0,
+                MPI_COMM_WORLD);
+    PMPI_Reduce(&local_successes, total_successes, 1, MPI_UNSIGNED, MPI_SUM, 0,
+                MPI_COMM_WORLD);
+    PMPI_Reduce(&local_fails, total_fails, 1, MPI_UNSIGNED, MPI_SUM, 0,
+                MPI_COMM_WORLD);
 }
 
-void
-get_local_results(unsigned int *local_specs, unsigned int *local_successes, unsigned int *local_fails)
-{
-    *local_specs     = mpispec_get_number_of_specs();
+void get_local_results(unsigned int *local_specs, unsigned int *local_successes,
+                       unsigned int *local_fails) {
+    *local_specs = mpispec_get_number_of_specs();
     *local_successes = mpispec_get_number_of_successes();
-    *local_fails     = mpispec_get_number_of_failures();
+    *local_fails = mpispec_get_number_of_failures();
 }
 
-void
-display_results(int procs, unsigned int specs, unsigned int fails)
-{
+void display_results(int procs, unsigned int specs, unsigned int fails) {
     display_test_results(procs);
     display_successes_rate(procs, specs, fails);
     display_run_time();
 }
 
-void
-display_test_results(int procs)
-{
-    int  i, ch;
+void display_test_results(int procs) {
+    int i, ch;
     char result_filename[32];
     FILE *fp;
 
@@ -241,9 +210,7 @@ display_test_results(int procs)
     }
 }
 
-void
-display_successes_rate(int procs, unsigned int specs, unsigned int fails)
-{
+void display_successes_rate(int procs, unsigned int specs, unsigned int fails) {
     int i;
     double rate;
 
@@ -258,8 +225,7 @@ display_successes_rate(int procs, unsigned int specs, unsigned int fails)
     fprintf(stdout, "[%3.0lf%%]\n", rate);
 }
 
-void
-display_run_time(void)
-{
-    fprintf(stdout, "\nRun Time: %f sec\n", gettimeofday_sec() - test_start_time);
+void display_run_time(void) {
+    fprintf(stdout, "\nRun Time: %f sec\n",
+            gettimeofday_sec() - test_start_time);
 }
