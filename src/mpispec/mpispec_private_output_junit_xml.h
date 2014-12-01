@@ -7,20 +7,20 @@ typedef struct {
     const char *message;
     const char *type;
     const char *fname;
-    int        line;
+    int line;
     const char *assertion_descr;
 } MPISpecFailureStruct;
 
 typedef struct {
-    int     assert_num;
-    int     pending_num;
-    char    *descr;
+    int assert_num;
+    int pending_num;
+    char *descr;
     array_t *failures;
 } MPISpecItOutputStruct;
 
 typedef struct {
-    char                  *descr;
-    int                   it_output_num;
+    char *descr;
+    int it_output_num;
     MPISpecItOutputStruct *it_outputs;
 } MPISpecDescOutputStruct;
 
