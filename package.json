@@ -1,0 +1,9 @@
+{
+  "name": "mpispec",
+  "version": "1.1.0",
+  "repo": "calorie/mpispec",
+  "dependencies": {
+    "clibs/hash": "*"
+  },
+  "install": "make install"
+}
