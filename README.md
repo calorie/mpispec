@@ -4,7 +4,7 @@ A Behavior Driven Development Framework for MPI Programs, based on CUnit, CSpec 
 
 ## requirements
 
-- MPICH >= 1.2.0 or OpenMPI
+- OpenMPI
 
 ## install
 
