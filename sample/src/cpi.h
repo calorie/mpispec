@@ -4,7 +4,6 @@
 #ifndef CPI_H
 #define CPI_H
 
-double
-cpi();
+double cpi();
 
 #endif

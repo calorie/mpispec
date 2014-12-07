@@ -1,4 +1,5 @@
 #include "mpispec/mpispec.h"
+#include "../src/async.h"
 #include "../src/cpi.h"
 #include "../src/integral.h"
 
@@ -15,5 +16,7 @@ MPISPEC_INIT
   RANK(1)
     MPISpec_VerboseRun(fabs_spec)
   END
+
+  MPISpec_VerboseRun(async_spec)
 
 MPISPEC_FINALIZE
