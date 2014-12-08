@@ -28,53 +28,44 @@
 #include <stdio.h>
 #include <math.h>
 
-static double
-f(double x)
-{
-  return (4.0 / (1.0 + x * x));
-}
+static double f(double x) { return (4.0 / (1.0 + x * x)); }
 
-double
-cpi()
-{
-  int done = 0, n, myid, numprocs, i;
-  double mypi, pi, h, sum, x;
+double cpi() {
+    int done = 0, n, myid, numprocs, i;
+    double mypi, pi, h, sum, x;
 
-  MPI_Comm_size(MPI_COMM_WORLD, &numprocs);
-  MPI_Comm_rank(MPI_COMM_WORLD, &myid);
+    MPI_Comm_size(MPI_COMM_WORLD, &numprocs);
+    MPI_Comm_rank(MPI_COMM_WORLD, &myid);
 
-  n = 0;
-  while (!done) {
-    if (myid == 0) {
-      if (n == 0) {
-        n=10;
-      }
-      else {
-        n=0;
-      }
+    n = 0;
+    while (!done) {
+        if (myid == 0) {
+            if (n == 0) {
+                n = 10;
+            } else {
+                n = 0;
+            }
+        }
+        MPI_Bcast(&n, 1, MPI_INT, 0, MPI_COMM_WORLD);
+        if (n == 0) {
+            done = 1;
+        } else {
+            h = 1.0 / (double)n;
+            sum = 0.0;
+            for (i = myid + 1; i <= n; i += numprocs) {
+                x = h * ((double)i - 0.5);
+                sum += f(x);
+            }
+            mypi = h * sum;
+
+            MPI_Reduce(&mypi, &pi, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+
+            if (myid == 0) {
+                return pi;
+            } else {
+                return 0.0;
+            }
+        }
     }
-    MPI_Bcast(&n, 1, MPI_INT, 0, MPI_COMM_WORLD);
-    if (n == 0) {
-      done = 1;
-    }
-    else {
-      h   = 1.0 / (double) n;
-      sum = 0.0;
-      for (i = myid + 1; i <= n; i += numprocs) {
-        x = h * ((double)i - 0.5);
-        sum += f(x);
-      }
-      mypi = h * sum;
-
-      MPI_Reduce(&mypi, &pi, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
-
-      if (myid == 0) {
-        return pi;
-      }
-      else {
-        return 0.0;
-      }
-    }
-  }
-  return 0.0;
+    return 0.0;
 }

@@ -17,4 +17,10 @@ reinstall:	FORCE
 sample:	FORCE
 	cd sample ; mpispec -np 3
 
+format:	FORCE
+	clang-format-3.5 -i -style="{BasedOnStyle: Google, IndentWidth: 4}" src/mpispec/*.c src/mpispec/*.h sample/src/*.c sample/src/*.h
+
+deps:	FORCE
+	clib install -o src
+
 FORCE:

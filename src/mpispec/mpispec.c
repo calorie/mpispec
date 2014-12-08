@@ -1,8 +1,11 @@
 #include "mpispec.h"
+#include "mpispec_comm_world.h"
+#include "mpispec_hash.h"
 
 void MPISpec_Setup(int argc, char **argv) {
     MPI_Init(&argc, &argv);
     MPISpec_Basic_Setup();
+    MPISpec_Comm_World();
 }
 
 void MPISpec_Dispatch(void) {
@@ -12,6 +15,8 @@ void MPISpec_Dispatch(void) {
     MPISpec_Result_File_Close();
     MPI_Barrier(MPI_COMM_WORLD);
     MPISpec_Display_Results();
+    MPISpec_Hash_Del();
+    MPISpec_Comm_World_Free();
     MPI_Finalize();
 }
 

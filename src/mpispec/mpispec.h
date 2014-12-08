@@ -37,6 +37,7 @@
 #include "mpispec_output_junit_xml.h"
 #include "mpispec_output_xml.h"
 #include "mpispec_runner.h"
+#include "mpispec_stub.h"
 
 void MPISpec_Setup(int argc, char **argv);
 void MPISpec_Dispatch(void);
@@ -192,6 +193,9 @@ int MPISpec_Rank(void);
 #define SHOULD_NOT_BE_NULL(x) MPISPEC_EVAL((x) != 0)
 
 #define SHOULD_PENDING(reason) MPISPEC_PENDING(reason)
+
+#define STUB_NON_BLOCKING_P2P(data, from, to, tag) \
+    MPISpec_Stub(data, from, to, tag);
 
 #endif
 

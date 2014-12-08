@@ -1,17 +1,8 @@
 #include "mpispec/mpispec.h"
 #include "../src/integral.h"
 
-static double
-f(double x)
-{
-  return x;
-}
-
-static double
-pi_func(double x)
-{
-  return 4.0 / (1.0 + x * x);
-}
+static double f(double x) { return x; }
+static double pi_func(double x) { return 4.0 / (1.0 + x * x); }
 
 MPISPEC_DEF(integral_spec)
   DESCRIBE("integral function")
