@@ -194,8 +194,8 @@ int MPISpec_Rank(void);
 
 #define SHOULD_PENDING(reason) MPISPEC_PENDING(reason)
 
-#define STUB_IRECV(data, from, to, tag) MPISpec_Stub(data, from, to, tag);
-#define STUB_ISEND(data, from, to, tag) STUB_IRECV(data, from, to, tag)
+#define STUB_NON_BLOCKING_P2P(data, from, to, tag) \
+    MPISpec_Stub(data, from, to, tag);
 
 #endif
 
