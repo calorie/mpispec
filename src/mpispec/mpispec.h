@@ -4,7 +4,6 @@
  *
  *  License:    LGPL
  *  Author:     Yuu Shigetani
- *  Time-stamp: 2014/01/17 05:50:31
  */
 
 /* Time-stamp: <2007-11-14 22:36:36 shinya> */

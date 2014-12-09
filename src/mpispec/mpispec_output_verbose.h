@@ -1,13 +1,4 @@
 /*
- *  MPISpec - A Behavior Driven Development Framework for MPI Programs, based on
- *CUnit, CSpec and MPIUnit.
- *
- *  License:    LGPL
- *  Author:     Yuu Shigetani
- *  Time-stamp: 2014/01/17 06:04:05
- */
-
-/*
  *  cspec_output_verbose.h   :  Declaration of the verbose output
  *
  * See copyright notice in cspec.h
