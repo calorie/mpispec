@@ -2,7 +2,7 @@
 # Time-stamp: <2007-11-14 22:32:38 shinya>
 
 CC=mpicc
-CFLAGS+=-finstrument-functions -rdynamic -Wall -Ihash -Impispec
+CFLAGS+=-rdynamic -Wall -Ihash -Impispec
 
 lib_LTLIBRARIES = libmpispec.la
 
