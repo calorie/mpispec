@@ -10,11 +10,12 @@
  */
 
 #include <stdio.h>
-#include "mpispec_private.h"
-#include "mpispec_output.h"
 #include "mpispec_consts.h"
+#include "mpispec_output.h"
+#include "mpispec_private.h"
 
 #define MPISPEC_MAX_ACTION_ARRAY_SIZE 64
+#define MPISPEC_MAX_RANKS_NUM 1024
 
 typedef void (*MPISpecActionArray[MPISPEC_MAX_NEST_NUM]
                                  [MPISPEC_MAX_ACTION_ARRAY_SIZE])(void);

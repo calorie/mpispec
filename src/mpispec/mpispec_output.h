@@ -59,7 +59,7 @@ typedef struct {
 
 typedef MPISpecRunSummary *pMPISpecRunSummary;
 
-pMPISpecRunSummary get_mpi_run_summary(void);
+pMPISpecRunSummary MPISpec_Get_Run_Summary(void);
 void MPISpec_InitOutput(MPISpecOutputStruct *output);
 
 #endif

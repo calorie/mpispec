@@ -9,14 +9,13 @@
  * MPISpec doesn't contain cspec.h. So, please see mpispec.h.
  */
 
+#include <mpi.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
-#include <mpi.h>
-
-#include "mpispec_output_xml.h"
 #include "mpispec_consts.h"
+#include "mpispec_output_xml.h"
 
 static MPISpecOutputStruct xml;
 static FILE *output_xml_file = NULL;

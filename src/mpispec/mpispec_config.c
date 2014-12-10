@@ -16,9 +16,8 @@
  * MPISpec doesn't contain cspec.h. So, please see mpispec.h.
  */
 
-#include <string.h>
 #include <math.h>
-
+#include <string.h>
 #include "mpispec_config.h"
 
 int MPISpec_Strcmp(const char *str1, const char *str2) {

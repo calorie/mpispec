@@ -1,6 +1,6 @@
 #include <mpi.h>
-#include <stdio.h>
 #include <stdbool.h>
+#include <stdio.h>
 #include <ompi/request/request.h>
 #include "mpispec_comm_world.h"
 

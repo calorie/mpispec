@@ -1,6 +1,6 @@
+#include <mpi.h>
 #include <stdio.h>
 #include <string.h>
-#include <mpi.h>
 #include "mpispec_hash.h"
 #include "mpispec_stub.h"
 

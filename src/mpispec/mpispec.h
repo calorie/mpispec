@@ -28,13 +28,11 @@
 #include <mpi.h>
 #include <stdlib.h>
 #include <string.h>
-#include "mpispec_basic.h"
 #include "mpispec_config.h"
-#include "mpispec_private.h"
-#include "mpispec_output.h"
-#include "mpispec_output_verbose.h"
 #include "mpispec_output_junit_xml.h"
+#include "mpispec_output_verbose.h"
 #include "mpispec_output_xml.h"
+#include "mpispec_private.h"
 #include "mpispec_runner.h"
 #include "mpispec_stub.h"
 

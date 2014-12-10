@@ -1,5 +1,5 @@
-#include <stdlib.h>
 #include <mpi.h>
+#include <stdlib.h>
 #include "mpispec_comm_world.h"
 
 MPI_Comm *MPISpec_Comm_World() {

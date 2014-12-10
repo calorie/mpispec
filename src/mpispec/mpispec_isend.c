@@ -1,5 +1,5 @@
-#include <stdio.h>
 #include <mpi.h>
+#include <stdio.h>
 #include "mpispec_comm_world.h"
 #include "mpispec_hash.h"
 

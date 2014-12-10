@@ -12,9 +12,8 @@
 
 #include <stdarg.h>
 #include <stdio.h>
-
-#include "mpispec_output_verbose.h"
 #include "mpispec_consts.h"
+#include "mpispec_output_verbose.h"
 
 typedef enum {
     MPISPEC_COLOR_RED = 1,
@@ -30,7 +29,7 @@ static void fprint_tab(int n);
 static void colored_fprintf(MPISpec_Color color, const char *format, ...);
 static int get_ansi_color_code(MPISpec_Color color);
 
-void start_def_fun_verbose(void) { verbose_summary = get_mpi_run_summary(); }
+void start_def_fun_verbose(void) { verbose_summary = MPISpec_Get_Run_Summary(); }
 
 void end_def_fun_verbose(void) {}
 

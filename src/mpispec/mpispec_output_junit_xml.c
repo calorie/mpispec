@@ -11,14 +11,13 @@
 
 #define _GNU_SOURCE
 
+#include <mpi.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <mpi.h>
-
+#include "mpispec_consts.h"
 #include "mpispec_output_junit_xml.h"
 #include "mpispec_private_output_junit_xml.h"
-#include "mpispec_consts.h"
 
 #define DESCRIBE_NUM 10
 #define IT_NUM 10

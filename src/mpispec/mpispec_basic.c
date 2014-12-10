@@ -51,11 +51,11 @@
  * @{
  */
 
+#include <mpi.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 #include <sys/time.h>
-#include <mpi.h>
+#include <time.h>
 #include "mpispec_basic.h"
 #include "mpispec_output.h"
 
@@ -80,11 +80,6 @@ static void display_run_time(void);
 
 FILE *MPISPEC_GLOBAL_FP;
 static double test_start_time;
-static MPISPEC_MODE run_mode = MPISPEC_NORMAL;
-
-void MPISpec_Basic_Set_Mode(MPISPEC_MODE mode) { run_mode = mode; }
-
-MPISPEC_MODE MPISpec_Basic_Get_Mode(void) { return run_mode; }
 
 void MPISpec_Basic_Setup(void) {
     int rank;
@@ -92,13 +87,11 @@ void MPISpec_Basic_Setup(void) {
 
     if (rank == 0) test_start_time = gettimeofday_sec();
 
-    MPISpec_Basic_Set_Mode(MPISPEC_VERBOSE);
-
     mpispec_make_result_file(&rank);
 }
 
 void MPISpec_Run_Summary(void) {
-    pMPISpecRunSummary summary = get_mpi_run_summary();
+    pMPISpecRunSummary summary = MPISpec_Get_Run_Summary();
 
     fprintf(MPISPEC_GLOBAL_FP,
             "\n--Run Summary: Type      Total  Passed  Failed"
@@ -135,15 +128,15 @@ void mpispec_make_result_file(int *myrank) {
 }
 
 unsigned int mpispec_get_number_of_specs(void) {
-    return get_mpi_run_summary()->Total;
+    return MPISpec_Get_Run_Summary()->Total;
 }
 
 unsigned int mpispec_get_number_of_successes(void) {
-    return get_mpi_run_summary()->Passed;
+    return MPISpec_Get_Run_Summary()->Passed;
 }
 
 unsigned int mpispec_get_number_of_failures(void) {
-    pMPISpecRunSummary summary = get_mpi_run_summary();
+    pMPISpecRunSummary summary = MPISpec_Get_Run_Summary();
     return summary->Total - summary->Passed;
 }
 

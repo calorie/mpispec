@@ -48,14 +48,6 @@
 extern "C" {
 #endif
 
-typedef enum {
-    MPISPEC_NORMAL = 0,
-    MPISPEC_SILENT = 1,
-    MPISPEC_VERBOSE = 2
-} MPISPEC_MODE;
-
-void MPISpec_Basic_Set_Mode(MPISPEC_MODE mode);
-MPISPEC_MODE MPISpec_Basic_Get_Mode(void);
 void MPISpec_Basic_Setup(void);
 void MPISpec_Run_Summary(void);
 void MPISpec_Result_File_Close(void);
