@@ -1,6 +1,7 @@
 SUBDIRS = src script share
 
 runtest:	FORCE
+	make format
 	make all
 	sudo make install
 	make sample
@@ -15,7 +16,7 @@ sample:	FORCE
 	cd sample ; mpispec -np 3
 
 format:	FORCE
-	clang-format-3.5 -i -style="{BasedOnStyle: Google, IndentWidth: 4}" src/mpispec/*.c src/mpispec/*.h sample/src/*.c sample/src/*.h
+	find src/mpispec sample/src -type f -name '*.c' -o -name '*.h' -a ! -name 'mpispec.h' | xargs clang-format -i -style=file
 
 deps:	FORCE
 	clib install -o src

@@ -43,7 +43,7 @@ $ apt-get install binutils
 ### clang-format
 
 ```
-$ clang-format-3.5 -i -style="{BasedOnStyle: Google, IndentWidth: 4}" src/mpispec/*.c src/mpispec/*.h sample/src/*.c sample/src/*.h
+$ make format
 ```
 
 ### clib
