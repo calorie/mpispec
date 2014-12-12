@@ -7,12 +7,11 @@
  */
 
 /*
- * MPISpec doesn't contain cspec.h. So, please see mpispec.h.
+ * MPISpec doesn't contain cspec.h. please see mpispec.h.
  */
 
 #include <stdarg.h>
 #include <stdio.h>
-#include "mpispec_consts.h"
 #include "mpispec_output_verbose.h"
 
 typedef enum {

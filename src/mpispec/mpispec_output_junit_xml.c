@@ -6,7 +6,7 @@
  */
 
 /*
- * MPISpec doesn't contain cspec.h. So, please see mpispec.h.
+ * MPISpec doesn't contain cspec.h. please see mpispec.h.
  */
 
 #define _GNU_SOURCE
@@ -15,9 +15,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "mpispec_consts.h"
 #include "mpispec_output_junit_xml.h"
 #include "mpispec_private_output_junit_xml.h"
+#include "mpispec_util.h"
 
 #define DESCRIBE_NUM 10
 #define IT_NUM 10
@@ -80,10 +80,8 @@ void MPISpec_JUnitXmlFileOpen(const char *filename, const char *encoding) {
     if (output_xml_file != NULL) return;
 
     char xml_filename[MPISPEC_MAX_XML_FILENAME_LEN];
-    int myrank;
-    MPI_Comm_rank(MPI_COMM_WORLD, &myrank);
 
-    sprintf(xml_filename, "rank%d_%s", myrank, filename);
+    sprintf(xml_filename, "rank%d_%s", MPISpec_Rank(), filename);
     output_xml_file = fopen(xml_filename, "w");
 
     if (output_xml_file == NULL) return;

@@ -25,9 +25,11 @@
 #ifndef MPISPEC_H
 #define MPISPEC_H
 
+#include <math.h>
 #include <mpi.h>
 #include <stdlib.h>
 #include <string.h>
+#include "mpispec_basic.h"
 #include "mpispec_config.h"
 #include "mpispec_output_junit_xml.h"
 #include "mpispec_output_verbose.h"
@@ -35,10 +37,7 @@
 #include "mpispec_private.h"
 #include "mpispec_runner.h"
 #include "mpispec_stub.h"
-
-void MPISpec_Setup(int argc, char **argv);
-void MPISpec_Dispatch(void);
-int MPISpec_Rank(void);
+#include "mpispec_util.h"
 
 /*               */
 /* Public macros */
@@ -64,10 +63,10 @@ int MPISpec_Rank(void);
 
 #define MPISPEC_INIT                  \
     int main(int argc, char **argv) { \
-        MPISpec_Setup(argc, argv);
+        MPISpec_Init(argc, argv);
 
 #define MPISPEC_FINALIZE \
-    MPISpec_Dispatch();  \
+    MPISpec_Finalize();  \
     return EXIT_SUCCESS; \
     }
 
@@ -178,15 +177,15 @@ int MPISpec_Rank(void);
 #define SHOULD_BE_TRUE(x) MPISPEC_EVAL((x))
 #define SHOULD_EQUAL(x, y) MPISPEC_EVAL((x) == (y))
 #define SHOULD_EQUAL_DOUBLE(x, y, delta) \
-    MPISPEC_EVAL(MPISpec_Fabs((x) - (y)) <= delta)
-#define SHOULD_MATCH(x, y) MPISPEC_EVAL(MPISpec_Strcmp(x, y) == 0)
+    MPISPEC_EVAL(fabs((x) - (y)) <= delta)
+#define SHOULD_MATCH(x, y) MPISPEC_EVAL(strcmp(x, y) == 0)
 #define SHOULD_BE_NULL(x) MPISPEC_EVAL((x) == 0)
 
 #define SHOULD_BE_FALSE(x) MPISPEC_EVAL(!(x))
 #define SHOULD_NOT_EQUAL(x, y) MPISPEC_EVAL((x) != (y))
 #define SHOULD_NOT_EQUAL_DOUBLE(x, y, delta) \
-    MPISPEC_EVAL(MPISpec_Fabs((x) - (y)) > delta)
-#define SHOULD_NOT_MATCH(x, y) MPISPEC_EVAL(MPISpec_Strcmp(x, y) != 0)
+    MPISPEC_EVAL(fabs((x) - (y)) > delta)
+#define SHOULD_NOT_MATCH(x, y) MPISPEC_EVAL(strcmp(x, y) != 0)
 #define SHOULD_NOT_BE_NULL(x) MPISPEC_EVAL((x) != 0)
 
 #define SHOULD_PENDING(reason) MPISPEC_PENDING(reason)
