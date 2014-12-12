@@ -4,7 +4,7 @@ A Behavior Driven Development Framework for MPI Programs, based on CUnit, CSpec 
 
 ## Requirements
 
-- OpenMPI
+- [OpenMPI](http://www.open-mpi.org)
 
 ## Install
 
@@ -40,13 +40,13 @@ $ apt-get install binutils
 
 ## Development
 
-### clang-format
+### [clang-format](http://clang.llvm.org/docs/ClangFormat.html)
 
 ```
 $ make format
 ```
 
-### clib
+### [clib](https://github.com/clibs/clib)
 
 ```
 $ clib install -o src
