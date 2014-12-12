@@ -6,7 +6,7 @@
  */
 
 /*
- * MPISpec doesn't contain cspec.h. So, please see mpispec.h.
+ * MPISpec doesn't contain cspec.h. please see mpispec.h.
  */
 
 #include <mpi.h>
@@ -14,8 +14,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
-#include "mpispec_consts.h"
 #include "mpispec_output_xml.h"
+#include "mpispec_util.h"
 
 static MPISpecOutputStruct xml;
 static FILE *output_xml_file = NULL;
@@ -134,9 +134,7 @@ MPISpecOutputStruct *MPISpec_NewOutputXml(void) {
 }
 
 void get_xml_file_name(char *xml_filename, const char *filename) {
-    int rank;
-    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    sprintf(xml_filename, "rank%d_%s", rank, filename);
+    sprintf(xml_filename, "rank%d_%s", MPISpec_Rank(), filename);
 }
 
 void write_behavior(const char *encoding) {

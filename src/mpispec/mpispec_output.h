@@ -6,13 +6,17 @@
  */
 
 /*
- * MPISpec doesn't contain cspec.h. So, please see mpispec.h.
+ * MPISpec doesn't contain cspec.h. please see mpispec.h.
  */
 
 #ifndef MPISPEC_OUTPUT_H
 #define MPISPEC_OUTPUT_H
 
 #include <stdio.h>
+
+#define MPISPEC_MAX_NEST_NUM 16
+#define MPISPEC_MAX_XML_FILENAME_LEN 32
+#define MPISPEC_TAB "  "
 
 extern FILE *MPISPEC_GLOBAL_FP;
 

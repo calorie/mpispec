@@ -8,7 +8,7 @@
  */
 
 /*
- * MPISpec doesn't contain cspec.h. So, please see mpispec.h.
+ * MPISpec doesn't contain cspec.h. please see mpispec.h.
  */
 
 #include "mpispec_output.h"

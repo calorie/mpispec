@@ -40,18 +40,5 @@ stamp-h?
 *.l[ao]
 *~
 
-/doc/
-/AUTHORS
-/COPYING
-/INSTALL
-/README
-/README.ja
-
-.bundle
-/vendor/bundle
 rank*.xml
-.watsonrc
-
-Gemfile.lock
-
 exec_test

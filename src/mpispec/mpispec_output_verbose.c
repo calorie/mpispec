@@ -7,12 +7,11 @@
  */
 
 /*
- * MPISpec doesn't contain cspec.h. So, please see mpispec.h.
+ * MPISpec doesn't contain cspec.h. please see mpispec.h.
  */
 
 #include <stdarg.h>
 #include <stdio.h>
-#include "mpispec_consts.h"
 #include "mpispec_output_verbose.h"
 
 typedef enum {
@@ -29,7 +28,9 @@ static void fprint_tab(int n);
 static void colored_fprintf(MPISpec_Color color, const char *format, ...);
 static int get_ansi_color_code(MPISpec_Color color);
 
-void start_def_fun_verbose(void) { verbose_summary = MPISpec_Get_Run_Summary(); }
+void start_def_fun_verbose(void) {
+    verbose_summary = MPISpec_Get_Run_Summary();
+}
 
 void end_def_fun_verbose(void) {}
 

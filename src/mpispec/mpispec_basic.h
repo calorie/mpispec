@@ -41,17 +41,15 @@
  * @{
  */
 
-#ifndef MPISPEC_BASIC_H_SEEN
-#define MPISPEC_BASIC_H_SEEN
+#ifndef MPISPEC_BASIC_H
+#define MPISPEC_BASIC_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-void MPISpec_Basic_Setup(void);
-void MPISpec_Run_Summary(void);
-void MPISpec_Result_File_Close(void);
-void MPISpec_Display_Results(void);
+void MPISpec_Init(int argc, char **argv);
+void MPISpec_Finalize(void);
 
 #ifdef __cplusplus
 }

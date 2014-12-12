@@ -6,7 +6,7 @@
  */
 
 /*
- * MPISpec doesn't contain cspec.h. So, please see mpispec.h.
+ * MPISpec doesn't contain cspec.h. please see mpispec.h.
  */
 
 #ifndef MPISPEC_OUTPUT_XML_H

@@ -25,9 +25,11 @@
 #ifndef MPISPEC_H
 #define MPISPEC_H
 
+#include <math.h>
 #include <mpi.h>
 #include <stdlib.h>
 #include <string.h>
+#include "mpispec_basic.h"
 #include "mpispec_config.h"
 #include "mpispec_output_junit_xml.h"
 #include "mpispec_output_verbose.h"
@@ -35,10 +37,7 @@
 #include "mpispec_private.h"
 #include "mpispec_runner.h"
 #include "mpispec_stub.h"
-
-void MPISpec_Setup(int argc, char **argv);
-void MPISpec_Dispatch(void);
-int MPISpec_Rank(void);
+#include "mpispec_util.h"
 
 /*               */
 /* Public macros */
@@ -64,11 +63,11 @@ int MPISpec_Rank(void);
 
 #define MPISPEC_INIT                  \
     int main(int argc, char **argv) { \
-        MPISpec_Setup(argc, argv);
+        MPISpec_Init(argc, argv);
 
-#define MPISPEC_FINALIZE \
-    MPISpec_Dispatch();  \
-    return EXIT_SUCCESS; \
+#define MPISPEC_FINALIZE     \
+        MPISpec_Finalize();  \
+        return EXIT_SUCCESS; \
     }
 
 /* Structural macros */
@@ -77,18 +76,18 @@ int MPISpec_Rank(void);
     {                        \
         MPISpec_StartRank(); \
         if (MPISpec_Rank() == rank) {
-#define END_RANK       \
-    }                  \
-    MPISpec_EndRank(); \
+#define END_RANK           \
+        }                  \
+        MPISpec_EndRank(); \
     }
 
 #define EX_RANK(rank)        \
     {                        \
         MPISpec_StartRank(); \
         if (MPISpec_Rank() != rank) {
-#define END_EX_RANK    \
-    }                  \
-    MPISpec_EndRank(); \
+#define END_EX_RANK        \
+        }                  \
+        MPISpec_EndRank(); \
     }
 
 #define RANKS(ranks)                                                       \
@@ -96,9 +95,9 @@ int MPISpec_Rank(void);
         MPISpec_StartRanks();                                              \
         if (MPISpec_ValidateRanks(ranks, sizeof(ranks) / sizeof(ranks[0]), \
                                   MPISpec_Rank()) == 0) {
-#define END_RANKS       \
-    }                   \
-    MPISpec_EndRanks(); \
+#define END_RANKS           \
+        }                   \
+        MPISpec_EndRanks(); \
     }
 
 #define EX_RANKS(ranks)                                                    \
@@ -106,27 +105,27 @@ int MPISpec_Rank(void);
         MPISpec_StartRanks();                                              \
         if (MPISpec_ValidateRanks(ranks, sizeof(ranks) / sizeof(ranks[0]), \
                                   MPISpec_Rank()) != 0) {
-#define END_EX_RANKS    \
-    }                   \
-    MPISpec_EndRanks(); \
+#define END_EX_RANKS        \
+        }                   \
+        MPISpec_EndRanks(); \
     }
 
 #define MPISPEC_DEF(test)   \
     void test() {           \
         MPISpec_StartDef(); \
         {
-#define END_DEF       \
-    }                 \
-    MPISpec_EndDef(); \
+#define END_DEF           \
+        }                 \
+        MPISpec_EndDef(); \
     }
 
 #define DESCRIBE(caption)               \
     {                                   \
         MPISpec_StartDescribe(caption); \
         {
-#define END_DESCRIBE       \
-    }                      \
-    MPISpec_EndDescribe(); \
+#define END_DESCRIBE           \
+        }                      \
+        MPISpec_EndDescribe(); \
     }
 
 #define CONTEXT(caption) DESCRIBE(caption)
@@ -136,9 +135,9 @@ int MPISpec_Rank(void);
     {                             \
         MPISpec_StartIt(caption); \
         {
-#define END_IT       \
-    }                \
-    MPISpec_EndIt(); \
+#define END_IT           \
+        }                \
+        MPISpec_EndIt(); \
     }
 
 /* gcc only */
@@ -150,9 +149,9 @@ int MPISpec_Rank(void);
     void before_each_##foo() {             \
         MPISpec_StartBefore();             \
         {
-#define END_BEFORE       \
-    }                    \
-    MPISpec_EndBefore(); \
+#define END_BEFORE           \
+        }                    \
+        MPISpec_EndBefore(); \
     }
 
 #define AFTER_EACH(foo)                  \
@@ -161,32 +160,31 @@ int MPISpec_Rank(void);
     void after_each_##foo() {            \
         MPISpec_StartAfter();            \
         {
-#define END_AFTER       \
-    }                   \
-    MPISpec_EndAfter(); \
+#define END_AFTER           \
+        }                   \
+        MPISpec_EndAfter(); \
     }
 
 #endif
 
-#define END        \
-    }              \
-    MPISpec_End(); \
+#define END            \
+        }              \
+        MPISpec_End(); \
     }
 
 /* Expectation macros */
 
 #define SHOULD_BE_TRUE(x) MPISPEC_EVAL((x))
 #define SHOULD_EQUAL(x, y) MPISPEC_EVAL((x) == (y))
-#define SHOULD_EQUAL_DOUBLE(x, y, delta) \
-    MPISPEC_EVAL(MPISpec_Fabs((x) - (y)) <= delta)
-#define SHOULD_MATCH(x, y) MPISPEC_EVAL(MPISpec_Strcmp(x, y) == 0)
+#define SHOULD_EQUAL_DOUBLE(x, y, delta) MPISPEC_EVAL(fabs((x) - (y)) <= delta)
+#define SHOULD_MATCH(x, y) MPISPEC_EVAL(strcmp(x, y) == 0)
 #define SHOULD_BE_NULL(x) MPISPEC_EVAL((x) == 0)
 
 #define SHOULD_BE_FALSE(x) MPISPEC_EVAL(!(x))
 #define SHOULD_NOT_EQUAL(x, y) MPISPEC_EVAL((x) != (y))
 #define SHOULD_NOT_EQUAL_DOUBLE(x, y, delta) \
-    MPISPEC_EVAL(MPISpec_Fabs((x) - (y)) > delta)
-#define SHOULD_NOT_MATCH(x, y) MPISPEC_EVAL(MPISpec_Strcmp(x, y) != 0)
+    MPISPEC_EVAL(fabs((x) - (y)) > delta)
+#define SHOULD_NOT_MATCH(x, y) MPISPEC_EVAL(strcmp(x, y) != 0)
 #define SHOULD_NOT_BE_NULL(x) MPISPEC_EVAL((x) != 0)
 
 #define SHOULD_PENDING(reason) MPISPEC_PENDING(reason)
