@@ -64,7 +64,6 @@ void MPISpec_Init(int argc, char **argv) {
     MPI_Init(&argc, &argv);
     MPISpec_Comm_World();
     MPISpec_Start_Time();
-    MPISpec_Result_File_Open();
 }
 
 void MPISpec_Finalize(void) {
@@ -75,6 +74,7 @@ void MPISpec_Finalize(void) {
     MPISpec_Hash_Del();
     MPI_Barrier(MPI_COMM_WORLD);
     MPISpec_Display_Results();
+    MPISpec_Free_Summary();
     MPISpec_Comm_World_Free();
     MPI_Finalize();
 }

@@ -13,6 +13,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include "mpispec_output_verbose.h"
+#include "mpispec_summary.h"
 
 typedef enum {
     MPISPEC_COLOR_RED = 1,
@@ -22,29 +23,28 @@ typedef enum {
 
 static MPISpecOutputStruct verbose;
 static int mpispec_tab_num = 0;
-pMPISpecRunSummary verbose_summary;
+MPISpecRunSummary *verbose_summary;
 
 static void fprint_tab(int n);
 static void colored_fprintf(MPISpec_Color color, const char *format, ...);
 static int get_ansi_color_code(MPISpec_Color color);
 
-void start_def_fun_verbose(void) {
-    verbose_summary = MPISpec_Get_Run_Summary();
-}
+void start_def_fun_verbose(void) { verbose_summary = MPISpec_Get_Summary(); }
 
 void end_def_fun_verbose(void) {}
 
 void start_describe_fun_verbose(const char *descr) {
-    fprintf(MPISPEC_GLOBAL_FP, "\n");
+    FILE *fp = MPISpec_Result_File();
+    fprintf(fp, "\n");
     fprint_tab(++mpispec_tab_num);
-    fprintf(MPISPEC_GLOBAL_FP, "%s\n", descr);
+    fprintf(fp, "%s\n", descr);
 }
 
 void end_describe_fun_verbose(void) { mpispec_tab_num--; }
 
 void start_it_fun_verbose(const char *descr) {
     fprint_tab(++mpispec_tab_num);
-    fprintf(MPISPEC_GLOBAL_FP, "- %s\n", descr);
+    fprintf(MPISpec_Result_File(), "- %s\n", descr);
 }
 
 void end_it_fun_verbose(void) { mpispec_tab_num--; }
@@ -107,23 +107,23 @@ static int get_ansi_color_code(MPISpec_Color color) {
 
 static void fprint_tab(int n) {
     int i;
-    for (i = 0; i < n; i++) fprintf(MPISPEC_GLOBAL_FP, MPISPEC_TAB);
+    for (i = 0; i < n; i++) fprintf(MPISpec_Result_File(), MPISPEC_TAB);
 }
 
 static void colored_fprintf(MPISpec_Color color, const char *format, ...) {
     va_list args;
+    FILE *fp = MPISpec_Result_File();
 
     va_start(args, format);
 
     /* Set color */
-    fprintf(MPISPEC_GLOBAL_FP, "\033[0;%dm", get_ansi_color_code(color));
+    fprintf(fp, "\033[0;%dm", get_ansi_color_code(color));
 
     /* Print Text */
-    vfprintf(MPISPEC_GLOBAL_FP, format, args);
+    vfprintf(fp, format, args);
 
     /* Reset color */
-    fprintf(MPISPEC_GLOBAL_FP, "\033[m");
+    fprintf(fp, "\033[m");
 
     va_end(args);
-    return;
 }

@@ -22,30 +22,42 @@ static void display_successes_rate(int procs, unsigned int specs,
                                    unsigned int fails);
 static void display_run_time(void);
 
-FILE *MPISPEC_GLOBAL_FP;
+MPISpecRunSummary *MPISpec_Get_Summary(void) {
+    static MPISpecRunSummary *summary;
+    if (summary == NULL) {
+        summary = (MPISpecRunSummary *)calloc(1, sizeof(MPISpecRunSummary));
+    }
+    return summary;
+}
 
-void MPISpec_Result_File_Open() {
+void MPISpec_Free_Summary(void) { free(MPISpec_Get_Summary()); }
+
+FILE *MPISpec_Result_File() {
+    static FILE *fp;
+    if (fp != NULL) return fp;
+
     char result_filename[32];
     int rank = MPISpec_Rank();
 
     sprintf(result_filename, "rank%d.result", rank);
-    if ((MPISPEC_GLOBAL_FP = fopen(result_filename, "a")) == NULL) {
+    if ((fp = fopen(result_filename, "a")) == NULL) {
         fprintf(stderr, "Can't open result files");
         exit(-1);
     }
-    fprintf(MPISPEC_GLOBAL_FP, "\nrank  %d:", rank);
+    fprintf(fp, "\nrank  %d:", rank);
+    return fp;
 }
 
-void MPISpec_Run_Summary(void) {
-    pMPISpecRunSummary summary = MPISpec_Get_Run_Summary();
+void MPISpec_Result_File_Close(void) { fclose(MPISpec_Result_File()); }
 
-    fprintf(MPISPEC_GLOBAL_FP,
+void MPISpec_Run_Summary(void) {
+    MPISpecRunSummary *summary = MPISpec_Get_Summary();
+
+    fprintf(MPISpec_Result_File(),
             "\n--Run Summary: Type      Total  Passed  Failed"
             "\n               tests  %8u%8u%8u\n",
             summary->Total, summary->Passed, summary->Total - summary->Passed);
 }
-
-void MPISpec_Result_File_Close(void) { fclose(MPISPEC_GLOBAL_FP); }
 
 void MPISpec_Display_Results(void) {
     unsigned int specs, successes, fails;
@@ -72,15 +84,15 @@ void get_total_results(unsigned int *total_specs, unsigned int *total_successes,
 }
 
 unsigned int mpispec_get_number_of_specs(void) {
-    return MPISpec_Get_Run_Summary()->Total;
+    return MPISpec_Get_Summary()->Total;
 }
 
 unsigned int mpispec_get_number_of_successes(void) {
-    return MPISpec_Get_Run_Summary()->Passed;
+    return MPISpec_Get_Summary()->Passed;
 }
 
 unsigned int mpispec_get_number_of_failures(void) {
-    pMPISpecRunSummary summary = MPISpec_Get_Run_Summary();
+    MPISpecRunSummary *summary = MPISpec_Get_Summary();
     return summary->Total - summary->Passed;
 }
 

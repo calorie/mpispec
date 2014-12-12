@@ -18,8 +18,6 @@
 #define MPISPEC_MAX_XML_FILENAME_LEN 32
 #define MPISPEC_TAB "  "
 
-extern FILE *MPISPEC_GLOBAL_FP;
-
 typedef void (*MPISpecDescFun)(void);
 
 typedef void (*MPISpecOutputStartDefFun)(void);
@@ -56,14 +54,6 @@ typedef struct {
     int failed;
 } MPISpecOutputStruct;
 
-typedef struct {
-    unsigned int Passed;
-    unsigned int Total;
-} MPISpecRunSummary;
-
-typedef MPISpecRunSummary *pMPISpecRunSummary;
-
-pMPISpecRunSummary MPISpec_Get_Run_Summary(void);
 void MPISpec_InitOutput(MPISpecOutputStruct *output);
 
 #endif

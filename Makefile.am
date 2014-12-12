@@ -1,7 +1,6 @@
 SUBDIRS = src script share
 
 runtest:	FORCE
-	make format
 	make all
 	sudo make install
 	make sample
