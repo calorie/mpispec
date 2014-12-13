@@ -20,4 +20,10 @@ format:	FORCE
 deps:	FORCE
 	clib install -o src
 
+memcheck:	FORCE
+	cd sample ; mpispec -np 3 valgrind -v --leak-check=full --show-reachable=yes --log-file=valgrind.%p.log --suppressions=/usr/local/share/openmpi/openmpi-valgrind.supp
+
+rmdust:	FORCE
+	rm -f sample/rank*.xml sample/rank*.result sample/valgrind*.log sample/exec_test
+
 FORCE:

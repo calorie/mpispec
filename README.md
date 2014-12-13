@@ -52,6 +52,12 @@ $ make format
 $ clib install -o src
 ```
 
+### [valgrind](http://valgrind.org)
+
+```
+$ make memcheck
+```
+
 =======
 LGPL Lisence
 
