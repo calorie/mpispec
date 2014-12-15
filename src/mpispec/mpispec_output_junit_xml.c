@@ -15,6 +15,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "mpispec_basic.h"
+#include "mpispec_error.h"
+#include "mpispec_error_function.h"
 #include "mpispec_output_junit_xml.h"
 #include "mpispec_private_output_junit_xml.h"
 #include "mpispec_util.h"
@@ -94,12 +97,9 @@ void MPISpec_JUnitXmlFileOpen(const char *filename, const char *encoding) {
 
 void MPISpec_JUnitXmlFileClose(void) {
     if (output_xml_file == NULL) return;
-
     output_describe();
     output_footer();
-
     destruct();
-
     xml_file_close();
 }
 
@@ -378,8 +378,9 @@ static void desc_name(char **name, char *descr) {
     desc_prefix_name(&prefix);
     // [TODO] - remove asprintf
     if (asprintf(name, "%s %s", prefix, descr) < 0) {
-        printf("Couldn't combine prefix & description names.\n");
-        exit(-1);
+        MPISpec_Set_Error_Fun(MPISpec_Asprintf_Error);
+        MPISpec_Finalize();
+        exit(1);
     }
 }
 
@@ -390,8 +391,9 @@ static void desc_prefix_name(char **prefix) {
             // [TODO] - remove asprintf
             if (asprintf(prefix, "%s %s", *prefix, desc_name_prefix_array[i]) <
                 0) {
-                printf("Couldn't combine prefix & description names.\n");
-                exit(-1);
+                MPISpec_Set_Error_Fun(MPISpec_Asprintf_Error);
+                MPISpec_Finalize();
+                exit(1);
             }
         } else {
             break;

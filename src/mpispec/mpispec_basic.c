@@ -54,6 +54,7 @@
 #include <mpi.h>
 #include "mpispec_basic.h"
 #include "mpispec_comm_world.h"
+#include "mpispec_error.h"
 #include "mpispec_hash.h"
 #include "mpispec_output_junit_xml.h"
 #include "mpispec_output_xml.h"
@@ -67,13 +68,11 @@ void MPISpec_Init(int argc, char **argv) {
 }
 
 void MPISpec_Finalize(void) {
+    MPISpec_Summary();
+    MPISpec_Run_Errors();
     MPISpec_JUnitXmlFileClose();
     MPISpec_XmlFileClose();
-    MPISpec_Run_Summary();
-    MPISpec_Result_File_Close();
     MPISpec_Hash_Del();
-    MPI_Barrier(MPI_COMM_WORLD);
-    MPISpec_Display_Results();
     MPISpec_Free_Summary();
     MPISpec_Comm_World_Free();
     MPI_Finalize();

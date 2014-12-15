@@ -8,6 +8,8 @@ libmpispec_la_SOURCES = \
     mpispec/array.c \
     mpispec/mpispec_basic.c \
     mpispec/mpispec_comm_world.c \
+    mpispec/mpispec_error.c \
+    mpispec/mpispec_error_function.c \
     mpispec/mpispec_hash.c \
     mpispec/mpispec_irecv.c \
     mpispec/mpispec_isend.c \
@@ -29,6 +31,8 @@ pkginclude_HEADERS = \
     mpispec/mpispec.h \
     mpispec/mpispec_basic.h \
     mpispec/mpispec_comm_world.h \
+    mpispec/mpispec_error.h \
+    mpispec/mpispec_error_function.h \
     mpispec/mpispec_hash.h \
     mpispec/mpispec_output.h \
     mpispec/mpispec_output_junit_xml.h \

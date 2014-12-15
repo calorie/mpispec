@@ -8,6 +8,7 @@ typedef struct {
     unsigned int Total;
 } MPISpecRunSummary;
 
+void MPISpec_Summary(void);
 MPISpecRunSummary *MPISpec_Get_Summary(void);
 void MPISpec_Free_Summary(void);
 void MPISpec_Run_Summary(void);
