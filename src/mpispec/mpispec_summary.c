@@ -1,6 +1,9 @@
 #include <mpi.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "mpispec_basic.h"
+#include "mpispec_error.h"
+#include "mpispec_error_function.h"
 #include "mpispec_output.h"
 #include "mpispec_summary.h"
 #include "mpispec_util.h"
@@ -22,46 +25,69 @@ static void display_successes_rate(int procs, unsigned int specs,
                                    unsigned int fails);
 static void display_run_time(void);
 
+void MPISpec_Summary(void) {
+    MPISpec_Run_Summary();
+    MPISpec_Result_File_Close();
+    MPI_Barrier(MPI_COMM_WORLD);
+    MPISpec_Display_Results();
+}
+
 MPISpecRunSummary *MPISpec_Get_Summary(void) {
     static MPISpecRunSummary *summary;
-    if (summary == NULL) {
-        summary = (MPISpecRunSummary *)calloc(1, sizeof(MPISpecRunSummary));
+    if (summary != NULL) return summary;
+    if (MPISpec_Error()) return NULL;
+    summary = (MPISpecRunSummary *)calloc(1, sizeof(MPISpecRunSummary));
+    if (!summary) {
+        MPISpec_Set_Error_Fun(MPISpec_Alloc_Error);
+        MPISpec_Finalize();
+        exit(1);
     }
     return summary;
 }
 
-void MPISpec_Free_Summary(void) { free(MPISpec_Get_Summary()); }
+void MPISpec_Free_Summary(void) {
+    MPISpecRunSummary *summary = MPISpec_Get_Summary();
+    if (summary) free(summary);
+}
 
 FILE *MPISpec_Result_File() {
     static FILE *fp;
     if (fp != NULL) return fp;
+    if (MPISpec_Error()) return NULL;
 
     char result_filename[32];
     int rank = MPISpec_Rank();
 
     sprintf(result_filename, "rank%d.result", rank);
     if ((fp = fopen(result_filename, "a")) == NULL) {
-        fprintf(stderr, "Can't open result files");
-        exit(-1);
+        MPISpec_Set_Error_Fun(MPISpec_Fopen_Error);
+        MPISpec_Finalize();
+        exit(1);
     }
     fprintf(fp, "\nrank  %d:", rank);
     return fp;
 }
 
-void MPISpec_Result_File_Close(void) { fclose(MPISpec_Result_File()); }
+void MPISpec_Result_File_Close(void) {
+    FILE *fp = MPISpec_Result_File();
+    if (fp) fclose(fp);
+}
 
 void MPISpec_Run_Summary(void) {
-    MPISpecRunSummary *summary = MPISpec_Get_Summary();
-
-    fprintf(MPISpec_Result_File(),
+    FILE *fp;
+    MPISpecRunSummary *summary;
+    if ((fp = MPISpec_Result_File()) == NULL) return;
+    if ((summary = MPISpec_Get_Summary()) == NULL) return;
+    fprintf(fp,
             "\n--Run Summary: Type      Total  Passed  Failed"
             "\n               tests  %8u%8u%8u\n",
             summary->Total, summary->Passed, summary->Total - summary->Passed);
 }
 
 void MPISpec_Display_Results(void) {
-    unsigned int specs, successes, fails;
+    if (MPISpec_Error()) return;
 
+    unsigned int specs, successes, fails;
     get_total_results(&specs, &successes, &fails);
     if (MPISpec_Rank() != 0) return;
     display_results(MPISpec_Size(), specs, fails);
@@ -117,8 +143,9 @@ void display_test_results(int procs) {
     for (i = 0; i < procs; i++) {
         sprintf(result_filename, "rank%d.result", i);
         if (NULL == (fp = fopen(result_filename, "r"))) {
-            fprintf(stderr, "Can't open result files");
-            exit(-1);
+            MPISpec_Set_Error_Fun(MPISpec_Fopen_Error);
+            MPISpec_Finalize();
+            exit(1);
         }
         while ((ch = fgetc(fp)) != EOF) {
             fputc(ch, stdout);

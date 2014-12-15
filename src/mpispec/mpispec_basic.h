@@ -44,15 +44,7 @@
 #ifndef MPISPEC_BASIC_H
 #define MPISPEC_BASIC_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 void MPISpec_Init(int argc, char **argv);
 void MPISpec_Finalize(void);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif
