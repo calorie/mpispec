@@ -34,21 +34,17 @@ esac],[coverage=false])
 AM_CONDITIONAL(COVERAGE, test x$coverage = xtrue)
 
 # Checks for programs.
-AC_PROG_CXX
 AC_PROG_CC
-AC_PROG_CPP
 AC_PROG_INSTALL
 AC_PROG_LN_S
-AC_PROG_MAKE_SET
-AC_PROG_RANLIB
-#AC_PROG_LIBTOOL
+AC_PROG_LIBTOOL
 
 # Checks for libraries.
 LT_INIT
 
 # Checks for header files.
 AC_HEADER_STDC
-AC_CHECK_HEADERS([fcntl.h stdlib.h string.h unistd.h memory.h string.h])
+AC_CHECK_HEADERS([stdio.h stdbool.h stdarg.h memory.h mpi.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
