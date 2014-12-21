@@ -6,5 +6,5 @@ MPISPECLIBS = -L${INSTDIR}/lib -lmpispec -lm
 RUNTEST = run-test
 
 mpispec:
-	@${CC} ${MPISPECFLAGS} ${SRC} ${SPECRC} -o ${RUNTEST} ${MPISPECLIBS}
+	@${CC} ${MPISPECFLAGS} ${SRC} ${SPECSRC} -o ${RUNTEST} ${MPISPECLIBS}
 	@mpirun ${ARGV} ./${RUNTEST}
