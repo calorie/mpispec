@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "mpispec_basic.h"
+#include "mpispec_comm_world.h"
 #include "mpispec_error.h"
 #include "mpispec_error_function.h"
 #include "mpispec_output.h"
@@ -28,7 +29,7 @@ static void display_run_time(void);
 void MPISpec_Summary(void) {
     MPISpec_Run_Summary();
     MPISpec_Result_File_Close();
-    MPI_Barrier(MPI_COMM_WORLD);
+    MPI_Barrier(MPISPEC_COMM_WORLD);
     MPISpec_Display_Results();
 }
 
@@ -102,11 +103,11 @@ void get_total_results(unsigned int *total_specs, unsigned int *total_successes,
     get_local_results(&local_specs, &local_successes, &local_fails);
 
     PMPI_Reduce(&local_specs, total_specs, 1, MPI_UNSIGNED, MPI_SUM, 0,
-                MPI_COMM_WORLD);
+                MPISPEC_COMM_WORLD);
     PMPI_Reduce(&local_successes, total_successes, 1, MPI_UNSIGNED, MPI_SUM, 0,
-                MPI_COMM_WORLD);
+                MPISPEC_COMM_WORLD);
     PMPI_Reduce(&local_fails, total_fails, 1, MPI_UNSIGNED, MPI_SUM, 0,
-                MPI_COMM_WORLD);
+                MPISPEC_COMM_WORLD);
 }
 
 unsigned int mpispec_get_number_of_specs(void) {

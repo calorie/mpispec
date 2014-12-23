@@ -1,17 +1,18 @@
 #include <mpi.h>
 #include <sys/time.h>
 #include <time.h>
+#include "mpispec_comm_world.h"
 #include "mpispec_util.h"
 
 int MPISpec_Rank(void) {
     int rank;
-    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    MPI_Comm_rank(MPISPEC_COMM_WORLD, &rank);
     return rank;
 }
 
 int MPISpec_Size(void) {
     int size;
-    MPI_Comm_size(MPI_COMM_WORLD, &size);
+    MPI_Comm_size(MPISPEC_COMM_WORLD, &size);
     return size;
 }
 
