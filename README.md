@@ -11,7 +11,6 @@ A Behavior Driven Development Framework for MPI Programs, based on CUnit, CSpec 
 ```
 $ git clone https://github.com/calorie/mpispec.git
 $ cd mpispec
-$ VAR=`locate ompi/request/request.h` | export C_INCLUDE_PATH=$C_INCLUDE_PATH:${VAR%/ompi/request/request.h}
 $ ./autogen.sh
 $ ./configure
 $ make
@@ -63,4 +62,4 @@ LGPL Lisence
 
 Author: Yuu Shigetani
 
-Year:   2013, 2014
+Year:   2013-2015

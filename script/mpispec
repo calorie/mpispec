@@ -3,7 +3,7 @@
 INSTDIR=/usr/local
 CC="mpicc"
 EXEC="exec_test"
-MPISPECFLAGS="-I${INSTDIR}/include -finstrument-functions -rdynamic"
+MPISPECFLAGS="-I${INSTDIR}/include"
 MPISPECLIBS="-L${INSTDIR}/lib -lmpispec -lm"
 MPISPECSRC=`find src -name *.c`
 MPISPECSPEC=`find spec -name *.c`

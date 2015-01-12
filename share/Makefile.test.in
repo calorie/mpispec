@@ -3,8 +3,8 @@ INSTDIR = @prefix@
 CC=mpicc
 MPISPECFLAGS = -I${INSTDIR}/include
 MPISPECLIBS = -L${INSTDIR}/lib -lmpispec -lm
-RUNTEST = run-test
+EXEC = exec_test
 
 mpispec:
-	@${CC} ${MPISPECFLAGS} ${SRC} ${SPECSRC} -o ${RUNTEST} ${MPISPECLIBS}
-	@mpirun ${ARGV} ./${RUNTEST}
+	@${CC} ${MPISPECFLAGS} ${SRC} ${SPECSRC} -o ${EXEC} ${MPISPECLIBS}
+	@mpirun ${ARGV} ./${EXEC}
