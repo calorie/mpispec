@@ -149,7 +149,7 @@ void write_behavior(const char *encoding) {
             encoding);
     fprintf(output_xml_file,
             "<?xml-stylesheet type=\"text/xsl\" href=\"MPISpec-Run.xsl\" ?>\n");
-    fprintf(output_xml_file, "<BEHAVIOUR timestump=\"%s\">\n", time_str);
+    fprintf(output_xml_file, "<BEHAVIOUR timestamp=\"%s\">\n", time_str);
     mpispec_tab_num++;
 }
 
