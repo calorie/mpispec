@@ -12,18 +12,37 @@
 #include <mpi.h>
 #include <stdarg.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include "mpispec_basic.h"
+#include "mpispec_comm_world.h"
+#include "mpispec_error.h"
+#include "mpispec_error_function.h"
 #include "mpispec_output_xml.h"
 #include "mpispec_util.h"
+
+#define XML_SUMMARY_FILE_NAME "output.xml"
 
 static MPISpecOutputStruct xml;
 static FILE *output_xml_file = NULL;
 static int mpispec_tab_num = 0;
 
+static void merge_xml_file(void);
+
+static void start_describe_fun_xml(const char *descr);
+static void end_describe_fun_xml(void);
+static void start_it_fun_xml(const char *descr);
+static void end_it_fun_xml(void);
+static void eval_fun_xml(const char *filename, int line_number,
+                         const char *assertion, int assertion_result);
+static void pending_fun_xml(const char *reason);
+
 static void fprint_tab(int n);
 static void get_xml_file_name(char *xml_filename, const char *filename);
-static void write_behavior(const char *encoding);
+static void get_rank_xml_file_name(char *xml_filename, const char *filename,
+                                   int rank);
+static void write_behavior(FILE *fp, const char *encoding);
 static void write_result(const char *filename, int line_number,
                          const char *assertion, int assertion_result);
 static void test_success(const char *assertion);
@@ -38,18 +57,38 @@ void MPISpec_XmlFileOpen(const char *filename, const char *encoding) {
 
     output_xml_file = fopen(xml_filename, "w");
     if (output_xml_file == NULL) return;
-
-    write_behavior(encoding);
 }
 
 void MPISpec_XmlFileClose(void) {
-    if (output_xml_file == NULL) return;
+    if (output_xml_file != NULL) {
+        mpispec_tab_num--;
+        fprint_tab(mpispec_tab_num);
+        fclose(output_xml_file);
+    }
+    MPI_Barrier(MPISPEC_COMM_WORLD);
+    if (MPISpec_Rank() == 0) merge_xml_file();
+}
 
-    mpispec_tab_num--;
-    fprint_tab(mpispec_tab_num);
-    fprintf(output_xml_file, "</BEHAVIOUR>\n");
-
-    fclose(output_xml_file);
+void merge_xml_file(void) {
+    int i, ch, size = MPISpec_Size();
+    char xml_filename[MPISPEC_MAX_XML_FILENAME_LEN];
+    FILE *fp, *summary;
+    remove(MPISPEC_XML_BASE_FILENAME);
+    summary = fopen(MPISPEC_XML_BASE_FILENAME, "a");
+    write_behavior(summary, MPISPEC_XML_ENCODING);
+    for (i = 0; i < size; i++) {
+        get_rank_xml_file_name(xml_filename, MPISPEC_XML_BASE_FILENAME, i);
+        if (NULL == (fp = fopen(xml_filename, "r"))) {
+            continue;
+        }
+        while ((ch = fgetc(fp)) != EOF) {
+            fputc(ch, summary);
+        }
+        fclose(fp);
+        remove(xml_filename);
+    }
+    fprintf(summary, "</BEHAVIOUR>\n");
+    fclose(summary);
 }
 
 void start_describe_fun_xml(const char *descr) {
@@ -133,11 +172,21 @@ MPISpecOutputStruct *MPISpec_NewOutputXml(void) {
     return &xml;
 }
 
-void get_xml_file_name(char *xml_filename, const char *filename) {
-    sprintf(xml_filename, "rank%d_%s", MPISpec_Rank(), filename);
+void fprint_tab(int n) {
+    int i;
+    for (i = 0; i < n; i++) fprintf(output_xml_file, MPISPEC_TAB);
 }
 
-void write_behavior(const char *encoding) {
+void get_xml_file_name(char *xml_filename, const char *filename) {
+    get_rank_xml_file_name(xml_filename, filename, MPISpec_Rank());
+}
+
+void get_rank_xml_file_name(char *xml_filename, const char *filename,
+                            int rank) {
+    sprintf(xml_filename, "rank%04d_%s", rank, filename);
+}
+
+void write_behavior(FILE *fp, const char *encoding) {
     time_t time_value;
     char *time_str;
 
@@ -145,17 +194,10 @@ void write_behavior(const char *encoding) {
     time_str = ctime(&time_value);
     time_str[strlen(time_str) - 1] = '\0';
 
-    fprintf(output_xml_file, "<?xml version=\"1.0\" encoding=\"%s\" ?>\n",
-            encoding);
-    fprintf(output_xml_file,
+    fprintf(fp, "<?xml version=\"1.0\" encoding=\"%s\" ?>\n", encoding);
+    fprintf(fp,
             "<?xml-stylesheet type=\"text/xsl\" href=\"MPISpec-Run.xsl\" ?>\n");
-    fprintf(output_xml_file, "<BEHAVIOUR timestamp=\"%s\">\n", time_str);
-    mpispec_tab_num++;
-}
-
-void fprint_tab(int n) {
-    int i;
-    for (i = 0; i < n; i++) fprintf(output_xml_file, MPISPEC_TAB);
+    fprintf(fp, "<BEHAVIOUR timestamp=\"%s\">\n", time_str);
 }
 
 void write_result(const char *filename, int line_number, const char *assertion,

@@ -14,6 +14,9 @@
 
 #include "mpispec_output.h"
 
+#define MPISPEC_JUNIT_XML_BASE_FILENAME "junit_output.xml"
+#define MPISPEC_JUNIT_XML_ENCODING "utf-8"
+
 MPISpecOutputStruct *MPISpec_NewOutputJUnitXml(void);
 
 void MPISpec_JUnitXmlFileOpen(const char *filename, const char *encoding);

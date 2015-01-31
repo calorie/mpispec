@@ -15,7 +15,7 @@
 #include <stdio.h>
 
 #define MPISPEC_MAX_NEST_NUM 16
-#define MPISPEC_MAX_XML_FILENAME_LEN 32
+#define MPISPEC_MAX_XML_FILENAME_LEN 33
 #define MPISPEC_TAB "  "
 
 typedef void (*MPISpecDescFun)(void);

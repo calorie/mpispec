@@ -44,3 +44,4 @@ stamp-h?
 rank*.xml
 rank*.result
 exec_test
+/sample/*.xml

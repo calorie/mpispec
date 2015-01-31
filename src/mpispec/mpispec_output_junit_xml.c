@@ -16,6 +16,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "mpispec_basic.h"
+#include "mpispec_comm_world.h"
 #include "mpispec_error.h"
 #include "mpispec_error_function.h"
 #include "mpispec_output_junit_xml.h"
@@ -35,6 +36,7 @@ static const char *const failure_type = "";
 
 static char *desc_name_prefix_array[MPISPEC_MAX_NEST_NUM];
 
+static void merge_xml_file(void);
 static void desc_name(char **name, char *descr);
 static void desc_prefix_name(char **prefix);
 static void push_desc_prefix_name(char *descr);
@@ -59,8 +61,8 @@ static void eval_fun_junit_xml(const char *filename, int line_number,
                                const char *assertion, int assertionResult);
 static void pending_fun_junit_xml(const char *reason);
 
-static void output_header(const char *encoding);
-static void output_footer(void);
+static void output_header(FILE *fp, const char *encoding);
+static void output_footer(FILE *fp);
 static void output_describe(void);
 static void output_describe_header(const MPISpecDescOutputStruct *const descr);
 static void output_describe_main(const MPISpecDescOutputStruct *const descr);
@@ -79,37 +81,63 @@ static void test_fails(const char *filename, int line_number,
                        const char *assertion);
 static void add_failure(MPISpecFailureStruct *failure);
 
+static void get_xml_file_name(char *xml_filename, const char *filename);
+static void get_rank_xml_file_name(char *xml_filename, const char *filename,
+                                   int rank);
+
 void MPISpec_JUnitXmlFileOpen(const char *filename, const char *encoding) {
     if (output_xml_file != NULL) return;
 
     char xml_filename[MPISPEC_MAX_XML_FILENAME_LEN];
 
-    sprintf(xml_filename, "rank%d_%s", MPISpec_Rank(), filename);
+    get_xml_file_name(xml_filename, filename);
     output_xml_file = fopen(xml_filename, "w");
 
     if (output_xml_file == NULL) return;
 
     desc_outputs_num = 0;
     desc_outputs = NULL;
-
-    output_header(encoding);
 }
 
 void MPISpec_JUnitXmlFileClose(void) {
-    if (output_xml_file == NULL) return;
-    output_describe();
-    output_footer();
-    destruct();
-    xml_file_close();
+    if (output_xml_file != NULL) {
+        output_describe();
+        destruct();
+        xml_file_close();
+    }
+    MPI_Barrier(MPISPEC_COMM_WORLD);
+    if (MPISpec_Rank() == 0) merge_xml_file();
 }
 
-void output_header(const char *encoding) {
-    fprintf(output_xml_file, "<?xml version=\"1.0\" encoding=\"%s\" ?>\n",
-            encoding);
-    fprintf(output_xml_file, "<testsuites>\n");
+void merge_xml_file(void) {
+    int i, ch, size = MPISpec_Size();
+    char xml_filename[MPISPEC_MAX_XML_FILENAME_LEN];
+    FILE *fp, *summary;
+    remove(MPISPEC_JUNIT_XML_BASE_FILENAME);
+    summary = fopen(MPISPEC_JUNIT_XML_BASE_FILENAME, "a");
+    output_header(summary, MPISPEC_JUNIT_XML_ENCODING);
+    for (i = 0; i < size; i++) {
+        get_rank_xml_file_name(xml_filename, MPISPEC_JUNIT_XML_BASE_FILENAME,
+                               i);
+        if (NULL == (fp = fopen(xml_filename, "r"))) {
+            continue;
+        }
+        while ((ch = fgetc(fp)) != EOF) {
+            fputc(ch, summary);
+        }
+        fclose(fp);
+        remove(xml_filename);
+    }
+    output_footer(summary);
+    fclose(summary);
 }
 
-void output_footer(void) { fprintf(output_xml_file, "</testsuites>\n"); }
+void output_header(FILE *fp, const char *encoding) {
+    fprintf(fp, "<?xml version=\"1.0\" encoding=\"%s\" ?>\n", encoding);
+    fprintf(fp, "<testsuites>\n");
+}
+
+void output_footer(FILE *fp) { fprintf(fp, "</testsuites>\n"); }
 
 void output_describe(void) {
     int i;
@@ -460,4 +488,13 @@ void add_failure(MPISpecFailureStruct *failure) {
             .failures);
     destruct();
     xml_file_close();
+}
+
+void get_xml_file_name(char *xml_filename, const char *filename) {
+    get_rank_xml_file_name(xml_filename, filename, MPISpec_Rank());
+}
+
+void get_rank_xml_file_name(char *xml_filename, const char *filename,
+                            int rank) {
+    sprintf(xml_filename, "rank%04d_%s", rank, filename);
 }

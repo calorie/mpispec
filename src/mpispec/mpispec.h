@@ -50,12 +50,12 @@
 
 #define MPISpec_JUnitXmlRun(test)                          \
     void test();                                           \
-    MPISpec_JUnitXmlFileOpen("junit_output.xml", "utf-8"); \
+    MPISpec_JUnitXmlFileOpen(MPISPEC_JUNIT_XML_BASE_FILENAME, MPISPEC_JUNIT_XML_ENCODING); \
     MPISpec_Run(test, MPISpec_NewOutputJUnitXml());
 
 #define MPISpec_XmlRun(test)                    \
     void test();                                \
-    MPISpec_XmlFileOpen("output.xml", "utf-8"); \
+    MPISpec_XmlFileOpen(MPISPEC_XML_BASE_FILENAME, MPISPEC_XML_ENCODING); \
     MPISpec_Run(test, MPISpec_NewOutputXml());
 
 /* Config macros */

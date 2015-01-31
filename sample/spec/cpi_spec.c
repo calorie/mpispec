@@ -11,7 +11,7 @@ MPISPEC_DEF(cpi_spec)
       END
     END
     EX_RANK(0)
-      CONTEXT("rank0")
+      CONTEXT("exclude rank0")
         IT("return 0")
           SHOULD_EQUAL_DOUBLE(cpi(), 0.0, 0.001)
         END
