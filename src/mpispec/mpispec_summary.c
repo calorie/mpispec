@@ -28,7 +28,6 @@ static void display_run_time(void);
 
 void MPISpec_Summary(void) {
     MPISpec_Run_Summary();
-    MPISpec_Result_File_Close();
     MPI_Barrier(MPISPEC_COMM_WORLD);
     MPISpec_Display_Results();
 }
@@ -77,12 +76,14 @@ void MPISpec_Result_File_Close(void) {
 void MPISpec_Run_Summary(void) {
     FILE *fp;
     MPISpecRunSummary *summary;
-    if ((fp = MPISpec_Result_File()) == NULL) return;
     if ((summary = MPISpec_Get_Summary()) == NULL) return;
+    if (summary->Total == 0) return;
+    if ((fp = MPISpec_Result_File()) == NULL) return;
     fprintf(fp,
             "\n--Run Summary: Type      Total  Passed  Failed"
             "\n               tests  %8u%8u%8u\n",
             summary->Total, summary->Passed, summary->Total - summary->Passed);
+    MPISpec_Result_File_Close();
 }
 
 void MPISpec_Display_Results(void) {
@@ -144,9 +145,7 @@ void display_test_results(int procs) {
     for (i = 0; i < procs; i++) {
         sprintf(result_filename, "rank%d.result", i);
         if (NULL == (fp = fopen(result_filename, "r"))) {
-            MPISpec_Set_Error_Fun(MPISpec_Fopen_Error);
-            MPISpec_Finalize();
-            exit(1);
+            continue;
         }
         while ((ch = fgetc(fp)) != EOF) {
             fputc(ch, stdout);
@@ -157,10 +156,11 @@ void display_test_results(int procs) {
 }
 
 void display_successes_rate(int procs, unsigned int specs, unsigned int fails) {
+    if (specs == 0) return;
+
     int i;
     double rate;
-
-    rate = (specs == 0) ? 100 : (double)(specs - fails) / (double)(specs) * 100;
+    rate = (double)(specs - fails) / (double)(specs) * 100;
     fprintf(stdout, "\n[%d Process Results]\n", procs);
     for (i = 1; i <= 50; i++) {
         if (i <= rate / 2)
