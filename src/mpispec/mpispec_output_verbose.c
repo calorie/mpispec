@@ -35,7 +35,6 @@ void end_def_fun_verbose(void) {}
 
 void start_describe_fun_verbose(const char *descr) {
     FILE *fp = MPISpec_Result_File();
-    fprintf(fp, "\n");
     fprint_tab(++mpispec_tab_num);
     fprintf(fp, "%s\n", descr);
 }

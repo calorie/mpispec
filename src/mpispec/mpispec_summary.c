@@ -64,7 +64,7 @@ FILE *MPISpec_Result_File() {
         MPISpec_Finalize();
         exit(1);
     }
-    fprintf(fp, "\nrank  %d:", rank);
+    fprintf(fp, "\nrank  %d:\n", rank);
     return fp;
 }
 
